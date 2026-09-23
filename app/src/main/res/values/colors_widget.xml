@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Baseline brand colors -->
+    <color name="redwings_red">#CE1126</color>
+    <color name="redwings_white">#FFFFFF</color>
+    <color name="redwings_black">#000000</color>
+
+    <!-- Classic Red -->
+    <color name="widget_classic_title">#CE1126</color>
+    <color name="widget_classic_countdown">#CE1126</color>
+    <color name="widget_classic_opponent">#FFFFFF</color>
+    <color name="widget_classic_divider">#CE1126</color>
+    <color name="widget_classic_sub">#FFFFFF</color>
+    <color name="widget_classic_standing">#FFC107</color>
+    <color name="widget_classic_team">#D0D8E4</color>
+    <color name="widget_classic_team_det">#FFC107</color>
+    <color name="widget_classic_wcgb">#FF5252</color>
+    <color name="widget_classic_tag_text">#FFFFFF</color>
+
+    <!-- Motor City White -->
+    <color name="widget_whiteout_title">#CE1126</color>
+    <color name="widget_whiteout_countdown">#9E0B1D</color>
+    <color name="widget_whiteout_opponent">#1A1A1A</color>
+    <color name="widget_whiteout_divider">#CE1126</color>
+    <color name="widget_whiteout_sub">#333333</color>
+    <color name="widget_whiteout_standing">#9E0B1D</color>
+    <color name="widget_whiteout_team">#4A4A4A</color>
+    <color name="widget_whiteout_team_det">#CE1126</color>
+    <color name="widget_whiteout_wcgb">#B71C1C</color>
+    <color name="widget_whiteout_tag_text">#FFFFFF</color>
+
+    <!-- Heritage 1926 (cream/gold) -->
+    <color name="widget_heritage_title">#C9A227</color>
+    <color name="widget_heritage_countdown">#E8C547</color>
+    <color name="widget_heritage_opponent">#F5EFDC</color>
+    <color name="widget_heritage_divider">#C9A227</color>
+    <color name="widget_heritage_sub">#D8CFA8</color>
+    <color name="widget_heritage_standing">#E8C547</color>
+    <color name="widget_heritage_team">#B8AE8E</color>
+    <color name="widget_heritage_team_det">#E8C547</color>
+    <color name="widget_heritage_wcgb">#E07A5F</color>
+    <color name="widget_heritage_tag_text">#2A1F0D</color>
+
+    <!-- Night Black -->
+    <color name="widget_night_title">#E0322D</color>
+    <color name="widget_night_countdown">#E0322D</color>
+    <color name="widget_night_opponent">#F5F5F5</color>
+    <color name="widget_night_divider">#3A3A3A</color>
+    <color name="widget_night_sub">#B0B0B0</color>
+    <color name="widget_night_standing">#FFD54F</color>
+    <color name="widget_night_team">#9E9E9E</color>
+    <color name="widget_night_team_det">#FFD54F</color>
+    <color name="widget_night_wcgb">#FF8A80</color>
+    <color name="widget_night_tag_text">#FFFFFF</color>
+
+    <!-- Material You dynamic (neutral; host theme drives bg) -->
+    <color name="widget_my_title">#E8E8E8</color>
+    <color name="widget_my_countdown">#FFFFFF</color>
+    <color name="widget_my_opponent">#FFFFFF</color>
+    <color name="widget_my_divider">#808080</color>
+    <color name="widget_my_sub">#D0D0D0</color>
+    <color name="widget_my_standing">#FFE082</color>
+    <color name="widget_my_team">#C0C0C0</color>
+    <color name="widget_my_team_det">#FFE082</color>
+    <color name="widget_my_wcgb">#FF9E9E</color>
+    <color name="widget_my_tag_text">#FFFFFF</color>
+</resources>

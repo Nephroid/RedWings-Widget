@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Red Wings Widget</string>
+    <string name="red_wings_widget_desc">Red Wings next-game countdown with Atlantic standings</string>
+</resources>

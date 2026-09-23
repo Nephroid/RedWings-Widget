@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_bg_classic"
+    android:orientation="vertical"
+    android:gravity="fill"
+    android:clipToPadding="true"
+    android:clipChildren="true"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp">
+
+    <!-- Header: title + tag left, theme toggle right (RemoteViews-safe only) -->
+    <LinearLayout
+        android:id="@+id/widget_header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.2"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp">
+
+        <TextView
+            android:id="@+id/widget_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RED WINGS"
+            android:textColor="#CE1126"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.04"
+            android:includeFontPadding="false"
+            android:layout_marginEnd="6dp" />
+
+        <TextView
+            android:id="@+id/widget_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/widget_tag_classic"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text="NEXT GAME"
+            android:textColor="#FFFFFF"
+            android:textSize="8sp"
+            android:textStyle="bold"
+            android:includeFontPadding="false" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/widget_theme_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/widget_tag_classic"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text="&#127912; THEME"
+            android:textColor="#CE1126"
+            android:textSize="8sp"
+            android:includeFontPadding="false" />
+    </LinearLayout>
+
+    <!-- Divider as FrameLayout (NO bare <View>: not RemoteViews-safe) -->
+    <FrameLayout
+        android:id="@+id/widget_divider_top"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CE1126"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="3dp" />
+
+    <!-- Matchup: away logo | opponent + countdown | home logo -->
+    <LinearLayout
+        android:id="@+id/widget_matchup_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5.0"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp">
+
+        <ImageView
+            android:id="@+id/widget_away_logo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:scaleType="fitCenter"
+            android:padding="2dp"
+            android:src="@drawable/ic_redwings_logo" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3.2"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/widget_opponent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="vs. Maple Leafs"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.02"
+                android:gravity="center"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:id="@+id/widget_countdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1d 02h 45m"
+                android:textColor="#CE1126"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:maxLines="1"
+                android:includeFontPadding="false" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/widget_home_logo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:scaleType="fitCenter"
+            android:padding="2dp"
+            android:src="@drawable/ic_puck_placeholder" />
+    </LinearLayout>
+
+    <!-- Venue + standings context card -->
+    <LinearLayout
+        android:id="@+id/widget_info_card"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.0"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp">
+
+        <TextView
+            android:id="@+id/widget_venue_info"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Little Caesars Arena &#8226; Home"
+            android:textColor="#FFFFFF"
+            android:textSize="9.5sp"
+            android:textStyle="bold"
+            android:gravity="center|center_vertical"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:includeFontPadding="false" />
+
+        <TextView
+            android:id="@+id/widget_standing_h2h"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="3rd in Atlantic &#8226; 25-20-5"
+            android:textColor="#FFC107"
+            android:textSize="8.5sp"
+            android:textStyle="bold"
+            android:gravity="center|center_vertical"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:includeFontPadding="false" />
+    </LinearLayout>
+
+    <!-- Atlantic standings: 3 columns x 2 rows -->
+    <LinearLayout
+        android:id="@+id/widget_standings_table"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.8"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/widget_team_1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="1. BOS: 30-15-5"
+                android:textColor="#D0D8E4"
+                android:textSize="8.5sp"
+                android:textStyle="bold"
+                android:gravity="center|center_vertical"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:id="@+id/widget_team_2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="2. TOR: 28-16-6"
+                android:textColor="#D0D8E4"
+                android:textSize="8.5sp"
+                android:textStyle="bold"
+                android:gravity="center|center_vertical"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:includeFontPadding="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/widget_team_3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="3. FLA: 28-17-5"
+                android:textColor="#D0D8E4"
+                android:textSize="8.5sp"
+                android:textStyle="bold"
+                android:gravity="center|center_vertical"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:id="@+id/widget_team_4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="4. DET: 25-20-5"
+                android:textColor="#FFC107"
+                android:textSize="8.5sp"
+                android:textStyle="bold"
+                android:gravity="center|center_vertical"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:includeFontPadding="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/widget_team_5"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="5. TB: 26-18-6"
+                android:textColor="#D0D8E4"
+                android:textSize="8.5sp"
+                android:textStyle="bold"
+                android:gravity="center|center_vertical"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:id="@+id/widget_team_6"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="WCGB: 2.0"
+                android:textColor="#FF5252"
+                android:textSize="8.5sp"
+                android:textStyle="bold|italic"
+                android:gravity="center|center_vertical"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:includeFontPadding="false" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
