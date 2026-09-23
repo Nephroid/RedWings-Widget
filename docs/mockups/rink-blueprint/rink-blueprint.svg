@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="460" viewBox="0 0 720 460" font-family="monospace, 'Droid Sans Mono', 'Courier New', monospace">
+  <!-- BACKING: deep ice-navy -->
+  <rect x="0" y="0" width="720" height="460" rx="24" fill="#0A1A2F"/>
+  <rect x="1.5" y="1.5" width="717" height="457" rx="23" fill="none" stroke="#7FB3D5" stroke-opacity="0.55" stroke-width="2"/>
+
+  <!-- ===== FAINT RINK LINE-ART (export as PNG in production — see IMPLEMENTATION.md) ===== -->
+  <g stroke="#7FB3D5" fill="none">
+    <!-- rink outer outline -->
+    <rect x="22" y="22" width="676" height="416" rx="78" stroke-opacity="0.22" stroke-width="2"/>
+    <!-- blue lines -->
+    <line x1="222" y1="30" x2="222" y2="430" stroke-opacity="0.16" stroke-width="2.5"/>
+    <line x1="498" y1="30" x2="498" y2="430" stroke-opacity="0.16" stroke-width="2.5"/>
+    <!-- center line -->
+    <line x1="360" y1="30" x2="360" y2="430" stroke-opacity="0.20" stroke-width="2" stroke-dasharray="10 6"/>
+    <!-- center circle + dot -->
+    <circle cx="360" cy="230" r="58" stroke-opacity="0.18" stroke-width="2"/>
+    <circle cx="360" cy="230" r="5" fill="#7FB3D5" fill-opacity="0.20" stroke="none"/>
+    <!-- faceoff circles (4) -->
+    <circle cx="132" cy="140" r="36" stroke-opacity="0.18" stroke-width="1.75"/>
+    <circle cx="132" cy="320" r="36" stroke-opacity="0.18" stroke-width="1.75"/>
+    <circle cx="588" cy="140" r="36" stroke-opacity="0.18" stroke-width="1.75"/>
+    <circle cx="588" cy="320" r="36" stroke-opacity="0.18" stroke-width="1.75"/>
+    <circle cx="132" cy="140" r="4" fill="#7FB3D5" fill-opacity="0.20" stroke="none"/>
+    <circle cx="132" cy="320" r="4" fill="#7FB3D5" fill-opacity="0.20" stroke="none"/>
+    <circle cx="588" cy="140" r="4" fill="#7FB3D5" fill-opacity="0.20" stroke="none"/>
+    <circle cx="588" cy="320" r="4" fill="#7FB3D5" fill-opacity="0.20" stroke="none"/>
+    <!-- faceoff hash marks -->
+    <line x1="96" y1="140" x2="112" y2="140" stroke-opacity="0.14" stroke-width="1.5"/>
+    <line x1="152" y1="140" x2="168" y2="140" stroke-opacity="0.14" stroke-width="1.5"/>
+    <line x1="96" y1="320" x2="112" y2="320" stroke-opacity="0.14" stroke-width="1.5"/>
+    <line x1="152" y1="320" x2="168" y2="320" stroke-opacity="0.14" stroke-width="1.5"/>
+    <line x1="552" y1="140" x2="568" y2="140" stroke-opacity="0.14" stroke-width="1.5"/>
+    <line x1="608" y1="140" x2="624" y2="140" stroke-opacity="0.14" stroke-width="1.5"/>
+    <line x1="552" y1="320" x2="568" y2="320" stroke-opacity="0.14" stroke-width="1.5"/>
+    <line x1="608" y1="320" x2="624" y2="320" stroke-opacity="0.14" stroke-width="1.5"/>
+    <!-- goal creases -->
+    <path d="M 22 200 A 34 34 0 0 1 22 260" stroke-opacity="0.20" stroke-width="2"/>
+    <path d="M 698 200 A 34 34 0 0 0 698 260" stroke-opacity="0.20" stroke-width="2"/>
+    <!-- goal lines -->
+    <line x1="64" y1="46" x2="64" y2="414" stroke-opacity="0.12" stroke-width="1.5"/>
+    <line x1="656" y1="46" x2="656" y2="414" stroke-opacity="0.12" stroke-width="1.5"/>
+  </g>
+
+  <!-- ===== TECHNICAL HEADER STRIP ===== -->
+  <text x="48" y="52" font-size="15" letter-spacing="2" fill="#7FB3D5" fill-opacity="0.9">DET &#9656; RINK.BLUEPRINT / V1</text>
+  <text x="672" y="52" font-size="15" letter-spacing="2" fill="#7FB3D5" fill-opacity="0.9" text-anchor="end">FIG. 03 &#8212; 3&#215;2</text>
+  <line x1="48" y1="66" x2="672" y2="66" stroke="#7FB3D5" stroke-opacity="0.35" stroke-width="1"/>
+
+  <!-- ===== NEXT FACEOFF BLOCK (left) ===== -->
+  <text x="48" y="102" font-size="19" letter-spacing="5" fill="#7FB3D5">NEXT FACEOFF</text>
+  <!-- countdown: red reserved — chip in Wings red, white tabular numerals for legibility -->
+  <rect x="48" y="114" width="296" height="62" rx="8" fill="#CE1126"/>
+  <text x="196" y="157" font-size="40" font-weight="bold" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">1d 04h 22m</text>
+
+  <!-- matchup with logo circles (single-color stencil to respect palette) -->
+  <circle cx="70" cy="216" r="21" fill="#FFFFFF" stroke="#7FB3D5" stroke-width="1.5"/>
+  <text x="70" y="224" font-size="20" font-weight="bold" fill="#0A1A2F" text-anchor="middle">D</text>
+  <circle cx="118" cy="216" r="21" fill="#0A1A2F" stroke="#7FB3D5" stroke-width="1.5"/>
+  <text x="118" y="224" font-size="20" font-weight="bold" fill="#7FB3D5" text-anchor="middle">T</text>
+  <text x="152" y="225" font-size="25" font-weight="bold" fill="#FFFFFF">vs. Toronto Maple Leafs</text>
+
+  <!-- venue line -->
+  <text x="48" y="256" font-size="17" letter-spacing="1.5" fill="#7FB3D5">LITTLE CAESARS ARENA &#8212; 7:00 PM ET</text>
+
+  <!-- last shift -->
+  <text x="48" y="288" font-size="18" letter-spacing="2" fill="#7FB3D5">LAST SHIFT:</text>
+  <text x="196" y="288" font-size="19" font-weight="bold" fill="#FFFFFF" letter-spacing="1">W 4-2 at MTL</text>
+
+  <!-- divider above standings -->
+  <line x1="48" y1="306" x2="672" y2="306" stroke="#7FB3D5" stroke-opacity="0.35" stroke-width="1"/>
+
+  <!-- ===== STANDINGS — TABULAR DIAGRAM ROWS ===== -->
+  <text x="48" y="330" font-size="15" letter-spacing="3" fill="#7FB3D5">STANDINGS // ATLANTIC</text>
+  <text x="672" y="330" font-size="15" letter-spacing="2" fill="#7FB3D5" text-anchor="end">TAB. 01</text>
+
+  <!-- column header -->
+  <text x="48" y="352" font-size="13" letter-spacing="2" fill="#7FB3D5" fill-opacity="0.75">#&#160;&#160;TEAM</text>
+  <text x="330" y="352" font-size="13" letter-spacing="2" fill="#7FB3D5" fill-opacity="0.75">GP</text>
+  <text x="402" y="352" font-size="13" letter-spacing="2" fill="#7FB3D5" fill-opacity="0.75">PTS</text>
+
+  <!-- row: TOR -->
+  <text x="48" y="376" font-size="17" fill="#FFFFFF">1&#160;&#160;TOR</text>
+  <text x="330" y="376" font-size="17" fill="#FFFFFF">62</text>
+  <text x="402" y="376" font-size="17" fill="#FFFFFF">71</text>
+  <!-- row: FLA -->
+  <text x="48" y="400" font-size="17" fill="#FFFFFF">2&#160;&#160;FLA</text>
+  <text x="330" y="400" font-size="17" fill="#FFFFFF">61</text>
+  <text x="402" y="400" font-size="17" fill="#FFFFFF">68</text>
+  <!-- row: DET (highlight — second allowed red use) -->
+  <rect x="40" y="408" width="428" height="28" rx="4" fill="#CE1126"/>
+  <text x="48" y="429" font-size="17" font-weight="bold" fill="#FFFFFF">3&#160;&#160;DET</text>
+  <text x="330" y="429" font-size="17" font-weight="bold" fill="#FFFFFF">62</text>
+  <text x="402" y="429" font-size="17" font-weight="bold" fill="#FFFFFF">64</text>
+  <!-- WCGB chip (white/ice-blue only — red is reserved, so value stays white) -->
+  <rect x="492" y="406" width="180" height="32" rx="6" fill="none" stroke="#7FB3D5" stroke-opacity="0.8" stroke-width="1.5"/>
+  <text x="582" y="429" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">WCGB: 4</text>
+
+  <!-- footer datum -->
+  <text x="48" y="454" font-size="12" letter-spacing="2" fill="#7FB3D5" fill-opacity="0.6">SCALE 1:1 &#8212; ICE-NAVY / ICE-BLUE / WINGS-RED(POP ONLY)</text>
+</svg>

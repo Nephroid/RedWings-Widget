@@ -1,0 +1,177 @@
+<svg width="720" height="460" viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Red Wings Heritage 3x2 widget mockup">
+  <defs>
+    <!-- Flat colors only — no gradients per RemoteViews constraint -->
+  </defs>
+
+  <!-- ===== Paper base ===== -->
+  <rect x="0" y="0" width="720" height="460" rx="28" fill="#F5F1E6"/>
+  <!-- Outer + inner double rule (vintage program border) -->
+  <rect x="7" y="7" width="706" height="446" rx="23" fill="none" stroke="#1A1210" stroke-width="3"/>
+  <rect x="15" y="15" width="690" height="430" rx="17" fill="none" stroke="#1A1210" stroke-width="1"/>
+  <!-- Thin red keyline inside -->
+  <rect x="21" y="21" width="678" height="418" rx="13" fill="none" stroke="#CE1126" stroke-width="1" opacity="0.55"/>
+
+  <!-- ===== LEFT COLUMN : program cover (x 36–446) ===== -->
+
+  <!-- Masthead row: winged-wheel motif + title -->
+  <g>
+    <!-- Small winged-wheel circle motif (48px) -->
+    <circle cx="74" cy="66" r="24" fill="#CE1126"/>
+    <circle cx="74" cy="66" r="24" fill="none" stroke="#1A1210" stroke-width="1.5"/>
+    <circle cx="74" cy="66" r="18.5" fill="#F5F1E6"/>
+    <circle cx="74" cy="66" r="18.5" fill="none" stroke="#1A1210" stroke-width="1"/>
+    <!-- wheel -->
+    <circle cx="70" cy="68" r="7.5" fill="none" stroke="#CE1126" stroke-width="2"/>
+    <circle cx="70" cy="68" r="1.8" fill="#CE1126"/>
+    <line x1="70" y1="60.5" x2="70" y2="75.5" stroke="#CE1126" stroke-width="1.2"/>
+    <line x1="62.5" y1="68" x2="77.5" y2="68" stroke="#CE1126" stroke-width="1.2"/>
+    <!-- wing: three flat feather bars -->
+    <rect x="76" y="59" width="12" height="3" fill="#CE1126"/>
+    <rect x="76" y="63.5" width="14" height="3" fill="#CE1126"/>
+    <rect x="76" y="68" width="11" height="3" fill="#CE1126"/>
+    <rect x="76" y="72.5" width="7" height="2.4" fill="#1A1210"/>
+  </g>
+
+  <text x="110" y="52" font-family="Georgia, 'Palatino Linotype', 'Times New Roman', serif" font-size="13" letter-spacing="6" fill="#1A1210">DETROIT</text>
+  <text x="108" y="86" font-family="Georgia, 'Palatino Linotype', 'Times New Roman', serif" font-size="40" font-weight="bold" letter-spacing="1.5" fill="#1A1210">RED WINGS</text>
+  <text x="110" y="103" font-family="Georgia, 'Times New Roman', serif" font-size="10.5" font-style="italic" letter-spacing="2.2" fill="#1A1210">EST. 1926 &#183; ORIGINAL SIX &#183; DETROIT, MICH.</text>
+
+  <!-- Date tag: bordered ticket stub -->
+  <g>
+    <rect x="52" y="114" width="360" height="26" rx="13" fill="none" stroke="#1A1210" stroke-width="1.2"/>
+    <rect x="58" y="118" width="14" height="18" fill="#CE1126"/>
+    <text x="61.5" y="132" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#F5F1E6">7</text>
+    <text x="150" y="132" text-anchor="middle" font-family="Georgia, serif" font-size="12" letter-spacing="2.5" fill="#1A1210">SAT &#183; OCT 12 &#183; GAME No. 7</text>
+    <circle cx="394" cy="127" r="3" fill="none" stroke="#CE1126" stroke-width="1.5"/>
+  </g>
+
+  <!-- Double-rule divider with diamond -->
+  <g>
+    <line x1="52" y1="152" x2="212" y2="152" stroke="#1A1210" stroke-width="1.4"/>
+    <line x1="252" y1="152" x2="412" y2="152" stroke="#1A1210" stroke-width="1.4"/>
+    <line x1="52" y1="156" x2="212" y2="156" stroke="#1A1210" stroke-width="0.8"/>
+    <line x1="252" y1="156" x2="412" y2="156" stroke="#1A1210" stroke-width="0.8"/>
+    <rect x="227" y="149" width="10" height="10" transform="rotate(45 232 154)" fill="#CE1126" stroke="#1A1210" stroke-width="1"/>
+  </g>
+
+  <text x="232" y="176" text-anchor="middle" font-family="Georgia, serif" font-size="10.5" letter-spacing="4" fill="#1A1210">NEXT OPPONENT</text>
+
+  <!-- Matchup: two 96px logo circles -->
+  <g>
+    <!-- DET circle: 96px diameter -->
+    <circle cx="142" cy="224" r="48" fill="#F5F1E6" stroke="#CE1126" stroke-width="4"/>
+    <circle cx="142" cy="224" r="42" fill="none" stroke="#1A1210" stroke-width="1"/>
+    <circle cx="142" cy="224" r="40" fill="#EAE2CC"/>
+    <!-- mini winged wheel inside -->
+    <circle cx="134" cy="226" r="12" fill="none" stroke="#CE1126" stroke-width="3"/>
+    <circle cx="134" cy="226" r="2.6" fill="#1A1210"/>
+    <line x1="134" y1="214" x2="134" y2="238" stroke="#CE1126" stroke-width="1.6"/>
+    <line x1="122" y1="226" x2="146" y2="226" stroke="#CE1126" stroke-width="1.6"/>
+    <rect x="144" y="214" width="20" height="4.5" fill="#CE1126"/>
+    <rect x="144" y="220.5" width="23" height="4.5" fill="#CE1126"/>
+    <rect x="144" y="227" width="19" height="4.5" fill="#CE1126"/>
+    <rect x="144" y="233.5" width="12" height="3.5" fill="#1A1210"/>
+    <text x="142" y="258" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="2.5" fill="#1A1210">DETROIT</text>
+
+    <!-- VS cartouche -->
+    <rect x="214" y="212" width="36" height="24" fill="#1A1210"/>
+    <text x="232" y="229" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" font-weight="bold" fill="#F5F1E6">vs.</text>
+
+    <!-- TOR circle: 96px diameter -->
+    <circle cx="322" cy="224" r="48" fill="#F5F1E6" stroke="#1A1210" stroke-width="3"/>
+    <circle cx="322" cy="224" r="42" fill="none" stroke="#CE1126" stroke-width="1.5"/>
+    <circle cx="322" cy="224" r="40" fill="#EAE2CC"/>
+    <!-- simplified leaf -->
+    <path d="M322 206 L326 214 L334 212 L331 219 L338 223 L330 226 L332 234 L324 231 L322 240 L320 231 L312 234 L314 226 L306 223 L313 219 L310 212 L318 214 Z" fill="none" stroke="#1A1210" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M322 206 L326 214 L334 212 L331 219 L338 223 L330 226 L332 234 L324 231 L322 240 L320 231 L312 234 L314 226 L306 223 L313 219 L310 212 L318 214 Z" fill="#CE1126" opacity="0.22"/>
+    <text x="322" y="258" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="2.5" fill="#1A1210">TORONTO</text>
+  </g>
+
+  <text x="232" y="282" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="19" font-style="italic" fill="#1A1210">vs. Toronto Maple Leafs</text>
+
+  <!-- Countdown block with flanking rules -->
+  <g>
+    <line x1="52" y1="308" x2="120" y2="308" stroke="#1A1210" stroke-width="0.8"/>
+    <line x1="344" y1="308" x2="412" y2="308" stroke="#1A1210" stroke-width="0.8"/>
+    <text x="232" y="312" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="3.5" fill="#CE1126">NEXT FACE-OFF IN</text>
+    <text x="232" y="350" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="44" font-weight="bold" letter-spacing="1" fill="#1A1210">1d 04h 22m</text>
+    <line x1="130" y1="360" x2="334" y2="360" stroke="#CE1126" stroke-width="1.5"/>
+    <line x1="130" y1="363" x2="334" y2="363" stroke="#1A1210" stroke-width="0.8"/>
+  </g>
+
+  <text x="232" y="384" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-style="italic" fill="#1A1210">Little Caesars Arena &#183; Home</text>
+
+  <!-- Last-result ticket line -->
+  <g>
+    <rect x="102" y="392" width="30" height="20" fill="#CE1126" stroke="#1A1210" stroke-width="1"/>
+    <text x="117" y="406" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#F5F1E6">W</text>
+    <text x="262" y="406" text-anchor="middle" font-family="Georgia, serif" font-size="12.5" letter-spacing="0.8" fill="#1A1210">Last: W 4-2 at MTL</text>
+  </g>
+
+  <!-- ===== VERTICAL DOUBLE RULE ===== -->
+  <line x1="460" y1="40" x2="460" y2="420" stroke="#1A1210" stroke-width="1.2"/>
+  <line x1="465" y1="40" x2="465" y2="420" stroke="#1A1210" stroke-width="0.8"/>
+
+  <!-- ===== RIGHT COLUMN : standings ledger (x 478–684) ===== -->
+  <text x="581" y="56" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" letter-spacing="3" fill="#1A1210">ATLANTIC</text>
+  <text x="581" y="70" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="4.5" fill="#CE1126">DIVISION</text>
+  <line x1="490" y1="78" x2="672" y2="78" stroke="#1A1210" stroke-width="1.2"/>
+  <line x1="490" y1="81" x2="672" y2="81" stroke="#1A1210" stroke-width="0.7"/>
+  <text x="581" y="95" text-anchor="middle" font-family="Georgia, serif" font-size="8.5" letter-spacing="1.5" fill="#1A1210" opacity="0.75">CLUB &#183;&#183;&#183; W-L-OT &#183;&#183;&#183; PTS</text>
+
+  <g font-family="Georgia, serif">
+    <!-- Row 1 -->
+    <text x="496" y="118" font-size="11" fill="#1A1210" opacity="0.6">1</text>
+    <text x="512" y="118" font-size="12" font-weight="bold" letter-spacing="1" fill="#1A1210">FLA</text>
+    <text x="596" y="118" font-size="11" fill="#1A1210">4-2-0</text>
+    <text x="646" y="118" font-size="12" font-weight="bold" fill="#1A1210">8</text>
+    <line x1="490" y1="128" x2="672" y2="128" stroke="#1A1210" stroke-width="0.6" opacity="0.4"/>
+    <!-- Row 2 -->
+    <text x="496" y="151" font-size="11" fill="#1A1210" opacity="0.6">2</text>
+    <text x="512" y="151" font-size="12" font-weight="bold" letter-spacing="1" fill="#1A1210">TOR</text>
+    <text x="596" y="151" font-size="11" fill="#1A1210">4-1-0</text>
+    <text x="646" y="151" font-size="12" font-weight="bold" fill="#1A1210">8</text>
+    <line x1="490" y1="161" x2="672" y2="161" stroke="#1A1210" stroke-width="0.6" opacity="0.4"/>
+    <!-- Row 3 DET highlighted -->
+    <rect x="486" y="169" width="190" height="30" fill="#EADFC6" stroke="#CE1126" stroke-width="1.2"/>
+    <rect x="486" y="169" width="5" height="30" fill="#CE1126"/>
+    <text x="500" y="189" font-size="11" font-weight="bold" fill="#CE1126">3</text>
+    <text x="516" y="189" font-size="13" font-weight="bold" letter-spacing="1" fill="#1A1210">DET &#10022;</text>
+    <text x="594" y="189" font-size="11" font-weight="bold" fill="#1A1210">3-2-1</text>
+    <text x="646" y="189" font-size="13" font-weight="bold" fill="#CE1126">7</text>
+    <!-- Row 4 -->
+    <text x="496" y="222" font-size="11" fill="#1A1210" opacity="0.6">4</text>
+    <text x="512" y="222" font-size="12" font-weight="bold" letter-spacing="1" fill="#1A1210">BOS</text>
+    <text x="596" y="222" font-size="11" fill="#1A1210">3-3-0</text>
+    <text x="646" y="222" font-size="12" font-weight="bold" fill="#1A1210">6</text>
+    <line x1="490" y1="232" x2="672" y2="232" stroke="#1A1210" stroke-width="0.6" opacity="0.4"/>
+    <!-- Row 5 -->
+    <text x="496" y="255" font-size="11" fill="#1A1210" opacity="0.6">5</text>
+    <text x="512" y="255" font-size="12" font-weight="bold" letter-spacing="1" fill="#1A1210">OTT</text>
+    <text x="596" y="255" font-size="11" fill="#1A1210">2-3-1</text>
+    <text x="646" y="255" font-size="12" font-weight="bold" fill="#1A1210">5</text>
+    <line x1="490" y1="265" x2="672" y2="265" stroke="#1A1210" stroke-width="1.2"/>
+    <line x1="490" y1="268" x2="672" y2="268" stroke="#1A1210" stroke-width="0.7"/>
+  </g>
+
+  <!-- WCGB box -->
+  <g>
+    <rect x="490" y="280" width="182" height="34" fill="none" stroke="#1A1210" stroke-width="1.2"/>
+    <rect x="490" y="280" width="56" height="34" fill="#1A1210"/>
+    <text x="518" y="302" text-anchor="middle" font-family="Georgia, serif" font-size="10" letter-spacing="1.5" fill="#F5F1E6">WCGB</text>
+    <text x="606" y="303" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#1A1210">WCGB: 4</text>
+  </g>
+
+  <!-- Footer ornament -->
+  <g>
+    <line x1="500" y1="340" x2="556" y2="340" stroke="#1A1210" stroke-width="0.7"/>
+    <line x1="606" y1="340" x2="662" y2="340" stroke="#1A1210" stroke-width="0.7"/>
+    <circle cx="581" cy="340" r="5" fill="none" stroke="#CE1126" stroke-width="1.5"/>
+    <circle cx="581" cy="340" r="1.4" fill="#CE1126"/>
+    <text x="581" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="9" font-style="italic" letter-spacing="2" fill="#1A1210">Since 1926</text>
+    <text x="581" y="378" text-anchor="middle" font-family="Georgia, serif" font-size="8" letter-spacing="2.5" fill="#1A1210" opacity="0.7">HOCKEYTOWN &#183; No. 7</text>
+    <!-- bottom red seal -->
+    <rect x="540" y="388" width="82" height="20" rx="10" fill="#CE1126" stroke="#1A1210" stroke-width="1"/>
+    <text x="581" y="402" text-anchor="middle" font-family="Georgia, serif" font-size="9" font-weight="bold" letter-spacing="2" fill="#F5F1E6">GO WINGS</text>
+  </g>
+</svg>

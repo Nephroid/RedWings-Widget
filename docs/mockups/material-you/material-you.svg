@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="460" viewBox="0 0 720 460" role="img" aria-label="Material You light mockup of Detroit Red Wings 3x2 widget">
+  <title>Red Wings Widget — Material You Adaptive (Light)</title>
+  <desc>Pixel-native light mockup: pale-red container, tonal chips, soft logo tints, big countdown, soft standings rows, FAB refresh.</desc>
+
+  <!-- Wallpaper / canvas -->
+  <rect x="0" y="0" width="720" height="460" rx="0" fill="#E7EAF1"/>
+  <circle cx="90" cy="400" r="150" fill="#D8E2FF" opacity="0.55"/>
+  <circle cx="660" cy="60" r="130" fill="#F9D2D2" opacity="0.55"/>
+
+  <!-- Widget shadow (flat, SVG-only presentation — not part of RemoteViews) -->
+  <rect x="22" y="26" width="676" height="416" rx="58" fill="#1A1B1E" opacity="0.10"/>
+
+  <!-- Widget container: 28dp rounded, light dynamic tint -->
+  <rect x="20" y="20" width="676" height="416" rx="56" fill="#FBEAEA" stroke="#EAD0D0" stroke-width="1.5"/>
+
+  <!-- Inner content uses 32px padding: content left = 52 -->
+  <g font-family="Roboto, 'Google Sans', system-ui, -apple-system, 'Segoe UI', sans-serif">
+
+    <!-- Header row -->
+    <!-- Tonal header chip RED WINGS -->
+    <rect x="52" y="52" width="172" height="40" rx="20" fill="#F3C4C4"/>
+    <circle cx="78" cy="72" r="7" fill="#B3261E"/>
+    <!-- tiny wing tick inside dot for Red Wings hint -->
+    <path d="M74 72 L82 72" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+    <text x="94" y="77.5" font-size="14" font-weight="700" letter-spacing="1.8" fill="#561010">RED WINGS</text>
+
+    <!-- Date / medium-emphasis label -->
+    <text x="238" y="77" font-size="13" font-weight="500" letter-spacing="0.6" fill="#8A6E70">WED · SEP 23</text>
+
+    <!-- Floating action-style refresh glyph -->
+    <circle cx="634" cy="72" r="23" fill="#FFFFFF" stroke="#E7C8C8" stroke-width="1.5"/>
+    <text x="634" y="80" font-size="22" font-weight="700" text-anchor="middle" fill="#8C1D18">⟳</text>
+
+    <!-- Matchup row -->
+    <!-- Soft-tinted logo backgrounds -->
+    <circle cx="90" cy="164" r="31" fill="#F6C7C7" stroke="#FFFFFF" stroke-width="3"/>
+    <text x="90" y="173" font-size="24" font-weight="800" text-anchor="middle" fill="#8C1D18">D</text>
+    <!-- mini wing mark under D -->
+    <path d="M78 178 Q90 184 102 178" stroke="#8C1D18" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+
+    <circle cx="150" cy="164" r="31" fill="#D7E3FF" stroke="#FFFFFF" stroke-width="3"/>
+    <text x="150" y="173" font-size="24" font-weight="800" text-anchor="middle" fill="#0A305F">T</text>
+    <path d="M142 178 Q150 183 158 178" stroke="#0A305F" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.55"/>
+
+    <text x="198" y="158" font-size="22" font-weight="700" letter-spacing="0.1" fill="#201A1B">vs. Toronto Maple Leafs</text>
+    <text x="198" y="182" font-size="13.5" font-weight="500" fill="#74565A">Away · Scotiabank Arena rival matchup</text>
+
+    <!-- Countdown block -->
+    <text x="52" y="224" font-size="12" font-weight="700" letter-spacing="2" fill="#8A6E70">NEXT FACEOFF IN</text>
+    <text x="50" y="264" font-size="40" font-weight="800" letter-spacing="0.5" fill="#211A1A">1d 04h 22m</text>
+    <text x="322" y="262" font-size="14" font-weight="700" fill="#8C1D18" opacity="0.85">Thu</text>
+
+    <!-- Venue line -->
+    <circle cx="60" cy="286" r="3.5" fill="#A08A8D"/>
+    <text x="72" y="291" font-size="14" font-weight="500" fill="#6E5659">Thu 7:00 PM • Little Caesars Arena</text>
+
+    <!-- Tonal chips row (no dividers, spacing only) -->
+    <!-- Last-result chip: green secondary-container tonal -->
+    <rect x="52" y="306" width="184" height="36" rx="18" fill="#CFE8CF"/>
+    <text x="70" y="329" font-size="14" font-weight="700" letter-spacing="0.3" fill="#0F3710">✓  W 4–2 at MTL</text>
+
+    <!-- Home chip: white tonal -->
+    <rect x="246" y="306" width="126" height="36" rx="18" fill="#FFFFFF" stroke="#E8CFCF" stroke-width="1.2"/>
+    <circle cx="268" cy="324" r="5" fill="#B3261E"/>
+    <text x="280" y="329" font-size="14" font-weight="700" letter-spacing="0.8" fill="#5A1111">HOME</text>
+
+    <!-- Streak hint chip: neutral tonal -->
+    <rect x="382" y="306" width="132" height="36" rx="18" fill="#F2D9D9"/>
+    <text x="400" y="329" font-size="14" font-weight="700" fill="#5A1111">Streak W2</text>
+
+    <!-- Standings: soft rows card + WCGB chip -->
+    <rect x="52" y="356" width="588" height="64" rx="24" fill="#FFF8F7"/>
+    <!-- Row content: no dividers, spacing does the work -->
+    <circle cx="80" cy="388" r="6" fill="#B3261E" opacity="0.9"/>
+    <text x="94" y="384" font-size="14" font-weight="700" fill="#201A1B">5th Atlantic</text>
+    <text x="94" y="402" font-size="13" font-weight="500" fill="#74565A">28–22–6 · 62 pts</text>
+
+    <!-- soft spacer dots (not a divider) -->
+    <circle cx="268" cy="388" r="3" fill="#E3C9C9"/>
+
+    <text x="284" y="384" font-size="14" font-weight="700" fill="#201A1B">Playoff race</text>
+    <text x="284" y="402" font-size="13" font-weight="500" fill="#74565A">2 pts out · 3 GR</text>
+
+    <!-- WCGB chip: tertiary-container tonal -->
+    <rect x="478" y="368" width="138" height="40" rx="20" fill="#FFE0A3"/>
+    <text x="547" y="394" font-size="14" font-weight="800" text-anchor="middle" fill="#3A2800">WCGB +2</text>
+  </g>
+</svg>

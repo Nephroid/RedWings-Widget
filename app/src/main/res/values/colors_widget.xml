@@ -29,17 +29,17 @@
     <color name="widget_whiteout_wcgb">#B71C1C</color>
     <color name="widget_whiteout_tag_text">#FFFFFF</color>
 
-    <!-- Heritage 1926 (cream/gold) -->
-    <color name="widget_heritage_title">#C9A227</color>
-    <color name="widget_heritage_countdown">#E8C547</color>
-    <color name="widget_heritage_opponent">#F5EFDC</color>
-    <color name="widget_heritage_divider">#C9A227</color>
-    <color name="widget_heritage_sub">#D8CFA8</color>
-    <color name="widget_heritage_standing">#E8C547</color>
-    <color name="widget_heritage_team">#B8AE8E</color>
-    <color name="widget_heritage_team_det">#E8C547</color>
-    <color name="widget_heritage_wcgb">#E07A5F</color>
-    <color name="widget_heritage_tag_text">#2A1F0D</color>
+    <!-- Heritage 1926 (paper cream / wings red / ink) -->
+    <color name="widget_heritage_title">#1A1210</color>
+    <color name="widget_heritage_countdown">#CE1126</color>
+    <color name="widget_heritage_opponent">#1A1210</color>
+    <color name="widget_heritage_divider">#CE1126</color>
+    <color name="widget_heritage_sub">#1A1210</color>
+    <color name="widget_heritage_standing">#1A1210</color>
+    <color name="widget_heritage_team">#5A4A33</color>
+    <color name="widget_heritage_team_det">#CE1126</color>
+    <color name="widget_heritage_wcgb">#CE1126</color>
+    <color name="widget_heritage_tag_text">#F5F1E6</color>
 
     <!-- Night Black -->
     <color name="widget_night_title">#E0322D</color>

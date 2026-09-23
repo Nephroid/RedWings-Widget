@@ -113,8 +113,8 @@ class RedWingsWidgetProviderTest {
             provider.applyResponsiveLayout(context, views, 180, 110)
             assertNotNull(views)
         }
-        // Index wraps around the 5 themes.
-        assertEquals(WidgetTheme.CLASSIC_RED, WidgetTheme.fromIndex(5))
+        // Index wraps around the 5 themes (HERITAGE is index 0).
+        assertEquals(WidgetTheme.HERITAGE, WidgetTheme.fromIndex(5))
         assertEquals(WidgetTheme.MY_DYNAMIC, WidgetTheme.fromIndex(-1))
     }
 

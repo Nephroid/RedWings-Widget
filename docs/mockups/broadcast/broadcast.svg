@@ -1,0 +1,115 @@
+<svg width="720" height="460" viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Red Wings Scoreboard Broadcast widget mockup">
+  <defs>
+    <clipPath id="card">
+      <rect x="2" y="2" width="716" height="456" rx="26"/>
+    </clipPath>
+  </defs>
+
+  <!-- CARD BASE -->
+  <rect x="2" y="2" width="716" height="456" rx="26" fill="#FFFFFF" stroke="#111111" stroke-width="4"/>
+  <g clip-path="url(#card)">
+    <!-- HEADER BAND -->
+    <rect x="0" y="0" width="720" height="80" fill="#CE1126"/>
+    <!-- header speed lines -->
+    <rect x="0" y="64" width="720" height="4" fill="#FFFFFF" opacity="0.25"/>
+    <rect x="430" y="0" width="10" height="80" fill="#FFFFFF" opacity="0.14" transform="skewX(-20)"/>
+    <rect x="455" y="0" width="6" height="80" fill="#FFFFFF" opacity="0.14" transform="skewX(-20)"/>
+    <rect x="470" y="0" width="3" height="80" fill="#FFFFFF" opacity="0.14" transform="skewX(-20)"/>
+
+    <!-- header left text -->
+    <text x="24" y="28" font-family="'Arial Narrow','Roboto Condensed','HelveticaNeue-CondensedBold',Arial,sans-serif" font-size="18" font-weight="700" letter-spacing="4" fill="#FFFFFF">DETROIT</text>
+    <text x="22" y="62" font-family="'Arial Narrow','Roboto Condensed','HelveticaNeue-CondensedBold',Arial,sans-serif" font-size="42" font-weight="900" letter-spacing="1" fill="#FFFFFF">RED WINGS</text>
+    <!-- header right chip -->
+    <rect x="534" y="18" width="162" height="44" rx="6" fill="#111111"/>
+    <text x="615" y="35" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="900" letter-spacing="1.5" fill="#FFFFFF">NHL • ATLANTIC</text>
+    <circle cx="556" cy="46" r="5" fill="#FFFFFF"/>
+    <text x="568" y="51" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="900" letter-spacing="1" fill="#FFFFFF">4TH • 63 PTS</text>
+
+    <!-- thick black divider under header -->
+    <rect x="0" y="80" width="720" height="6" fill="#111111"/>
+
+    <!-- NEXT GAME ROW -->
+    <text x="24" y="108" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="900" letter-spacing="2.5" fill="#CE1126">NEXT GAME • FRI FEB 14</text>
+    <text x="22" y="140" font-family="'Arial Narrow','Roboto Condensed',Arial,sans-serif" font-size="30" font-weight="900" letter-spacing="0.5" fill="#111111">VS. TORONTO MAPLE LEAFS</text>
+    <text x="24" y="160" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="700" letter-spacing="1" fill="#555555">7:00 PM ET • TNT</text>
+
+    <!-- countdown bug right -->
+    <text x="520" y="108" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="900" letter-spacing="2" fill="#555555">PUCK DROP IN</text>
+    <rect x="504" y="114" width="192" height="48" rx="8" fill="#111111"/>
+    <rect x="504" y="114" width="8" height="48" fill="#CE1126"/>
+    <text x="608" y="146" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="900" letter-spacing="1" fill="#FFFFFF">1d 04h 22m</text>
+
+    <rect x="0" y="170" width="720" height="4" fill="#111111"/>
+
+    <!-- LAST GAME SCORE BUG -->
+    <text x="24" y="190" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="900" letter-spacing="2" fill="#555555">LAST GAME</text>
+    <!-- bug bar -->
+    <rect x="24" y="196" width="672" height="42" rx="8" fill="#111111"/>
+    <rect x="24" y="196" width="104" height="42" rx="8" fill="#CE1126"/>
+    <rect x="100" y="196" width="28" height="42" fill="#CE1126"/>
+    <text x="76" y="223" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="900" letter-spacing="1.5" fill="#FFFFFF">FINAL</text>
+    <text x="268" y="224" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="24" font-weight="900" letter-spacing="1" fill="#FFFFFF">DET 4 <tspan fill="#888888">–</tspan> MTL 2</text>
+    <rect x="398" y="206" width="2" height="22" fill="#555555"/>
+    <text x="548" y="223" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="700" letter-spacing="1" fill="#FFFFFF">W • HOME</text>
+
+    <rect x="0" y="244" width="720" height="4" fill="#111111"/>
+
+    <!-- VENUE ROW -->
+    <text x="24" y="264" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="900" letter-spacing="1.5" fill="#111111">LITTLE CAESARS ARENA</text>
+    <text x="320" y="264" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" letter-spacing="1" fill="#555555">DETROIT, MI</text>
+    <!-- HOME pill (active) / AWAY pill (inactive) -->
+    <rect x="540" y="248" width="84" height="26" rx="13" fill="#CE1126"/>
+    <text x="582" y="265" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="900" letter-spacing="1.5" fill="#FFFFFF">HOME</text>
+    <rect x="630" y="248" width="66" height="26" rx="13" fill="#FFFFFF" stroke="#111111" stroke-width="2"/>
+    <text x="663" y="265" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="900" letter-spacing="1" fill="#111111">AWAY</text>
+
+    <rect x="0" y="280" width="720" height="4" fill="#111111"/>
+
+    <!-- STANDINGS BAR -->
+    <rect x="0" y="284" width="720" height="24" fill="#111111"/>
+    <text x="24" y="301" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="900" letter-spacing="2" fill="#FFFFFF">ATLANTIC LEADERBOARD</text>
+    <text x="696" y="301" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="900" letter-spacing="1.5" fill="#FFFFFF">W – L – OTL • PTS</text>
+
+    <!-- ROWS -->
+    <!-- row 1 -->
+    <rect x="0" y="308" width="720" height="26" fill="#FFFFFF"/>
+    <text x="24" y="326" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="900" fill="#999999">1</text>
+    <text x="52" y="326" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="900" letter-spacing="0.5" fill="#111111">TOR</text>
+    <text x="560" y="326" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" fill="#333333">32 – 16 – 6</text>
+    <text x="660" y="326" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="900" fill="#111111">70</text>
+    <rect x="24" y="332" width="672" height="1" fill="#E5E5E5"/>
+    <!-- row 2 -->
+    <rect x="0" y="333" width="720" height="26" fill="#FFFFFF"/>
+    <text x="24" y="351" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="900" fill="#999999">2</text>
+    <text x="52" y="351" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="900" fill="#111111">FLA</text>
+    <text x="560" y="351" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" fill="#333333">31 – 17 – 5</text>
+    <text x="660" y="351" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="900" fill="#111111">67</text>
+    <rect x="24" y="357" width="672" height="1" fill="#E5E5E5"/>
+    <!-- row 3 -->
+    <rect x="0" y="358" width="720" height="26" fill="#FFFFFF"/>
+    <text x="24" y="376" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="900" fill="#999999">3</text>
+    <text x="52" y="376" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="900" fill="#111111">TBL</text>
+    <text x="560" y="376" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" fill="#333333">29 – 18 – 7</text>
+    <text x="660" y="376" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="900" fill="#111111">65</text>
+    <rect x="24" y="382" width="672" height="1" fill="#E5E5E5"/>
+    <!-- row 4 DET highlighted -->
+    <rect x="0" y="383" width="720" height="28" fill="#FDECEF"/>
+    <rect x="0" y="383" width="8" height="28" fill="#CE1126"/>
+    <text x="24" y="402" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="900" fill="#CE1126">4</text>
+    <text x="52" y="402" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="900" fill="#CE1126">DET ◀</text>
+    <text x="560" y="402" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="900" fill="#111111">28 – 19 – 7</text>
+    <rect x="600" y="386" width="80" height="22" rx="4" fill="#111111"/>
+    <text x="640" y="402" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="900" fill="#FFFFFF">63</text>
+    <!-- row 5 -->
+    <rect x="0" y="411" width="720" height="25" fill="#FFFFFF"/>
+    <text x="24" y="429" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="900" fill="#999999">5</text>
+    <text x="52" y="429" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="900" fill="#111111">BOS</text>
+    <text x="560" y="429" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" fill="#333333">26 – 20 – 8</text>
+    <text x="660" y="429" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="900" fill="#111111">60</text>
+
+    <!-- WCGB FOOTER TICKER -->
+    <rect x="0" y="436" width="720" height="24" fill="#111111"/>
+    <rect x="0" y="436" width="720" height="3" fill="#CE1126"/>
+    <text x="360" y="453" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="900" letter-spacing="1.2" fill="#FFFFFF">DET 4TH ATL • 63 PTS • WCGB +2 • TRAIL TOR BY 7</text>
+  </g>
+</svg>

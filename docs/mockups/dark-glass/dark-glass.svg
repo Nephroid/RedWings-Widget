@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="460" viewBox="0 0 720 460" font-family="Roboto, 'Segoe UI', Arial, sans-serif">
+  <defs>
+    <!-- Mockup-only glow. NOT available in RemoteViews — see IMPLEMENTATION.md -->
+    <filter id="redGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="14" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="22" result="b"/>
+      <feComposite in="SourceGraphic" in2="b" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- ===== canvas ===== -->
+  <rect x="0" y="0" width="720" height="460" rx="0" fill="#08080B"/>
+  <!-- widget card 3x2 -->
+  <rect x="10" y="10" width="700" height="440" rx="28" fill="#0E0E12" stroke="#26262E" stroke-width="1.5"/>
+
+  <!-- thin red top accent hairline -->
+  <rect x="42" y="10.75" width="636" height="2" fill="#CE1126" opacity="0.9"/>
+  <!-- faint red ambient wash behind countdown (mockup only; implement as flat or PNG) -->
+  <ellipse cx="360" cy="168" rx="260" ry="86" fill="#CE1126" opacity="0.10" filter="url(#softGlow)"/>
+
+  <!-- ===== header ===== -->
+  <text x="42" y="58" font-size="19" letter-spacing="3.5" fill="#A2AAAD" font-weight="600">RED WINGS<tspan fill="#4A4A55">  •  </tspan><tspan fill="#FFFFFF">OCT 11</tspan></text>
+  <text x="678" y="58" font-size="15" letter-spacing="2.5" fill="#A2AAAD" font-weight="600" text-anchor="end">NEXT GAME</text>
+  <!-- live/status dot + label -->
+  <circle cx="622" cy="53" r="4" fill="#CE1126"/>
+  <circle cx="622" cy="53" r="8" fill="#CE1126" opacity="0.25"/>
+
+  <!-- header divider -->
+  <line x1="42" y1="76" x2="678" y2="76" stroke="#26262E" stroke-width="1"/>
+
+  <!-- ===== giant countdown (numbers-first) ===== -->
+  <!-- glow underlay: same glyphs, blurred, mockup-only -->
+  <text x="360" y="182" font-size="118" font-weight="800" fill="#CE1126" opacity="0.45" text-anchor="middle" letter-spacing="2" filter="url(#redGlow)">1d 04:22</text>
+  <!-- crisp foreground numerals -->
+  <text x="360" y="182" font-size="118" font-weight="800" fill="#E82338" text-anchor="middle" letter-spacing="2">1d 04:22</text>
+  <!-- unit labels -->
+  <text x="248" y="208" font-size="14" letter-spacing="3" fill="#A2AAAD" font-weight="600" text-anchor="middle">DAYS</text>
+  <text x="372" y="208" font-size="14" letter-spacing="3" fill="#A2AAAD" font-weight="600" text-anchor="middle">HRS</text>
+  <text x="490" y="208" font-size="14" letter-spacing="3" fill="#A2AAAD" font-weight="600" text-anchor="middle">MIN</text>
+  <!-- seconds tick -->
+  <text x="360" y="232" font-size="16" letter-spacing="4" fill="#6E6E7A" font-weight="600" text-anchor="middle">:18<tspan fill="#4A4A55"> SEC</tspan></text>
+
+  <!-- thin red divider -->
+  <line x1="42" y1="252" x2="678" y2="252" stroke="#CE1126" stroke-width="1" opacity="0.65"/>
+
+  <!-- ===== matchup row ===== -->
+  <!-- logo circles (flat; real logos = PNG assets) -->
+  <circle cx="72" cy="296" r="26" fill="#CE1126"/>
+  <circle cx="72" cy="296" r="26" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.35"/>
+  <text x="72" y="305" font-size="24" font-weight="800" fill="#FFFFFF" text-anchor="middle">D</text>
+  <circle cx="128" cy="296" r="26" fill="#0A2342"/>
+  <circle cx="128" cy="296" r="26" fill="none" stroke="#A2AAAD" stroke-width="1.5" opacity="0.5"/>
+  <text x="128" y="305" font-size="24" font-weight="800" fill="#FFFFFF" text-anchor="middle">T</text>
+  <text x="164" y="294" font-size="27" font-weight="800" fill="#FFFFFF">vs. Toronto Maple Leafs</text>
+  <text x="164" y="318" font-size="17" font-weight="500" fill="#A2AAAD">Sat • 7:00 PM ET • TNT</text>
+
+  <!-- last-result chip -->
+  <rect x="528" y="276" width="150" height="40" rx="20" fill="#1A1A21" stroke="#2E2E38" stroke-width="1"/>
+  <text x="552" y="302" font-size="18" font-weight="800" fill="#CE1126">W</text>
+  <text x="574" y="302" font-size="18" font-weight="700" fill="#FFFFFF">4–2 vs MTL</text>
+
+  <!-- venue line -->
+  <circle cx="48" cy="348" r="2.5" fill="#A2AAAD" opacity="0.8"/>
+  <text x="60" y="353" font-size="16" font-weight="500" fill="#A2AAAD">Little Caesars Arena • Detroit, MI</text>
+
+  <!-- ===== standings block ===== -->
+  <line x1="42" y1="370" x2="678" y2="370" stroke="#26262E" stroke-width="1"/>
+  <text x="42" y="392" font-size="13" letter-spacing="2.5" fill="#6E6E7A" font-weight="700">ATLANTIC</text>
+  <text x="678" y="392" font-size="13" letter-spacing="1.5" fill="#6E6E7A" font-weight="700" text-anchor="end">WCGB  +1.0</text>
+
+  <!-- row 1 -->
+  <text x="42" y="414" font-size="16" font-weight="600" fill="#A2AAAD">1  TOR   3–1–0</text>
+  <text x="220" y="414" font-size="16" font-weight="700" fill="#A2AAAD">7 PTS</text>
+  <!-- row 2 (highlighted DET) -->
+  <rect x="300" y="398" width="220" height="26" rx="6" fill="#1A1A21" stroke="#CE1126" stroke-width="1" opacity="1"/>
+  <rect x="300" y="398" width="4" height="26" fill="#CE1126"/>
+  <text x="314" y="416" font-size="16" font-weight="800" fill="#FFFFFF">2  DET   3–2–0   6 PTS</text>
+  <!-- row 3 -->
+  <text x="540" y="414" font-size="16" font-weight="600" fill="#A2AAAD">3  BOS   2–2–1   5 PTS</text>
+
+  <!-- footer tag -->
+  <text x="360" y="441" font-size="10" letter-spacing="3" fill="#3A3A44" font-weight="600" text-anchor="middle">MIDNIGHT AT THE JOE • DARK GLASS</text>
+</svg>
