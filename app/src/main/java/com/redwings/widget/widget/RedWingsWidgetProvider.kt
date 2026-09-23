@@ -145,9 +145,9 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
             views.setTextColor(id, if (row.contains("DET", ignoreCase = true)) detColor else teamColor)
         }
         val wcBack = prefs.getString(KEY_WCGB, "--") ?: "--"
-        val inPlayoffs = prefs.getString(KEY_PO_STATUS, "OUT").let {
-            it.equals("IN", true) || it.contains("CLINCHED", true)
-        }
+        val poStatus = prefs.getString(KEY_PO_STATUS, "OUT") ?: "OUT"
+        val inPlayoffs = poStatus.equals("IN", ignoreCase = true) ||
+            poStatus.contains("CLINCHED", ignoreCase = true)
         views.setTextViewText(R.id.widget_team_6, StandingsFormatter.formatWcLine(wcBack, inPlayoffs))
         views.setTextColor(R.id.widget_team_6,
             ContextCompat.getColor(context, if (inPlayoffs) theme.teamDetRes else theme.wcgbColorRes))
