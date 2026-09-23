@@ -4,6 +4,7 @@
     <color name="redwings_red">#CE1126</color>
     <color name="redwings_white">#FFFFFF</color>
     <color name="redwings_black">#000000</color>
+    <color name="ic_launcher_background">#F5F1E6</color>
 
     <!-- Classic Red -->
     <color name="widget_classic_title">#CE1126</color>
