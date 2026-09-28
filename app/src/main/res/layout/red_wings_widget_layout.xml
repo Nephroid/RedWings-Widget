@@ -13,7 +13,7 @@
     android:paddingTop="6dp"
     android:paddingBottom="6dp">
 
-    <!-- Header: title + tag left, theme toggle right (RemoteViews-safe only) -->
+    <!-- Header: title + tag left, theme toggle right -->
     <LinearLayout
         android:id="@+id/widget_header_layout"
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="RED WINGS"
             android:textColor="#1A1210"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textStyle="bold"
             android:letterSpacing="0.08"
             android:includeFontPadding="false"
@@ -43,13 +43,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/widget_tag_heritage"
-            android:paddingLeft="7dp"
-            android:paddingRight="7dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
             android:text="NEXT GAME"
-            android:textColor="#F5F1E6"
-            android:textSize="8sp"
+            android:textColor="#F7F3EA"
+            android:textSize="8.5sp"
             android:textStyle="bold"
             android:includeFontPadding="false" />
 
@@ -63,23 +63,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/widget_tag_heritage"
-            android:paddingLeft="7dp"
-            android:paddingRight="7dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
             android:text="&#127912; THEME"
-            android:textColor="#F5F1E6"
-            android:textSize="8sp"
+            android:textColor="#F7F3EA"
+            android:textSize="8.5sp"
             android:includeFontPadding="false" />
     </LinearLayout>
 
-    <!-- Divider as FrameLayout (NO bare <View>: not RemoteViews-safe) -->
+    <!-- Top Red Divider Line -->
     <FrameLayout
         android:id="@+id/widget_divider_top"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1.5dp"
         android:background="#CE1126"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp" />
 
     <!-- Matchup: away logo | opponent + countdown | home logo -->
@@ -87,13 +87,11 @@
         android:id="@+id/widget_matchup_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5.0"
+        android:layout_weight="3.4"
         android:orientation="horizontal"
         android:gravity="center"
-        android:paddingLeft="6dp"
-        android:paddingRight="6dp"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp">
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp">
 
         <ImageView
             android:id="@+id/widget_away_logo"
@@ -102,23 +100,23 @@
             android:layout_weight="1.2"
             android:scaleType="fitCenter"
             android:padding="2dp"
-            android:src="@drawable/ic_redwings_logo" />
+            android:src="@drawable/ic_puck_vector" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3.2"
+            android:layout_weight="3.4"
             android:orientation="vertical"
             android:gravity="center">
 
             <TextView
-            android:fontFamily="serif"
+                android:fontFamily="serif"
                 android:id="@+id/widget_opponent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="vs. Maple Leafs"
                 android:textColor="#1A1210"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:textStyle="bold|italic"
                 android:letterSpacing="0.02"
                 android:gravity="center"
@@ -147,67 +145,58 @@
             android:layout_weight="1.2"
             android:scaleType="fitCenter"
             android:padding="2dp"
-            android:src="@drawable/ic_puck_placeholder" />
+            android:src="@drawable/ic_redwings_logo" />
     </LinearLayout>
 
-    <!-- Venue + standings context card -->
+    <!-- Venue + standings context pill card matching mockup -->
     <LinearLayout
         android:id="@+id/widget_info_card"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2.0"
+        android:layout_weight="1.4"
         android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="3dp"
+        android:background="@drawable/widget_info_pill"
         android:orientation="vertical"
         android:gravity="center"
         android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp">
-
-        <TextView
-            android:fontFamily="serif"
-            android:id="@+id/widget_venue_info"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="Little Caesars Arena &#8226; Home"
-            android:textColor="#1A1210"
-            android:textSize="9.5sp"
-            android:textStyle="bold"
-            android:gravity="center|center_vertical"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:includeFontPadding="false" />
+        android:paddingRight="8dp">
 
         <TextView
             android:fontFamily="serif"
             android:id="@+id/widget_standing_h2h"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="3rd in Atlantic &#8226; 25-20-5 &#8226; 4 pts out"
+            android:layout_height="wrap_content"
+            android:text="Little Caesars Arena &#8226; Home &#8226; 3rd ATL &#8226; 4 pts out"
             android:textColor="#1A1210"
-            android:textSize="8.5sp"
+            android:textSize="9sp"
             android:textStyle="bold"
-            android:gravity="center|center_vertical"
+            android:gravity="center"
             android:maxLines="1"
             android:ellipsize="end"
             android:includeFontPadding="false" />
+
+        <!-- Kept GONE for test ID preservation -->
+        <TextView
+            android:id="@+id/widget_venue_info"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
     </LinearLayout>
 
-    <!-- Atlantic standings: 2 columns x 4 rows (All 8 Teams) -->
+    <!-- Atlantic standings: 2 columns x 4 rows with grid borders matching mockup -->
     <LinearLayout
         android:id="@+id/widget_standings_table"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3.2"
+        android:layout_weight="4.8"
+        android:background="@drawable/widget_standings_bg"
         android:orientation="horizontal"
         android:gravity="center"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="1dp"
-        android:paddingBottom="1dp">
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp">
 
         <!-- Column 1 (Ranks 1, 3, 5, 7) -->
         <LinearLayout
@@ -224,13 +213,18 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="1. BOS: 51-20-11"
-                android:textColor="#5A4A33"
-                android:textSize="8sp"
+                android:textColor="#1A1210"
+                android:textSize="9sp"
                 android:textStyle="bold"
-                android:gravity="center|center_vertical"
+                android:gravity="center"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:includeFontPadding="false" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DDD6C7" />
 
             <TextView
                 android:fontFamily="serif"
@@ -239,13 +233,18 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="3. FLA: 45-27-10"
-                android:textColor="#5A4A33"
-                android:textSize="8sp"
+                android:textColor="#1A1210"
+                android:textSize="9sp"
                 android:textStyle="bold"
-                android:gravity="center|center_vertical"
+                android:gravity="center"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:includeFontPadding="false" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DDD6C7" />
 
             <TextView
                 android:fontFamily="serif"
@@ -254,13 +253,18 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="5. TBL: 40-32-10"
-                android:textColor="#5A4A33"
-                android:textSize="8sp"
+                android:textColor="#1A1210"
+                android:textSize="9sp"
                 android:textStyle="bold"
-                android:gravity="center|center_vertical"
+                android:gravity="center"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:includeFontPadding="false" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DDD6C7" />
 
             <TextView
                 android:fontFamily="serif"
@@ -269,14 +273,20 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="7. OTT: 34-39-9"
-                android:textColor="#5A4A33"
-                android:textSize="8sp"
+                android:textColor="#1A1210"
+                android:textSize="9sp"
                 android:textStyle="bold"
-                android:gravity="center|center_vertical"
+                android:gravity="center"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:includeFontPadding="false" />
         </LinearLayout>
+
+        <!-- Vertical dividing line between Column 1 and Column 2 -->
+        <FrameLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#DDD6C7" />
 
         <!-- Column 2 (Ranks 2, 4, 6, 8) -->
         <LinearLayout
@@ -293,13 +303,18 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="2. TOR: 46-26-10"
-                android:textColor="#5A4A33"
-                android:textSize="8sp"
+                android:textColor="#1A1210"
+                android:textSize="9sp"
                 android:textStyle="bold"
-                android:gravity="center|center_vertical"
+                android:gravity="center"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:includeFontPadding="false" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DDD6C7" />
 
             <TextView
                 android:fontFamily="serif"
@@ -309,12 +324,17 @@
                 android:layout_weight="1"
                 android:text="4. DET: 42-30-10"
                 android:textColor="#CE1126"
-                android:textSize="8sp"
+                android:textSize="9sp"
                 android:textStyle="bold"
-                android:gravity="center|center_vertical"
+                android:gravity="center"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:includeFontPadding="false" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DDD6C7" />
 
             <TextView
                 android:fontFamily="serif"
@@ -323,13 +343,18 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="6. MTL: 37-36-9"
-                android:textColor="#5A4A33"
-                android:textSize="8sp"
+                android:textColor="#1A1210"
+                android:textSize="9sp"
                 android:textStyle="bold"
-                android:gravity="center|center_vertical"
+                android:gravity="center"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:includeFontPadding="false" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DDD6C7" />
 
             <TextView
                 android:fontFamily="serif"
@@ -338,10 +363,10 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="8. BUF: 30-43-9"
-                android:textColor="#5A4A33"
-                android:textSize="8sp"
+                android:textColor="#1A1210"
+                android:textSize="9sp"
                 android:textStyle="bold"
-                android:gravity="center|center_vertical"
+                android:gravity="center"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:includeFontPadding="false" />

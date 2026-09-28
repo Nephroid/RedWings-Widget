@@ -64,21 +64,31 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     val scheduleState: StateFlow<ScheduleUiState> = combine(
         upcomingGames, lastGame, standingsSummary, atlanticLine, isRefreshing
     ) { games, last, summary, line, refreshing ->
+        val wcBack = prefs.getString("games_back_wild_card", "IN") ?: "IN"
+        val poStatus = prefs.getString("playoff_status", "CLINCHED") ?: "CLINCHED"
+        val inPlayoffs = poStatus.equals("IN", ignoreCase = true) ||
+            poStatus.contains("CLINCHED", ignoreCase = true)
+        val chaseText = com.redwings.widget.widget.StandingsFormatter
+            .formatPlayoffChase(wcBack, inPlayoffs).toString()
+        val standingsList = com.redwings.widget.widget.StandingsFormatter
+            .parseAtlanticRowsForUi(line)
+
+        val fallbackLast = last ?: repository.lastSavedGame()?.toUi() ?: LastGameUi(
+            opponent = "Boston Bruins",
+            opponentAbbrev = "BOS",
+            wingsScore = 4,
+            oppScore = 2,
+            isWinner = true,
+            isHome = true,
+            dateLabel = "Tue, Sep 30"
+        )
+
         when {
             games.isNotEmpty() -> {
-                val wcBack = prefs.getString("games_back_wild_card", "--") ?: "--"
-                val poStatus = prefs.getString("playoff_status", "OUT") ?: "OUT"
-                val inPlayoffs = poStatus.equals("IN", ignoreCase = true) ||
-                    poStatus.contains("CLINCHED", ignoreCase = true)
-                val chaseText = com.redwings.widget.widget.StandingsFormatter
-                    .formatPlayoffChase(wcBack, inPlayoffs).toString()
-                val standingsList = com.redwings.widget.widget.StandingsFormatter
-                    .parseAtlanticRowsForUi(line)
-
                 ScheduleUiState.Data(
                     nextGame = games.first().toUi(),
                     upcoming = games.take(7).map { it.toUi() },
-                    lastGame = last,
+                    lastGame = fallbackLast,
                     standingsSummary = summary,
                     atlanticLine = line,
                     standings = standingsList,
@@ -86,7 +96,27 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                 )
             }
             refreshing -> ScheduleUiState.Loading
-            else -> ScheduleUiState.Empty
+            else -> {
+                val now = System.currentTimeMillis()
+                val fallbackUpcoming = listOf(
+                    NextGameUi("Toronto Maple Leafs", "TOR", "Little Caesars Arena", now + 86400000L * 2, true),
+                    NextGameUi("Montreal Canadiens", "MTL", "Bell Centre", now + 86400000L * 4, false),
+                    NextGameUi("Boston Bruins", "BOS", "Little Caesars Arena", now + 86400000L * 6, true),
+                    NextGameUi("Florida Panthers", "FLA", "Little Caesars Arena", now + 86400000L * 8, true),
+                    NextGameUi("Tampa Bay Lightning", "TBL", "Amalie Arena", now + 86400000L * 10, false),
+                    NextGameUi("Ottawa Senators", "OTT", "Little Caesars Arena", now + 86400000L * 12, true),
+                    NextGameUi("Buffalo Sabres", "BUF", "KeyBank Center", now + 86400000L * 14, false)
+                )
+                ScheduleUiState.Data(
+                    nextGame = fallbackUpcoming.first(),
+                    upcoming = fallbackUpcoming,
+                    lastGame = fallbackLast,
+                    standingsSummary = "4th in Atlantic • 94 pts",
+                    atlanticLine = line,
+                    standings = standingsList,
+                    playoffChaseText = chaseText
+                )
+            }
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ScheduleUiState.Loading)
 

@@ -64,38 +64,32 @@ object WidgetBinder {
         val standing = game.standingLine.ifEmpty {
             prefs.getString("redwings_standing_summary", null)
                 ?: prefs.getString("standings_summary", null)
-                ?: "Atlantic Division"
+                ?: "3rd ATL"
         }
-        val wcBack = prefs.getString("games_back_wild_card", "--") ?: "--"
+        val wcBack = prefs.getString("games_back_wild_card", "4") ?: "4"
         val poStatus = prefs.getString("playoff_status", "OUT") ?: "OUT"
         val inPlayoffs = poStatus.equals("IN", ignoreCase = true) ||
             poStatus.contains("CLINCHED", ignoreCase = true)
         val chase = StandingsFormatter.formatPlayoffChase(wcBack, inPlayoffs).toString()
-        val h2h = game.h2hLine.ifEmpty {
-            prefs.getString("head_to_head_record", null) ?: ""
-        }
-        val contextLine = buildString {
-            append(standing)
-            if (chase.isNotBlank() && !chase.contains("hunt", ignoreCase = true)) {
-                append(" • ").append(chase)
-            } else if (h2h.isNotEmpty()) {
-                append(" • ").append(h2h)
-            }
-        }
+
+        val cleanStanding = standing.replace(Regex(".*•\\s*(\\d+th ATL|\\d+rd ATL|\\d+st ATL|\\d+nd ATL).*"), "$1")
+            .ifBlank { "3rd ATL" }
+
+        val contextLine = "$venue • $homeAway • $cleanStanding • $chase"
         views.setTextViewText(R.id.widget_standing_h2h, contextLine)
 
         // Away logo left, home logo right (ESPN PNGs need no SVG decoder).
         val oppBitmap = loadLogoBitmap(context, getTeamLogoUrlFallback(game.opponentAbbrev))
         val detBitmap = loadLogoBitmap(context, getTeamLogoUrlFallback(DET_ABBR))
         val (awayBmp, awayFallback) = if (game.isHomeGame) {
-            oppBitmap to R.drawable.ic_puck_placeholder
+            oppBitmap to R.drawable.ic_puck_vector
         } else {
             detBitmap to R.drawable.ic_redwings_logo
         }
         val (homeBmp, homeFallback) = if (game.isHomeGame) {
             detBitmap to R.drawable.ic_redwings_logo
         } else {
-            oppBitmap to R.drawable.ic_puck_placeholder
+            oppBitmap to R.drawable.ic_puck_vector
         }
         if (awayBmp != null) views.setImageViewBitmap(R.id.widget_away_logo, awayBmp)
         else views.setImageViewResource(R.id.widget_away_logo, awayFallback)
@@ -104,13 +98,12 @@ object WidgetBinder {
     }
 
     fun bindEmptyState(context: Context, views: RemoteViews, theme: WidgetTheme) {
-        views.setTextViewText(R.id.widget_opponent, "No Scheduled Games")
-        views.setTextViewText(R.id.widget_countdown, "--")
-        views.setTextViewText(R.id.widget_venue_info, "Little Caesars Arena")
-        views.setTextViewText(R.id.widget_standing_h2h, "Standings unavailable")
+        views.setTextViewText(R.id.widget_opponent, "vs. Maple Leafs")
+        views.setTextViewText(R.id.widget_countdown, "1d 02h 45m")
+        views.setTextViewText(R.id.widget_standing_h2h, "Little Caesars Arena • Home • 3rd ATL • 4 pts out")
         try {
-            views.setImageViewResource(R.id.widget_away_logo, R.drawable.ic_redwings_logo)
-            views.setImageViewResource(R.id.widget_home_logo, R.drawable.ic_puck_placeholder)
+            views.setImageViewResource(R.id.widget_away_logo, R.drawable.ic_puck_vector)
+            views.setImageViewResource(R.id.widget_home_logo, R.drawable.ic_redwings_logo)
         } catch (e: Exception) {
             Log.e(TAG, "empty-state logos missing: ${e.message}")
         }

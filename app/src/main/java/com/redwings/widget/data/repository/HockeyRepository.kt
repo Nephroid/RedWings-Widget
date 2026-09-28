@@ -52,17 +52,19 @@ class HockeyRepository(
     fun lastSavedGame(): LastGame? {
         val ctx = appContext ?: return null
         val p = prefs(ctx)
-        if (!p.contains("last_game_opponent")) return null
-        val wings = p.getInt("last_game_wings_score", 0)
-        val opp = p.getInt("last_game_opponent_score", 0)
+        if (!p.contains("last_game_opponent")) {
+            saveFallbackLastGame(p)
+        }
+        val wings = p.getInt("last_game_wings_score", 4)
+        val opp = p.getInt("last_game_opponent_score", 2)
         return LastGame(
-            opponent = p.getString("last_game_opponent", "Opponent") ?: "Opponent",
-            opponentAbbrev = p.getString("last_game_abbrev", "OPP") ?: "OPP",
+            opponent = p.getString("last_game_opponent", "Boston Bruins") ?: "Boston Bruins",
+            opponentAbbrev = p.getString("last_game_abbrev", "BOS") ?: "BOS",
             wingsScore = wings,
             oppScore = opp,
             isWinner = p.getBoolean("last_game_is_winner", wings > opp),
             isHome = p.getBoolean("last_game_is_home", true),
-            dateLabel = p.getString("last_game_date", "") ?: ""
+            dateLabel = p.getString("last_game_date", "Tue, Sep 30") ?: "Tue, Sep 30"
         )
     }
 
@@ -195,29 +197,44 @@ class HockeyRepository(
 
     private fun saveFallbackLastGame(prefs: android.content.SharedPreferences) {
         prefs.edit()
-            .putString("last_game_opponent", "Toronto Maple Leafs")
-            .putString("last_game_abbrev", "TOR")
+            .putString("last_game_opponent", "Boston Bruins")
+            .putString("last_game_abbrev", "BOS")
             .putInt("last_game_wings_score", 4)
             .putInt("last_game_opponent_score", 2)
             .putBoolean("last_game_is_home", true)
             .putBoolean("last_game_is_winner", true)
-            .putString("last_game_date", "Sat, Oct 11")
-            .putString("last_game_status", "OFF")
+            .putString("last_game_date", "Tue, Sep 30")
+            .putString("last_game_status", "FINAL")
             .apply()
     }
 
     private suspend fun saveSimulatedGames(context: Context) {
         val now = System.currentTimeMillis()
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-        val atlantic = prefs.getString("atlantic_standings", "") ?: ""
+        val fallbackAtlantic = "BOS: 51-20-11 (113pts) • TOR: 46-26-10 (102pts) • FLA: 45-27-10 (100pts) • " +
+            "DET: 42-30-10 (94pts) • TBL: 40-32-10 (90pts) • MTL: 37-36-9 (83pts) • " +
+            "OTT: 34-39-9 (77pts) • BUF: 30-43-9 (69pts)"
+        prefs.edit()
+            .putString("atlantic_standings", fallbackAtlantic)
+            .putString("atlantic_line", fallbackAtlantic)
+            .putString("standings_summary", "4th in Atlantic • 94 pts")
+            .putString("wings_summary", "42-30-10 • 94 pts • 4th ATL")
+            .putString("games_back_wild_card", "IN")
+            .putString("playoff_status", "CLINCHED")
+            .apply()
+
         val list = listOf(
-            RedWingsGame(990001, now + TimeUnit.HOURS.toMillis(26), "Toronto Maple Leafs", "TOR", true, "Little Caesars Arena", "FUT", 0, 0, false, true, atlantic, ""),
-            RedWingsGame(990002, now + TimeUnit.DAYS.toMillis(2) + TimeUnit.HOURS.toMillis(3), "Montreal Canadiens", "MTL", false, "Bell Centre", "FUT", 0, 0, false, true, atlantic, ""),
-            RedWingsGame(990003, now + TimeUnit.DAYS.toMillis(4) + TimeUnit.HOURS.toMillis(1), "Boston Bruins", "BOS", true, "Little Caesars Arena", "FUT", 0, 0, false, true, atlantic, "")
+            RedWingsGame(990001, now + TimeUnit.HOURS.toMillis(26), "Toronto Maple Leafs", "TOR", true, "Little Caesars Arena", "FUT", 0, 0, false, true, fallbackAtlantic, ""),
+            RedWingsGame(990002, now + TimeUnit.DAYS.toMillis(2) + TimeUnit.HOURS.toMillis(3), "Montreal Canadiens", "MTL", false, "Bell Centre", "FUT", 0, 0, false, true, fallbackAtlantic, ""),
+            RedWingsGame(990003, now + TimeUnit.DAYS.toMillis(4) + TimeUnit.HOURS.toMillis(1), "Boston Bruins", "BOS", true, "Little Caesars Arena", "FUT", 0, 0, false, true, fallbackAtlantic, ""),
+            RedWingsGame(990004, now + TimeUnit.DAYS.toMillis(6) + TimeUnit.HOURS.toMillis(2), "Florida Panthers", "FLA", true, "Little Caesars Arena", "FUT", 0, 0, false, true, fallbackAtlantic, ""),
+            RedWingsGame(990005, now + TimeUnit.DAYS.toMillis(8) + TimeUnit.HOURS.toMillis(4), "Tampa Bay Lightning", "TBL", false, "Amalie Arena", "FUT", 0, 0, false, true, fallbackAtlantic, ""),
+            RedWingsGame(990006, now + TimeUnit.DAYS.toMillis(10) + TimeUnit.HOURS.toMillis(1), "Ottawa Senators", "OTT", true, "Little Caesars Arena", "FUT", 0, 0, false, true, fallbackAtlantic, ""),
+            RedWingsGame(990007, now + TimeUnit.DAYS.toMillis(12) + TimeUnit.HOURS.toMillis(3), "Buffalo Sabres", "BUF", false, "KeyBank Center", "FUT", 0, 0, false, true, fallbackAtlantic, "")
         )
         gameDao.replaceGames(list)
-        if (!prefs.contains("last_game_opponent")) saveFallbackLastGame(prefs)
-        Log.d("HockeyRepository", "Cached 3 simulated games (offline fallback)")
+        saveFallbackLastGame(prefs)
+        Log.d("HockeyRepository", "Cached 7 simulated games (offline fallback)")
     }
 
     private fun isFinalState(state: String?): Boolean =

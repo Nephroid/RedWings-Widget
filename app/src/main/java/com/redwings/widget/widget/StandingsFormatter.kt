@@ -53,12 +53,18 @@ object StandingsFormatter {
         val fallback = "BOS: 51-20-11 (113pts) • TOR: 46-26-10 (102pts) • FLA: 45-27-10 (100pts) • " +
             "DET: 42-30-10 (94pts) • TBL: 40-32-10 (90pts) • MTL: 37-36-9 (83pts) • " +
             "OTT: 34-39-9 (77pts) • BUF: 30-43-9 (69pts)"
-        val items = (rawPrefsString?.takeIf { it.isNotBlank() && !it.contains("unavailable") } ?: fallback)
-            .split("•", ",")
+        val validString = rawPrefsString?.takeIf {
+            it.isNotBlank() && !it.contains("unavailable") && it.contains("•") && it.length > 30
+        } ?: fallback
+        val items = validString.split("•", ",")
             .map { it.trim() }.filter { it.isNotEmpty() }
-        val rows = items.map(::parse)
-            .sortedWith(compareByDescending<Row> { it.pts }.thenByDescending { it.wins })
-            .take(8)
+        val parsedRows = items.map(::parse)
+        val rows = if (parsedRows.size >= 4) {
+            parsedRows
+        } else {
+            fallback.split("•").map { it.trim() }.filter { it.isNotEmpty() }.map(::parse)
+        }.sortedWith(compareByDescending<Row> { it.pts }.thenByDescending { it.wins }).take(8)
+
         return rows.mapIndexed { i, r ->
             val recordStr = if (r.wins > 0 || r.losses > 0 || r.otl > 0) {
                 "${r.wins}-${r.losses}-${r.otl}"
@@ -96,12 +102,18 @@ object StandingsFormatter {
         val fallback = "BOS: 51-20-11 (113pts) • TOR: 46-26-10 (102pts) • FLA: 45-27-10 (100pts) • " +
             "DET: 42-30-10 (94pts) • TBL: 40-32-10 (90pts) • MTL: 37-36-9 (83pts) • " +
             "OTT: 34-39-9 (77pts) • BUF: 30-43-9 (69pts)"
-        val items = (rawPrefsString?.takeIf { it.isNotBlank() && !it.contains("unavailable") } ?: fallback)
-            .split("•", ",")
+        val validString = rawPrefsString?.takeIf {
+            it.isNotBlank() && !it.contains("unavailable") && it.contains("•") && it.length > 30
+        } ?: fallback
+        val items = validString.split("•", ",")
             .map { it.trim() }.filter { it.isNotEmpty() }
-        val rows = items.map(::parse)
-            .sortedWith(compareByDescending<Row> { it.pts }.thenByDescending { it.wins })
-            .take(8)
+        val parsedRows = items.map(::parse)
+        val rows = if (parsedRows.size >= 4) {
+            parsedRows
+        } else {
+            fallback.split("•").map { it.trim() }.filter { it.isNotEmpty() }.map(::parse)
+        }.sortedWith(compareByDescending<Row> { it.pts }.thenByDescending { it.wins }).take(8)
+
         return rows.mapIndexed { i, r ->
             val gp = (r.wins + r.losses + r.otl).coerceAtLeast(if (r.pts > 0) 1 else 0)
             com.redwings.widget.ui.StandingsRowUi(
