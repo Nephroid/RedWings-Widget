@@ -249,6 +249,11 @@ fun GameDashboardContent(
                                     )
                                 }
                             }
+
+                            // 6. App Footer with version info
+                            item {
+                                AppFooter()
+                            }
                         }
                     }
                 }
@@ -858,6 +863,29 @@ private fun formatGameTime(millis: Long): String {
 private fun formatUpcomingDate(millis: Long): String {
     if (millis <= 0L) return "Sat, Oct 4"
     return SimpleDateFormat("EEE, MMM d", Locale.US).format(Date(millis))
+}
+
+@Composable
+private fun AppFooter(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Detroit Red Wings Widget v${com.redwings.widget.BuildConfig.VERSION_NAME}",
+            style = MaterialTheme.typography.labelSmall,
+            color = Color(0xFF6E727A),
+            fontWeight = FontWeight.Medium
+        )
+        Spacer(Modifier.height(2.dp))
+        Text(
+            text = "Automated Build • Atlantic Division",
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
+            color = Color(0xFF555960)
+        )
+    }
 }
 
 // ---- Previews ----
