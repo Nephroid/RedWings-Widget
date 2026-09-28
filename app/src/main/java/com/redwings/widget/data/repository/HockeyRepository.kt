@@ -57,6 +57,7 @@ class HockeyRepository(
         val opp = p.getInt("last_game_opponent_score", 0)
         return LastGame(
             opponent = p.getString("last_game_opponent", "Opponent") ?: "Opponent",
+            opponentAbbrev = p.getString("last_game_abbrev", "OPP") ?: "OPP",
             wingsScore = wings,
             oppScore = opp,
             isWinner = p.getBoolean("last_game_is_winner", wings > opp),

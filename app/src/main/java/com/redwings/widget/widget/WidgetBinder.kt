@@ -62,15 +62,27 @@ object WidgetBinder {
         views.setTextViewText(R.id.widget_venue_info, "$venue • $homeAway")
 
         val standing = game.standingLine.ifEmpty {
-            prefs.getString("redwings_standing_summary", null) ?: "Atlantic Division"
+            prefs.getString("redwings_standing_summary", null)
+                ?: prefs.getString("standings_summary", null)
+                ?: "Atlantic Division"
         }
+        val wcBack = prefs.getString("games_back_wild_card", "--") ?: "--"
+        val poStatus = prefs.getString("playoff_status", "OUT") ?: "OUT"
+        val inPlayoffs = poStatus.equals("IN", ignoreCase = true) ||
+            poStatus.contains("CLINCHED", ignoreCase = true)
+        val chase = StandingsFormatter.formatPlayoffChase(wcBack, inPlayoffs).toString()
         val h2h = game.h2hLine.ifEmpty {
             prefs.getString("head_to_head_record", null) ?: ""
         }
-        views.setTextViewText(
-            R.id.widget_standing_h2h,
-            if (h2h.isNotEmpty()) "$standing • $h2h" else standing
-        )
+        val contextLine = buildString {
+            append(standing)
+            if (chase.isNotBlank() && !chase.contains("hunt", ignoreCase = true)) {
+                append(" • ").append(chase)
+            } else if (h2h.isNotEmpty()) {
+                append(" • ").append(h2h)
+            }
+        }
+        views.setTextViewText(R.id.widget_standing_h2h, contextLine)
 
         // Away logo left, home logo right (ESPN PNGs need no SVG decoder).
         val oppBitmap = loadLogoBitmap(context, getTeamLogoUrlFallback(game.opponentAbbrev))

@@ -15,6 +15,7 @@ data class CountdownState(
 
 data class NextGameUi(
     val opponent: String = "",
+    val opponentAbbrev: String = "OPP",
     val venue: String = "",
     val startTimeMillis: Long = 0L,
     val isHome: Boolean = true
@@ -22,11 +23,23 @@ data class NextGameUi(
 
 data class LastGameUi(
     val opponent: String = "",
+    val opponentAbbrev: String = "OPP",
     val wingsScore: Int = 0,
     val oppScore: Int = 0,
     val isWinner: Boolean = false,
     val isHome: Boolean = true,
     val dateLabel: String = ""
+)
+
+data class StandingsRowUi(
+    val rank: Int,
+    val teamAbbrev: String,
+    val gamesPlayed: Int,
+    val wins: Int,
+    val losses: Int,
+    val otLosses: Int,
+    val points: Int,
+    val isRedWings: Boolean = false
 )
 
 sealed interface ScheduleUiState {
@@ -37,6 +50,8 @@ sealed interface ScheduleUiState {
         val upcoming: List<NextGameUi> = emptyList(),
         val lastGame: LastGameUi? = null,
         val standingsSummary: String = "",
-        val atlanticLine: String = ""
+        val atlanticLine: String = "",
+        val standings: List<StandingsRowUi> = emptyList(),
+        val playoffChaseText: String = ""
     ) : ScheduleUiState
 }

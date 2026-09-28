@@ -127,13 +127,13 @@
                 android:includeFontPadding="false" />
 
             <TextView
-            android:fontFamily="serif"
+                android:fontFamily="serif"
                 android:id="@+id/widget_countdown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1d 02h 45m"
                 android:textColor="#CE1126"
-                android:textSize="22sp"
+                android:textSize="26sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:maxLines="1"
@@ -156,8 +156,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2.0"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="3dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
         android:orientation="vertical"
         android:gravity="center"
         android:paddingLeft="8dp"
@@ -186,7 +186,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="3rd in Atlantic &#8226; 25-20-5"
+            android:text="3rd in Atlantic &#8226; 25-20-5 &#8226; 4 pts out"
             android:textColor="#1A1210"
             android:textSize="8.5sp"
             android:textStyle="bold"
@@ -196,19 +196,20 @@
             android:includeFontPadding="false" />
     </LinearLayout>
 
-    <!-- Atlantic standings: 3 columns x 2 rows -->
+    <!-- Atlantic standings: 2 columns x 4 rows (All 8 Teams) -->
     <LinearLayout
         android:id="@+id/widget_standings_table"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2.8"
+        android:layout_weight="3.2"
         android:orientation="horizontal"
         android:gravity="center"
-        android:paddingLeft="6dp"
-        android:paddingRight="6dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp">
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp">
 
+        <!-- Column 1 (Ranks 1, 3, 5, 7) -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -217,14 +218,14 @@
             android:gravity="center">
 
             <TextView
-            android:fontFamily="serif"
+                android:fontFamily="serif"
                 android:id="@+id/widget_team_1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="1. BOS: 30-15-5"
+                android:text="1. BOS: 51-20-11"
                 android:textColor="#5A4A33"
-                android:textSize="8.5sp"
+                android:textSize="8sp"
                 android:textStyle="bold"
                 android:gravity="center|center_vertical"
                 android:maxLines="1"
@@ -232,37 +233,14 @@
                 android:includeFontPadding="false" />
 
             <TextView
-            android:fontFamily="serif"
-                android:id="@+id/widget_team_2"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="2. TOR: 28-16-6"
-                android:textColor="#5A4A33"
-                android:textSize="8.5sp"
-                android:textStyle="bold"
-                android:gravity="center|center_vertical"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:includeFontPadding="false" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <TextView
-            android:fontFamily="serif"
+                android:fontFamily="serif"
                 android:id="@+id/widget_team_3"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="3. FLA: 28-17-5"
+                android:text="3. FLA: 45-27-10"
                 android:textColor="#5A4A33"
-                android:textSize="8.5sp"
+                android:textSize="8sp"
                 android:textStyle="bold"
                 android:gravity="center|center_vertical"
                 android:maxLines="1"
@@ -270,14 +248,29 @@
                 android:includeFontPadding="false" />
 
             <TextView
-            android:fontFamily="serif"
-                android:id="@+id/widget_team_4"
+                android:fontFamily="serif"
+                android:id="@+id/widget_team_5"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="4. DET: 25-20-5"
-                android:textColor="#CE1126"
-                android:textSize="8.5sp"
+                android:text="5. TBL: 40-32-10"
+                android:textColor="#5A4A33"
+                android:textSize="8sp"
+                android:textStyle="bold"
+                android:gravity="center|center_vertical"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:fontFamily="serif"
+                android:id="@+id/widget_team_7"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="7. OTT: 34-39-9"
+                android:textColor="#5A4A33"
+                android:textSize="8sp"
                 android:textStyle="bold"
                 android:gravity="center|center_vertical"
                 android:maxLines="1"
@@ -285,6 +278,7 @@
                 android:includeFontPadding="false" />
         </LinearLayout>
 
+        <!-- Column 2 (Ranks 2, 4, 6, 8) -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -293,14 +287,14 @@
             android:gravity="center">
 
             <TextView
-            android:fontFamily="serif"
-                android:id="@+id/widget_team_5"
+                android:fontFamily="serif"
+                android:id="@+id/widget_team_2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="5. TB: 26-18-6"
+                android:text="2. TOR: 46-26-10"
                 android:textColor="#5A4A33"
-                android:textSize="8.5sp"
+                android:textSize="8sp"
                 android:textStyle="bold"
                 android:gravity="center|center_vertical"
                 android:maxLines="1"
@@ -308,15 +302,45 @@
                 android:includeFontPadding="false" />
 
             <TextView
-            android:fontFamily="serif"
+                android:fontFamily="serif"
+                android:id="@+id/widget_team_4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="4. DET: 42-30-10"
+                android:textColor="#CE1126"
+                android:textSize="8sp"
+                android:textStyle="bold"
+                android:gravity="center|center_vertical"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:fontFamily="serif"
                 android:id="@+id/widget_team_6"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="WCGB: 2.0"
-                android:textColor="#CE1126"
-                android:textSize="8.5sp"
-                android:textStyle="bold|italic"
+                android:text="6. MTL: 37-36-9"
+                android:textColor="#5A4A33"
+                android:textSize="8sp"
+                android:textStyle="bold"
+                android:gravity="center|center_vertical"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:fontFamily="serif"
+                android:id="@+id/widget_team_8"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="8. BUF: 30-43-9"
+                android:textColor="#5A4A33"
+                android:textSize="8sp"
+                android:textStyle="bold"
                 android:gravity="center|center_vertical"
                 android:maxLines="1"
                 android:ellipsize="end"

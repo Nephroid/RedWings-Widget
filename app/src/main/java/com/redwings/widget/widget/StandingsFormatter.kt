@@ -37,37 +37,83 @@ object StandingsFormatter {
             val p = m.groupValues[5].toIntOrNull() ?: (w * 2 + o)
             Row(m.groupValues[1].uppercase(), w, l, o, p)
         } else {
-            Row(clean.take(3).uppercase(), 0, 0, 0, 0)
+            val m2 = Regex("([A-Za-z]{2,3}):?\\s*(\\d+)\\s*pts", RegexOption.IGNORE_CASE).find(clean)
+            if (m2 != null) {
+                val abbr = m2.groupValues[1].uppercase()
+                val pts = m2.groupValues[2].toIntOrNull() ?: 0
+                Row(abbr, 0, 0, 0, pts)
+            } else {
+                Row(clean.take(3).uppercase(), 0, 0, 0, 0)
+            }
         }
     }
 
-    /** Top-8 Atlantic rows like "1. BOS: 30-15-5 (68pts)"; DET row is bold. */
+    /** Top-8 Atlantic rows like "1. BOS: 51-20-11"; DET row is bold. */
     fun formatAtlanticLine(rawPrefsString: String?): List<CharSequence> {
-        val fallback = "BOS: 30-15-5 (70pts) • TOR: 28-16-6 (62pts) • FLA: 28-17-5 (61pts) • " +
-            "TB: 26-18-6 (58pts) • DET: 25-20-5 (55pts) • MTL: 24-21-5 (53pts) • " +
-            "OTT: 22-23-6 (50pts) • BUF: 20-26-6 (46pts)"
-        val items = (rawPrefsString ?: fallback).split("•", ",")
+        val fallback = "BOS: 51-20-11 (113pts) • TOR: 46-26-10 (102pts) • FLA: 45-27-10 (100pts) • " +
+            "DET: 42-30-10 (94pts) • TBL: 40-32-10 (90pts) • MTL: 37-36-9 (83pts) • " +
+            "OTT: 34-39-9 (77pts) • BUF: 30-43-9 (69pts)"
+        val items = (rawPrefsString?.takeIf { it.isNotBlank() && !it.contains("unavailable") } ?: fallback)
+            .split("•", ",")
             .map { it.trim() }.filter { it.isNotEmpty() }
         val rows = items.map(::parse)
             .sortedWith(compareByDescending<Row> { it.pts }.thenByDescending { it.wins })
             .take(8)
         return rows.mapIndexed { i, r ->
-            val line = "${i + 1}. ${r.abbr}: ${r.wins}-${r.losses}-${r.otl} (${r.pts}pts)"
+            val recordStr = if (r.wins > 0 || r.losses > 0 || r.otl > 0) {
+                "${r.wins}-${r.losses}-${r.otl}"
+            } else {
+                "${r.pts} pts"
+            }
+            val line = "${i + 1}. ${r.abbr}: $recordStr"
             if (r.abbr == "DET") spannedOf("<b>$line</b>") else line
         }
     }
 
-    /** "PLAYOFF: IN" when in, else "WCGB: <back>". Bold+italic for the widget. */
-    fun formatWcLine(wcBack: String, playoffIn: Boolean): CharSequence {
-        val text = if (playoffIn) {
-            "PLAYOFF: IN"
-        } else {
-            val clean = wcBack
-                .replace(Regex("^WCGB:?\\s*", RegexOption.IGNORE_CASE), "")
-                .replace(Regex("^WC:?\\s*", RegexOption.IGNORE_CASE), "")
-                .replace("GB", "").trim()
-            "WCGB: $clean"
+    /** "CLINCHED" when in playoffs, else "X pts out" or "In playoff hunt". Bold+italic for widget. */
+    fun formatPlayoffChase(ptsBack: String, playoffIn: Boolean): CharSequence {
+        val text = when {
+            playoffIn -> "CLINCHED"
+            ptsBack.equals("IN", ignoreCase = true) -> "CLINCHED"
+            ptsBack == "-" || ptsBack.isBlank() || ptsBack == "--" -> "In playoff hunt"
+            else -> {
+                val clean = ptsBack
+                    .replace(Regex("^WCGB:?\\s*", RegexOption.IGNORE_CASE), "")
+                    .replace(Regex("^WC:?\\s*", RegexOption.IGNORE_CASE), "")
+                    .replace("GB", "", ignoreCase = true).trim()
+                if (clean.toIntOrNull() != null) "$clean pts out" else "$clean out"
+            }
         }
         return spannedOf("<b><i>$text</i></b>")
+    }
+
+    /** Legacy alias for backwards compatibility with existing calls / tests. */
+    fun formatWcLine(wcBack: String, playoffIn: Boolean): CharSequence =
+        formatPlayoffChase(wcBack, playoffIn)
+
+    /** Parses standings string into typed rows for Compose UI dashboard. */
+    fun parseAtlanticRowsForUi(rawPrefsString: String?): List<com.redwings.widget.ui.StandingsRowUi> {
+        val fallback = "BOS: 51-20-11 (113pts) • TOR: 46-26-10 (102pts) • FLA: 45-27-10 (100pts) • " +
+            "DET: 42-30-10 (94pts) • TBL: 40-32-10 (90pts) • MTL: 37-36-9 (83pts) • " +
+            "OTT: 34-39-9 (77pts) • BUF: 30-43-9 (69pts)"
+        val items = (rawPrefsString?.takeIf { it.isNotBlank() && !it.contains("unavailable") } ?: fallback)
+            .split("•", ",")
+            .map { it.trim() }.filter { it.isNotEmpty() }
+        val rows = items.map(::parse)
+            .sortedWith(compareByDescending<Row> { it.pts }.thenByDescending { it.wins })
+            .take(8)
+        return rows.mapIndexed { i, r ->
+            val gp = (r.wins + r.losses + r.otl).coerceAtLeast(if (r.pts > 0) 1 else 0)
+            com.redwings.widget.ui.StandingsRowUi(
+                rank = i + 1,
+                teamAbbrev = r.abbr,
+                gamesPlayed = if (gp > 0) gp else 82,
+                wins = r.wins,
+                losses = r.losses,
+                otLosses = r.otl,
+                points = r.pts,
+                isRedWings = r.abbr == "DET"
+            )
+        }
     }
 }

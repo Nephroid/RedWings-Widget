@@ -8,12 +8,14 @@ data class UpcomingGame(
     val gameId: Int = 0,
     val gameTimeMillis: Long = 0L,
     val opponentName: String = "Opponent",
+    val opponentAbbrev: String = "OPP",
     val stadiumName: String = "Little Caesars Arena",
     val isHomeGame: Boolean = true
 )
 
 data class LastGame(
     val opponent: String = "Opponent",
+    val opponentAbbrev: String = "OPP",
     val wingsScore: Int = 0,
     val oppScore: Int = 0,
     val isWinner: Boolean = false,
@@ -25,6 +27,7 @@ fun RedWingsGame.toUpcoming() = UpcomingGame(
     gameId = gameId,
     gameTimeMillis = gameTimeMillis,
     opponentName = opponentName,
+    opponentAbbrev = opponentAbbrev,
     stadiumName = venueName,
     isHomeGame = isHomeGame
 )

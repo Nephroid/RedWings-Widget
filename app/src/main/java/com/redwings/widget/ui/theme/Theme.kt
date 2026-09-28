@@ -15,13 +15,16 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = WingsWhite,
     secondary = WingsSilver,
     onSecondary = WingsBlack,
-    tertiary = WingsSilver,
+    tertiary = WingsGold,
     background = WingsBlack,
     onBackground = WingsWhite,
     surface = WingsDarkSurface,
     onSurface = WingsWhite,
     surfaceVariant = WingsDarkCard,
     onSurfaceVariant = WingsSilver,
+    surfaceContainer = WingsDarkCard,
+    surfaceContainerHigh = WingsDarkElevated,
+    surfaceContainerLow = WingsDarkSurface,
     error = WingsLossRed,
     onError = WingsWhite
 )
@@ -31,13 +34,16 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = WingsWhite,
     secondary = WingsSilver,
     onSecondary = WingsBlack,
-    tertiary = WingsSilver,
-    background = WingsLightBackground,
+    tertiary = WingsGold,
+    background = IceBlue,
     onBackground = WingsBlack,
     surface = WingsLightCard,
     onSurface = WingsBlack,
     surfaceVariant = WingsLightBackground,
     onSurfaceVariant = WingsBlack,
+    surfaceContainer = WingsLightCard,
+    surfaceContainerHigh = WingsLightCard,
+    surfaceContainerLow = IceBlue,
     error = WingsLossRed,
     onError = WingsWhite
 )
@@ -45,7 +51,9 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun RedWingsTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    // Brand first: dynamic wallpaper tinting washes out the Wings red,
+    // so it stays OFF unless a caller explicitly opts in.
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

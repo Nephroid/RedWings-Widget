@@ -65,13 +65,26 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         upcomingGames, lastGame, standingsSummary, atlanticLine, isRefreshing
     ) { games, last, summary, line, refreshing ->
         when {
-            games.isNotEmpty() -> ScheduleUiState.Data(
-                nextGame = games.first().toUi(),
-                upcoming = games.take(7).map { it.toUi() },
-                lastGame = last,
-                standingsSummary = summary,
-                atlanticLine = line
-            )
+            games.isNotEmpty() -> {
+                val wcBack = prefs.getString("games_back_wild_card", "--") ?: "--"
+                val poStatus = prefs.getString("playoff_status", "OUT") ?: "OUT"
+                val inPlayoffs = poStatus.equals("IN", ignoreCase = true) ||
+                    poStatus.contains("CLINCHED", ignoreCase = true)
+                val chaseText = com.redwings.widget.widget.StandingsFormatter
+                    .formatPlayoffChase(wcBack, inPlayoffs).toString()
+                val standingsList = com.redwings.widget.widget.StandingsFormatter
+                    .parseAtlanticRowsForUi(line)
+
+                ScheduleUiState.Data(
+                    nextGame = games.first().toUi(),
+                    upcoming = games.take(7).map { it.toUi() },
+                    lastGame = last,
+                    standingsSummary = summary,
+                    atlanticLine = line,
+                    standings = standingsList,
+                    playoffChaseText = chaseText
+                )
+            }
             refreshing -> ScheduleUiState.Loading
             else -> ScheduleUiState.Empty
         }
@@ -148,6 +161,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun UpcomingGame.toUi() = NextGameUi(
         opponent = opponentName,
+        opponentAbbrev = opponentAbbrev,
         venue = stadiumName,
         startTimeMillis = gameTimeMillis,
         isHome = isHomeGame
@@ -155,6 +169,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun LastGame.toUi() = LastGameUi(
         opponent = opponent,
+        opponentAbbrev = opponentAbbrev,
         wingsScore = wingsScore,
         oppScore = oppScore,
         isWinner = isWinner,

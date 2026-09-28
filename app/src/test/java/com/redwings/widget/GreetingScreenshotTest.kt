@@ -39,6 +39,7 @@ class GreetingScreenshotTest {
     fun redwings_dashboard_screenshot() {
         val nextGame = NextGameUi(
             opponent = "Toronto Maple Leafs",
+            opponentAbbrev = "TOR",
             venue = "Little Caesars Arena",
             startTimeMillis = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(26),
             isHome = true
@@ -49,11 +50,22 @@ class GreetingScreenshotTest {
         )
         val lastGame = LastGameUi(
             opponent = "Montreal Canadiens",
+            opponentAbbrev = "MTL",
             wingsScore = 4,
             oppScore = 2,
             isWinner = true,
             isHome = false,
             dateLabel = "Sat, Oct 11"
+        )
+        val standings = listOf(
+            com.redwings.widget.ui.StandingsRowUi(1, "BOS", 82, 51, 20, 11, 113),
+            com.redwings.widget.ui.StandingsRowUi(2, "TOR", 82, 46, 26, 10, 102),
+            com.redwings.widget.ui.StandingsRowUi(3, "FLA", 82, 45, 27, 10, 100),
+            com.redwings.widget.ui.StandingsRowUi(4, "DET", 82, 42, 30, 10, 94, isRedWings = true),
+            com.redwings.widget.ui.StandingsRowUi(5, "TBL", 82, 40, 32, 10, 90),
+            com.redwings.widget.ui.StandingsRowUi(6, "MTL", 82, 37, 36, 9, 83),
+            com.redwings.widget.ui.StandingsRowUi(7, "OTT", 82, 34, 39, 9, 77),
+            com.redwings.widget.ui.StandingsRowUi(8, "BUF", 82, 30, 43, 9, 69)
         )
 
         composeTestRule.setContent {
@@ -62,6 +74,12 @@ class GreetingScreenshotTest {
                     NextGameHero(countdown = countdown, game = nextGame)
                     Spacer(Modifier.height(12.dp))
                     LastResultCard(lastGame = lastGame)
+                    Spacer(Modifier.height(12.dp))
+                    com.redwings.widget.ui.StandingsCard(
+                        standings = standings,
+                        playoffChaseText = "CLINCHED PLAYOFF SPOT",
+                        summary = "4th in Atlantic • 94 pts"
+                    )
                 }
             }
         }

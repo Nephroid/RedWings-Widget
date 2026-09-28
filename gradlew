@@ -115,11 +115,7 @@ if [ "$cygwin" = "false" -a "$darwin" = "false" -a "$nonstop" = "false" ] ; then
 fi
 
 # Collect all arguments for the java sub-shell.
-# Explicitly build arrays under bash and zsh to preserve whitespace in arguments.
-if [ -n "$BASH_VERSION" ] || [ -n "$ZSH_VERSION" ] ; then
-    DEFAULT_JVM_OPTS='"-Xmx64m" "-Xms64m"'
-    eval "set -- $DEFAULT_JVM_OPTS \"\$@\""
-fi
+JVM_OPTS="-Xmx64m -Xms64m"
 
 # Escape application args
-exec "$JAVACMD" "-Dorg.gradle.appname=$APP_BASE_NAME" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
+exec "$JAVACMD" "-Dorg.gradle.appname=$APP_BASE_NAME" $JVM_OPTS -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"

@@ -12,9 +12,9 @@
     <color name="widget_classic_opponent">#FFFFFF</color>
     <color name="widget_classic_divider">#CE1126</color>
     <color name="widget_classic_sub">#FFFFFF</color>
-    <color name="widget_classic_standing">#FFC107</color>
+    <color name="widget_classic_standing">#FFD54F</color>
     <color name="widget_classic_team">#D0D8E4</color>
-    <color name="widget_classic_team_det">#FFC107</color>
+    <color name="widget_classic_team_det">#FFD54F</color>
     <color name="widget_classic_wcgb">#FF5252</color>
     <color name="widget_classic_tag_text">#FFFFFF</color>
 
@@ -30,6 +30,18 @@
     <color name="widget_whiteout_wcgb">#B71C1C</color>
     <color name="widget_whiteout_tag_text">#FFFFFF</color>
 
+    <!-- Game Day (default: black ice, hot red, white — maximum pop) -->
+    <color name="widget_gameday_title">#FFFFFF</color>
+    <color name="widget_gameday_countdown">#FF2D20</color>
+    <color name="widget_gameday_opponent">#FFFFFF</color>
+    <color name="widget_gameday_divider">#FF2D20</color>
+    <color name="widget_gameday_sub">#E8E8E8</color>
+    <color name="widget_gameday_standing">#FFD54F</color>
+    <color name="widget_gameday_team">#C9C9C9</color>
+    <color name="widget_gameday_team_det">#FFD54F</color>
+    <color name="widget_gameday_wcgb">#FF6B60</color>
+    <color name="widget_gameday_tag_text">#FFFFFF</color>
+
     <!-- Heritage 1926 (paper cream / wings red / ink) -->
     <color name="widget_heritage_title">#1A1210</color>
     <color name="widget_heritage_countdown">#CE1126</color>
@@ -40,14 +52,14 @@
     <color name="widget_heritage_team">#5A4A33</color>
     <color name="widget_heritage_team_det">#CE1126</color>
     <color name="widget_heritage_wcgb">#CE1126</color>
-    <color name="widget_heritage_tag_text">#F5F1E6</color>
+    <color name="widget_heritage_tag_text">#F7F3EA</color>
 
     <!-- Night Black -->
     <color name="widget_night_title">#E0322D</color>
     <color name="widget_night_countdown">#E0322D</color>
     <color name="widget_night_opponent">#F5F5F5</color>
     <color name="widget_night_divider">#3A3A3A</color>
-    <color name="widget_night_sub">#B0B0B0</color>
+    <color name="widget_night_sub">#C8C8C8</color>
     <color name="widget_night_standing">#FFD54F</color>
     <color name="widget_night_team">#9E9E9E</color>
     <color name="widget_night_team_det">#FFD54F</color>

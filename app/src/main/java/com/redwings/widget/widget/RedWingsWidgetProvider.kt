@@ -135,8 +135,10 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         prefs: android.content.SharedPreferences, theme: WidgetTheme
     ) {
         val rows = StandingsFormatter.formatAtlanticLine(prefs.getString(KEY_ATLANTIC, null))
-        val ids = listOf(R.id.widget_team_1, R.id.widget_team_2, R.id.widget_team_3,
-            R.id.widget_team_4, R.id.widget_team_5)
+        val ids = listOf(
+            R.id.widget_team_1, R.id.widget_team_2, R.id.widget_team_3, R.id.widget_team_4,
+            R.id.widget_team_5, R.id.widget_team_6, R.id.widget_team_7, R.id.widget_team_8
+        )
         val teamColor = ContextCompat.getColor(context, theme.teamColorRes)
         val detColor = ContextCompat.getColor(context, theme.teamDetRes)
         ids.forEachIndexed { i, id ->
@@ -144,13 +146,6 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
             views.setTextViewText(id, row)
             views.setTextColor(id, if (row.contains("DET", ignoreCase = true)) detColor else teamColor)
         }
-        val wcBack = prefs.getString(KEY_WCGB, "--") ?: "--"
-        val poStatus = prefs.getString(KEY_PO_STATUS, "OUT") ?: "OUT"
-        val inPlayoffs = poStatus.equals("IN", ignoreCase = true) ||
-            poStatus.contains("CLINCHED", ignoreCase = true)
-        views.setTextViewText(R.id.widget_team_6, StandingsFormatter.formatWcLine(wcBack, inPlayoffs))
-        views.setTextColor(R.id.widget_team_6,
-            ContextCompat.getColor(context, if (inPlayoffs) theme.teamDetRes else theme.wcgbColorRes))
     }
 
     private fun applyWidgetTheme(context: Context, views: RemoteViews, theme: WidgetTheme) {
@@ -200,8 +195,10 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         views.setTextViewTextSize(R.id.widget_venue_info, TypedValue.COMPLEX_UNIT_SP, (h * 0.09f).coerceIn(8f, 14f))
         views.setTextViewTextSize(R.id.widget_standing_h2h, TypedValue.COMPLEX_UNIT_SP, (h * 0.085f).coerceIn(7.5f, 13f))
         val teamSp = (h * 0.088f).coerceIn(7.5f, 13f)
-        listOf(R.id.widget_team_1, R.id.widget_team_2, R.id.widget_team_3,
-            R.id.widget_team_4, R.id.widget_team_5, R.id.widget_team_6).forEach {
+        listOf(
+            R.id.widget_team_1, R.id.widget_team_2, R.id.widget_team_3, R.id.widget_team_4,
+            R.id.widget_team_5, R.id.widget_team_6, R.id.widget_team_7, R.id.widget_team_8
+        ).forEach {
             views.setTextViewTextSize(it, TypedValue.COMPLEX_UNIT_SP, teamSp)
         }
         val d = context.resources.displayMetrics.density
