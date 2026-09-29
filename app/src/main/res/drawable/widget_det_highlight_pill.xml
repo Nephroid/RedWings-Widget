@@ -2,7 +2,7 @@
 <!-- Detroit Red Wings Standings Highlight Pill -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <corners android:radius="6dp" />
+    <corners android:radius="12dp" />
     <gradient
         android:type="linear"
         android:angle="180"

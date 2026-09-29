@@ -1,6 +1,5 @@
 package com.redwings.widget
 
-import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -28,34 +27,68 @@ class WidgetScreenshotTest {
     fun renderActualWidgetToImage() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val provider = RedWingsWidgetProvider()
-        val views = RemoteViews(context.packageName, R.layout.red_wings_widget_layout)
 
-        // Bind with Home (Frosted Ice) theme
+        // 1. Outer Screen 4x2 Render (red_wings_widget_layout)
+        renderWidget(
+            context = context,
+            provider = provider,
+            layoutResId = R.layout.red_wings_widget_layout,
+            widthDp = 340,
+            heightDp = 150,
+            outputFiles = listOf(
+                File("/home/andre/Downloads/actual_widget_render.png"),
+                File("/home/andre/Downloads/actual_widget_render_outer_4x2.png")
+            )
+        )
+
+        // 2. Inner Unfolded Screen 4x2 Render (red_wings_widget_wide)
+        renderWidget(
+            context = context,
+            provider = provider,
+            layoutResId = R.layout.red_wings_widget_wide,
+            widthDp = 540,
+            heightDp = 170,
+            outputFiles = listOf(
+                File("/home/andre/Downloads/actual_widget_render_inner_4x2.png")
+            )
+        )
+    }
+
+    private fun renderWidget(
+        context: Context,
+        provider: RedWingsWidgetProvider,
+        layoutResId: Int,
+        widthDp: Int,
+        heightDp: Int,
+        outputFiles: List<File>
+    ) {
+        val views = RemoteViews(context.packageName, layoutResId)
         provider.applyWidgetTheme(context, views, WidgetTheme.HOME)
         WidgetBinder.bindEmptyState(context, views, WidgetTheme.HOME)
-        provider.applyResponsiveLayout(context, views, 360, 200)
+        provider.applyResponsiveLayout(context, views, widthDp, heightDp)
 
-        // Inflate in a container
         val root = FrameLayout(context)
         val inflated = views.apply(context, root)
         root.addView(inflated)
 
-        // Measure and layout at 720x400 (scale 2x for standard 360x200 dp)
-        val width = 720
-        val height = 400
-        root.measure(
-            View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-            View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
-        )
-        root.layout(0, 0, width, height)
+        val scale = 2
+        val widthPx = widthDp * scale
+        val heightPx = heightDp * scale
 
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        root.measure(
+            View.MeasureSpec.makeMeasureSpec(widthPx, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(heightPx, View.MeasureSpec.EXACTLY)
+        )
+        root.layout(0, 0, widthPx, heightPx)
+
+        val bitmap = Bitmap.createBitmap(widthPx, heightPx, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         root.draw(canvas)
 
-        val outputFile = File("/home/andre/Downloads/actual_widget_render.png")
-        FileOutputStream(outputFile).use { out ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+        outputFiles.forEach { file ->
+            FileOutputStream(file).use { out ->
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+            }
         }
     }
 }

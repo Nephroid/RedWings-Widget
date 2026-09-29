@@ -106,13 +106,13 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
 
                 val views = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     val sizeMap = mapOf(
-                        android.util.SizeF(130f, 90f) to buildWidgetViews(context, R.layout.red_wings_widget_layout, game, theme, prefs, id, 140, 90),
-                        android.util.SizeF(200f, 110f) to buildWidgetViews(context, R.layout.red_wings_widget_layout, game, theme, prefs, id, 220, 110),
-                        android.util.SizeF(340f, 110f) to buildWidgetViews(context, R.layout.red_wings_widget_layout, game, theme, prefs, id, 390, 110)
+                        android.util.SizeF(280f, 110f) to buildWidgetViews(context, R.layout.red_wings_widget_layout, game, theme, prefs, id, 320, 140),
+                        android.util.SizeF(460f, 130f) to buildWidgetViews(context, R.layout.red_wings_widget_wide, game, theme, prefs, id, 540, 170)
                     )
                     RemoteViews(sizeMap)
                 } else {
-                    buildWidgetViews(context, R.layout.red_wings_widget_layout, game, theme, prefs, id, w, h)
+                    val layout = if (w >= 450) R.layout.red_wings_widget_wide else R.layout.red_wings_widget_layout
+                    buildWidgetViews(context, layout, game, theme, prefs, id, w, h)
                 }
                 mgr.updateAppWidget(id, views)
             }
@@ -216,19 +216,13 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         views.setViewVisibility(R.id.widget_away_logo, if (showLogos) View.VISIBLE else View.GONE)
         views.setViewVisibility(R.id.widget_home_logo, if (showLogos) View.VISIBLE else View.GONE)
 
-        val h = minH.toFloat()
-        val bonus = if (minW >= 260 && minH >= 90) ((minW - 260) * 0.015f).coerceIn(0f, 3.5f) else 0f
-        views.setTextViewTextSize(R.id.widget_title, TypedValue.COMPLEX_UNIT_SP, (h * 0.105f).coerceIn(8.5f, 15f))
-        views.setTextViewTextSize(R.id.widget_opponent, TypedValue.COMPLEX_UNIT_SP, (h * 0.12f + bonus * 0.5f).coerceIn(10f, 18f))
-        views.setTextViewTextSize(R.id.widget_countdown, TypedValue.COMPLEX_UNIT_SP, (h * 0.22f + bonus).coerceIn(16f, 36f))
-        views.setTextViewTextSize(R.id.widget_venue_info, TypedValue.COMPLEX_UNIT_SP, (h * 0.09f).coerceIn(8f, 14f))
-        views.setTextViewTextSize(R.id.widget_standing_h2h, TypedValue.COMPLEX_UNIT_SP, (h * 0.085f).coerceIn(7.5f, 13f))
-        val teamSp = (h * 0.088f).coerceIn(7.5f, 13f)
-        listOf(
-            R.id.widget_team_1, R.id.widget_team_2, R.id.widget_team_3, R.id.widget_team_4,
-            R.id.widget_team_5, R.id.widget_team_6, R.id.widget_team_7, R.id.widget_team_8
-        ).forEach {
-            views.setTextViewTextSize(it, TypedValue.COMPLEX_UNIT_SP, teamSp)
+        if (minH < 100) {
+            val h = minH.toFloat()
+            views.setTextViewTextSize(R.id.widget_title, TypedValue.COMPLEX_UNIT_SP, (h * 0.105f).coerceIn(8.5f, 15f))
+            views.setTextViewTextSize(R.id.widget_opponent, TypedValue.COMPLEX_UNIT_SP, (h * 0.12f).coerceIn(10f, 18f))
+            views.setTextViewTextSize(R.id.widget_countdown, TypedValue.COMPLEX_UNIT_SP, (h * 0.22f).coerceIn(16f, 36f))
+            views.setTextViewTextSize(R.id.widget_venue_info, TypedValue.COMPLEX_UNIT_SP, (h * 0.09f).coerceIn(8f, 14f))
+            views.setTextViewTextSize(R.id.widget_standing_h2h, TypedValue.COMPLEX_UNIT_SP, (h * 0.085f).coerceIn(7.5f, 13f))
         }
     }
 

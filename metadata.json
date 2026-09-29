@@ -1,14 +1,15 @@
 {
   "name": "Red Wings Widget",
-  "version": "26.9.29.7",
-  "versionCode": 26092907,
+  "version": "26.9.29.8",
+  "versionCode": 26092908,
   "description": "Detroit Red Wings NHL schedule widget + companion app: next-game countdown, last result, and division standings.",
   "changelog": [
-    "Unified all home screen widget sizes (compact, standard, wide, 4x2, 4x3, 5x2) to the Concept 2 Frosted Ice mockup layout.",
-    "Eliminated legacy split 2-pane and beige Heritage layouts so the widget always displays the full Frosted Ice template.",
-    "Added high-resolution Concept 2 Frosted Ice preview image and layout to the Android Widget Picker.",
-    "Fixed widget root padding so the Detroit Red Wings sweater ribbon sits completely flush with the top and side borders.",
-    "Restored exact responsive boundary thresholds for standings table visibility."
+    "Strictly locked widget to 4x2 cell size with resizing completely disabled (android:resizeMode=none).",
+    "Tailored pixel-perfect Concept 2 Frosted Ice mockup duplication for Google Pixel 10 Fold dual screens.",
+    "Outer cover display 4x2 (~330x140 dp) features seamless Home Red sweater header with dual racing stripes, circular crest badge, floating crimson @ puck badge, frosted matchup card with Away & Home records, floating Little Caesars Arena venue pill, and Playoff Seeds (with glowing red Detroit pill) + In The Hunt standings.",
+    "Inner unfolded display 4x2 (~540x170 dp) scales typography, crests, and seed pill spacing across the expansive inner screen without stretching or distorting.",
+    "Dynamic RemoteViews size-mapping on Android 12+ automatically selects the optimal layout when folding and unfolding.",
+    "Preserved pure white text and specular borders for WCAG AAA contrast across all screens."
   ],
   "requestFramePermissions": [],
   "majorCapabilities": []
