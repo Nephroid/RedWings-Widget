@@ -164,7 +164,10 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         ids.forEachIndexed { i, id ->
             val row = rows.getOrNull(i) ?: "${i + 1}. --"
             views.setTextViewText(id, row)
-            views.setTextColor(id, if (row.contains("DET", ignoreCase = true)) detColor else teamColor)
+            val isDet = row.contains("DET", ignoreCase = true)
+            views.setTextColor(id, if (isDet) detColor else teamColor)
+            val bg = if (isDet && theme == WidgetTheme.HOME) R.drawable.widget_det_highlight_pill else 0
+            views.setInt(id, "setBackgroundResource", bg)
         }
     }
 
@@ -172,6 +175,8 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         views.setInt(R.id.widget_root, "setBackgroundResource", theme.bgDrawableRes)
         views.setInt(R.id.widget_tag, "setBackgroundResource", theme.tagDrawableRes)
         views.setInt(R.id.widget_theme_toggle, "setBackgroundResource", theme.tagDrawableRes)
+        views.setInt(R.id.widget_header_layout, "setBackgroundResource",
+            if (theme == WidgetTheme.HOME) R.drawable.widget_header_ribbon else 0)
         views.setInt(R.id.widget_divider_top, "setBackgroundColor",
             ContextCompat.getColor(context, theme.dividerColorRes))
         views.setTextColor(R.id.widget_title, ContextCompat.getColor(context, theme.titleColorRes))

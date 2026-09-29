@@ -18,17 +18,17 @@
     <color name="widget_heritage_wcgb">#CE1126</color>
     <color name="widget_heritage_tag_text">#F7F3EA</color>
 
-    <!-- 2. Home (Official Red Sweater) - Crisp pure white on rich hockey red -->
+    <!-- 2. Home (Frosted Ice & Home Red Sweater) - Crisp pure white on red ribbon, obsidian on ice -->
     <color name="widget_home_title">#FFFFFF</color>
-    <color name="widget_home_countdown">#FFFFFF</color>
-    <color name="widget_home_opponent">#FFFFFF</color>
-    <color name="widget_home_divider">#FFFFFF</color>
-    <color name="widget_home_sub">#F0F0F0</color>
-    <color name="widget_home_standing">#FFD54F</color>
-    <color name="widget_home_team">#E0E0E0</color>
-    <color name="widget_home_team_det">#FFD54F</color>
-    <color name="widget_home_wcgb">#FF8A80</color>
-    <color name="widget_home_tag_text">#9E0B1D</color>
+    <color name="widget_home_countdown">#C8102E</color>
+    <color name="widget_home_opponent">#0F172A</color>
+    <color name="widget_home_divider">#C8102E</color>
+    <color name="widget_home_sub">#475569</color>
+    <color name="widget_home_standing">#1E293B</color>
+    <color name="widget_home_team">#334155</color>
+    <color name="widget_home_team_det">#FFFFFF</color>
+    <color name="widget_home_wcgb">#C8102E</color>
+    <color name="widget_home_tag_text">#FFFFFF</color>
 
     <!-- 3. Away (Official White Road Sweater) - Deep obsidian ink on ice white -->
     <color name="widget_away_title">#111111</color>

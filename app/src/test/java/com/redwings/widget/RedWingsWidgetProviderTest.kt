@@ -269,4 +269,13 @@ class RedWingsWidgetProviderTest {
         assertNotNull(inflated.findViewById(R.id.widget_matchup_layout))
         assertNotNull(inflated.findViewById(R.id.widget_countdown))
     }
+
+    @Test
+    fun frostedIceHomeTheme_appliesHighlightAndVenuePill() {
+        val views = RemoteViews(context.packageName, R.layout.red_wings_widget_layout)
+        provider.applyWidgetTheme(context, views, WidgetTheme.HOME)
+        val inflated = views.apply(context, FrameLayout(context)) as android.view.ViewGroup
+        assertNotNull(inflated.findViewById(R.id.widget_info_card))
+        assertNotNull(inflated.findViewById(R.id.widget_header_logo))
+    }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Home Red Sweater / Frosted Ice substrate: icy translucent base with specular glass border -->
+<!-- Frosted Ice & Home Red Sweater substrate: icy translucent base with specular glass border -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <corners android:radius="20dp" />

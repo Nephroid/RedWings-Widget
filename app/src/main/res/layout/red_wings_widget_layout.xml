@@ -3,86 +3,109 @@
     android:id="@+id/widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/widget_bg_heritage"
+    android:background="@drawable/widget_bg_home"
     android:orientation="vertical"
     android:gravity="fill"
     android:clipToPadding="true"
     android:clipChildren="true"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:paddingTop="6dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
     android:paddingBottom="6dp">
 
-    <!-- Header: title + tag left, theme toggle right -->
+    <!-- Region 1: Home Red Sweater Ribbon Header -->
     <LinearLayout
         android:id="@+id/widget_header_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.2"
+        android:layout_weight="1.3"
+        android:background="@drawable/widget_header_ribbon"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp">
+        android:paddingLeft="10dp"
+        android:paddingRight="8dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp">
+
+        <ImageView
+            android:id="@+id/widget_header_logo"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_redwings_logo"
+            android:layout_marginEnd="6dp" />
 
         <TextView
             android:fontFamily="serif"
             android:id="@+id/widget_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="RED WINGS"
-            android:textColor="#1A1210"
+            android:text="DETROIT RED WINGS"
+            android:textColor="#FFFFFF"
             android:textSize="11sp"
             android:textStyle="bold"
             android:letterSpacing="0.08"
-            android:includeFontPadding="false"
-            android:layout_marginEnd="6dp" />
+            android:includeFontPadding="false" />
 
+        <!-- Kept GONE for test ID preservation -->
         <TextView
-            android:fontFamily="serif"
             android:id="@+id/widget_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/widget_tag_heritage"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:text="NEXT GAME"
-            android:textColor="#F7F3EA"
-            android:textSize="8.5sp"
-            android:textStyle="bold"
-            android:includeFontPadding="false" />
+            android:visibility="gone" />
 
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
+        <!-- Dual white sweater stripes -->
+        <LinearLayout
+            android:layout_width="22dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginEnd="6dp"
+            android:gravity="center">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:background="#FFFFFF" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:background="#FFFFFF" />
+        </LinearLayout>
+
         <Button
             android:id="@+id/widget_theme_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/widget_tag_heritage"
+            android:background="@drawable/widget_tag_home"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
-            android:text="&#127912; THEME"
-            android:textColor="#F7F3EA"
-            android:textSize="8.5sp"
+            android:text="🔴 HOME"
+            android:textColor="#FFFFFF"
+            android:textSize="8sp"
             android:includeFontPadding="false" />
     </LinearLayout>
 
-    <!-- Top Red Divider Line -->
+    <!-- Top Divider Line under ribbon -->
     <FrameLayout
         android:id="@+id/widget_divider_top"
         android:layout_width="match_parent"
-        android:layout_height="1.5dp"
-        android:background="#CE1126"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="3dp" />
+        android:layout_height="1dp"
+        android:background="#FFFFFF"
+        android:layout_marginBottom="2dp" />
 
-    <!-- Matchup: away team (left) | game time + @ + countdown (center) | home team (right) -->
+    <!-- Region 2: Matchup Hero: away (left) | game time + @ + countdown (center) | home (right) -->
     <LinearLayout
         android:id="@+id/widget_matchup_layout"
         android:layout_width="match_parent"
@@ -90,8 +113,8 @@
         android:layout_weight="3.4"
         android:orientation="horizontal"
         android:gravity="center"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp">
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
 
         <!-- Away Team (Left) -->
         <LinearLayout
@@ -101,6 +124,17 @@
             android:layout_weight="1.2"
             android:orientation="vertical"
             android:gravity="center">
+
+            <TextView
+                android:id="@+id/widget_away_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AWAY"
+                android:textColor="#64748B"
+                android:textSize="7.5sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:includeFontPadding="false" />
 
             <ImageView
                 android:id="@+id/widget_away_logo"
@@ -117,8 +151,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TOR"
-                android:textColor="#1A1210"
-                android:textSize="11sp"
+                android:textColor="#0F172A"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:includeFontPadding="false" />
@@ -137,9 +171,9 @@
                 android:id="@+id/widget_opponent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="SAT • 7:00 PM"
-                android:textColor="#1A1210"
-                android:textSize="11.5sp"
+                android:text="SATURDAY • 7:00 PM"
+                android:textColor="#0F172A"
+                android:textSize="11sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.02"
                 android:gravity="center"
@@ -153,10 +187,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@"
-                android:textColor="#CE1126"
-                android:textSize="11sp"
-                android:textStyle="bold|italic"
+                android:textColor="#FFFFFF"
+                android:textSize="9sp"
+                android:textStyle="bold"
                 android:gravity="center"
+                android:background="@drawable/widget_at_puck_badge"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:includeFontPadding="false" />
 
             <TextView
@@ -164,9 +205,9 @@
                 android:id="@+id/widget_countdown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="1d 02h 45m"
-                android:textColor="#CE1126"
-                android:textSize="23sp"
+                android:text="02 : 14 : 22"
+                android:textColor="#C8102E"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:maxLines="1"
@@ -181,6 +222,17 @@
             android:layout_weight="1.2"
             android:orientation="vertical"
             android:gravity="center">
+
+            <TextView
+                android:id="@+id/widget_home_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HOME"
+                android:textColor="#C8102E"
+                android:textSize="7.5sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:includeFontPadding="false" />
 
             <ImageView
                 android:id="@+id/widget_home_logo"
@@ -197,36 +249,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="DET"
-                android:textColor="#1A1210"
-                android:textSize="11sp"
+                android:textColor="#0F172A"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:includeFontPadding="false" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Venue + standings context pill card matching mockup -->
+    <!-- Region 3: Frosted Venue Glass Pill -->
     <LinearLayout
         android:id="@+id/widget_info_card"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1.4"
+        android:layout_weight="1.2"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="3dp"
-        android:background="@drawable/widget_info_pill"
+        android:background="@drawable/widget_venue_pill"
         android:orientation="vertical"
         android:gravity="center"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp">
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp">
 
         <TextView
             android:fontFamily="serif"
             android:id="@+id/widget_standing_h2h"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Little Caesars Arena &#8226; Home &#8226; 3rd ATL &#8226; 4 pts out"
-            android:textColor="#1A1210"
-            android:textSize="9sp"
+            android:text="Little Caesars Arena • Detroit"
+            android:textColor="#1E293B"
+            android:textSize="8.5sp"
             android:textStyle="bold"
             android:gravity="center"
             android:maxLines="1"
@@ -241,21 +294,24 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <!-- Atlantic standings: 2 columns x 4 rows with grid borders matching mockup -->
+    <!-- Region 4: Atlantic Standings Tray: 2 columns x 4 rows -->
     <LinearLayout
         android:id="@+id/widget_standings_table"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4.8"
-        android:background="@drawable/widget_standings_bg"
+        android:background="@drawable/widget_standings_frosted_bg"
         android:orientation="horizontal"
         android:gravity="center"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="2dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp">
 
-        <!-- Column 1 (Ranks 1, 2, 3, 4) -->
+        <!-- Column 1 (Playoff Seeds 1, 2, 3, 4) -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -264,14 +320,25 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/widget_seeds_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PLAYOFF SEEDS (1-4)"
+                android:textColor="#475569"
+                android:textSize="7sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:includeFontPadding="false" />
+
+            <TextView
                 android:fontFamily="serif"
                 android:id="@+id/widget_team_1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="1. BOS: 51-20-11"
-                android:textColor="#1A1210"
-                android:textSize="9sp"
+                android:textColor="#334155"
+                android:textSize="8.5sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:maxLines="1"
@@ -281,7 +348,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#DDD6C7" />
+                android:background="#FFFFFF" />
 
             <TextView
                 android:fontFamily="serif"
@@ -290,8 +357,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="2. FLA: 45-27-10"
-                android:textColor="#1A1210"
-                android:textSize="9sp"
+                android:textColor="#334155"
+                android:textSize="8.5sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:maxLines="1"
@@ -301,7 +368,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#DDD6C7" />
+                android:background="#FFFFFF" />
 
             <TextView
                 android:fontFamily="serif"
@@ -310,8 +377,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="3. TOR: 46-26-10"
-                android:textColor="#1A1210"
-                android:textSize="9sp"
+                android:textColor="#334155"
+                android:textSize="8.5sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:maxLines="1"
@@ -321,7 +388,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#DDD6C7" />
+                android:background="#FFFFFF" />
 
             <TextView
                 android:fontFamily="serif"
@@ -330,10 +397,11 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="4. DET: 42-30-10"
-                android:textColor="#CE1126"
-                android:textSize="9sp"
+                android:textColor="#FFFFFF"
+                android:textSize="8.5sp"
                 android:textStyle="bold"
                 android:gravity="center"
+                android:background="@drawable/widget_det_highlight_pill"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:includeFontPadding="false" />
@@ -343,9 +411,9 @@
         <FrameLayout
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="#DDD6C7" />
+            android:background="#FFFFFF" />
 
-        <!-- Column 2 (Ranks 5, 6, 7, 8) -->
+        <!-- Column 2 (In the Hunt 5, 6, 7, 8) -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -354,14 +422,25 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/widget_hunt_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="IN THE HUNT (5-8)"
+                android:textColor="#475569"
+                android:textSize="7sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:includeFontPadding="false" />
+
+            <TextView
                 android:fontFamily="serif"
                 android:id="@+id/widget_team_5"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="5. TBL: 40-32-10"
-                android:textColor="#1A1210"
-                android:textSize="9sp"
+                android:textColor="#334155"
+                android:textSize="8.5sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:maxLines="1"
@@ -371,7 +450,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#DDD6C7" />
+                android:background="#FFFFFF" />
 
             <TextView
                 android:fontFamily="serif"
@@ -380,8 +459,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="6. OTT: 34-39-9"
-                android:textColor="#1A1210"
-                android:textSize="9sp"
+                android:textColor="#334155"
+                android:textSize="8.5sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:maxLines="1"
@@ -391,7 +470,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#DDD6C7" />
+                android:background="#FFFFFF" />
 
             <TextView
                 android:fontFamily="serif"
@@ -400,8 +479,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="7. BUF: 37-37-5"
-                android:textColor="#1A1210"
-                android:textSize="9sp"
+                android:textColor="#334155"
+                android:textSize="8.5sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:maxLines="1"
@@ -411,7 +490,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#DDD6C7" />
+                android:background="#FFFFFF" />
 
             <TextView
                 android:fontFamily="serif"
@@ -420,8 +499,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="8. MTL: 29-36-12"
-                android:textColor="#1A1210"
-                android:textSize="9sp"
+                android:textColor="#334155"
+                android:textSize="8.5sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:maxLines="1"
