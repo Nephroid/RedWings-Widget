@@ -152,4 +152,22 @@ class RedWingsWidgetProviderTest {
         assertEquals("at", away)
         assertTrue(WidgetBinder.formatCountdown(System.currentTimeMillis() + 3_600_000).isNotBlank())
     }
+
+    @Test
+    fun wideLayout_inflatesAndBindsCleanly() {
+        val views = RemoteViews(context.packageName, R.layout.red_wings_widget_wide)
+        provider.applyResponsiveLayout(context, views, 390, 110)
+        val inflated = views.apply(context, FrameLayout(context)) as android.view.ViewGroup
+        assertNotNull(inflated.findViewById(R.id.widget_matchup_layout))
+        assertNotNull(inflated.findViewById(R.id.widget_standings_table))
+    }
+
+    @Test
+    fun compactLayout_inflatesAndBindsCleanly() {
+        val views = RemoteViews(context.packageName, R.layout.red_wings_widget_compact)
+        provider.applyResponsiveLayout(context, views, 140, 90)
+        val inflated = views.apply(context, FrameLayout(context)) as android.view.ViewGroup
+        assertNotNull(inflated.findViewById(R.id.widget_matchup_layout))
+        assertNotNull(inflated.findViewById(R.id.widget_countdown))
+    }
 }

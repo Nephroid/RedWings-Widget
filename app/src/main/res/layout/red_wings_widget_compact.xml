@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_bg_heritage"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:clipToPadding="true"
+    android:clipChildren="true"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp">
+
+    <!-- Header -->
+    <LinearLayout
+        android:id="@+id/widget_header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp">
+
+        <TextView
+            android:fontFamily="serif"
+            android:id="@+id/widget_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RED WINGS"
+            android:textColor="#1A1210"
+            android:textSize="10.5sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:includeFontPadding="false"
+            android:layout_marginEnd="4dp" />
+
+        <TextView
+            android:fontFamily="serif"
+            android:id="@+id/widget_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/widget_tag_heritage"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text="NEXT"
+            android:textColor="#F7F3EA"
+            android:textSize="8sp"
+            android:textStyle="bold"
+            android:includeFontPadding="false" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/widget_theme_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/widget_tag_heritage"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text="&#127912;"
+            android:textColor="#F7F3EA"
+            android:textSize="8sp"
+            android:includeFontPadding="false" />
+    </LinearLayout>
+
+    <!-- Top Red Divider Line -->
+    <FrameLayout
+        android:id="@+id/widget_divider_top"
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:background="#CE1126"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp" />
+
+    <!-- Matchup row -->
+    <LinearLayout
+        android:id="@+id/widget_matchup_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/widget_away_logo"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:scaleType="fitCenter"
+                android:padding="2dp"
+                android:src="@drawable/ic_puck_vector" />
+
+            <TextView
+                android:fontFamily="serif"
+                android:id="@+id/widget_opponent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="vs. Maple Leafs"
+                android:textColor="#1A1210"
+                android:textSize="11.5sp"
+                android:textStyle="bold|italic"
+                android:gravity="center"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:includeFontPadding="false" />
+
+            <ImageView
+                android:id="@+id/widget_home_logo"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:scaleType="fitCenter"
+                android:padding="2dp"
+                android:src="@drawable/ic_redwings_logo" />
+        </LinearLayout>
+
+        <TextView
+            android:fontFamily="serif"
+            android:id="@+id/widget_countdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1d 02h 45m"
+            android:textColor="#CE1126"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:maxLines="1"
+            android:includeFontPadding="false" />
+    </LinearLayout>
+
+    <!-- Venue + standings context pill card -->
+    <LinearLayout
+        android:id="@+id/widget_info_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/widget_info_pill"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp">
+
+        <TextView
+            android:fontFamily="serif"
+            android:id="@+id/widget_standing_h2h"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Little Caesars Arena &#8226; Home"
+            android:textColor="#1A1210"
+            android:textSize="8sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:includeFontPadding="false" />
+
+        <TextView
+            android:id="@+id/widget_venue_info"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/widget_standings_table"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</LinearLayout>

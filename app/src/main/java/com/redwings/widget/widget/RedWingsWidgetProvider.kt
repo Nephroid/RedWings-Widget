@@ -108,26 +108,54 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
             }
 
             ids.forEach { id ->
-                val views = RemoteViews(context.packageName, R.layout.red_wings_widget_layout)
                 val options = opts ?: mgr.getAppWidgetOptions(id)
                 val w = options?.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 180)?.takeIf { it > 0 } ?: 180
                 val h = options?.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 110)?.takeIf { it > 0 } ?: 110
 
-                views.setOnClickPendingIntent(R.id.widget_theme_toggle, togglePI(context, id))
-                views.setTextViewText(R.id.widget_theme_toggle, theme.buttonLabel)
-                applyWidgetTheme(context, views, theme)
-
-                if (game != null) WidgetBinder.bindGameData(context, views, game, theme)
-                else WidgetBinder.bindEmptyState(context, views, theme)
-                bindStandings(context, views, prefs, theme)
-                applyResponsiveLayout(context, views, w, h)
-
-                views.setOnClickPendingIntent(R.id.widget_root, openAppPI(context))
+                val views = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    val sizeMap = mapOf(
+                        android.util.SizeF(130f, 90f) to buildWidgetViews(context, R.layout.red_wings_widget_compact, game, theme, prefs, id, 140, 90),
+                        android.util.SizeF(200f, 110f) to buildWidgetViews(context, R.layout.red_wings_widget_layout, game, theme, prefs, id, 220, 110),
+                        android.util.SizeF(340f, 110f) to buildWidgetViews(context, R.layout.red_wings_widget_wide, game, theme, prefs, id, 390, 110)
+                    )
+                    RemoteViews(sizeMap)
+                } else {
+                    val layoutRes = when {
+                        w >= 340 -> R.layout.red_wings_widget_wide
+                        w < 180 && h < 110 -> R.layout.red_wings_widget_compact
+                        else -> R.layout.red_wings_widget_layout
+                    }
+                    buildWidgetViews(context, layoutRes, game, theme, prefs, id, w, h)
+                }
                 mgr.updateAppWidget(id, views)
             }
         } catch (e: Exception) {
             Log.e(TAG, "update failed: ${e.message}", e)
         }
+    }
+
+    private suspend fun buildWidgetViews(
+        context: Context,
+        layoutResId: Int,
+        game: WidgetBinder.WidgetGame?,
+        theme: WidgetTheme,
+        prefs: android.content.SharedPreferences,
+        widgetId: Int,
+        minW: Int,
+        minH: Int
+    ): RemoteViews {
+        val views = RemoteViews(context.packageName, layoutResId)
+        views.setOnClickPendingIntent(R.id.widget_theme_toggle, togglePI(context, widgetId))
+        views.setTextViewText(R.id.widget_theme_toggle, theme.buttonLabel)
+        applyWidgetTheme(context, views, theme)
+
+        if (game != null) WidgetBinder.bindGameData(context, views, game, theme)
+        else WidgetBinder.bindEmptyState(context, views, theme)
+
+        bindStandings(context, views, prefs, theme)
+        applyResponsiveLayout(context, views, minW, minH)
+        views.setOnClickPendingIntent(R.id.widget_root, openAppPI(context))
+        return views
     }
 
     private fun bindStandings(
@@ -208,21 +236,16 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
     }
 
     private fun piFlags() =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        } else PendingIntent.FLAG_UPDATE_CURRENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        else PendingIntent.FLAG_UPDATE_CURRENT
 
-    private fun togglePI(context: Context, id: Int): PendingIntent {
-        val i = Intent(context, RedWingsWidgetProvider::class.java).apply { action = ACTION_TOGGLE_THEME }
-        return PendingIntent.getBroadcast(context, id, i, piFlags())
-    }
+    private fun togglePI(context: Context, id: Int): PendingIntent =
+        PendingIntent.getBroadcast(context, id, Intent(context, RedWingsWidgetProvider::class.java).apply { action = ACTION_TOGGLE_THEME }, piFlags())
 
-    private fun openAppPI(context: Context): PendingIntent {
-        val i = Intent(context, MainActivity::class.java).apply {
+    private fun openAppPI(context: Context): PendingIntent =
+        PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        return PendingIntent.getActivity(context, 0, i, piFlags())
-    }
+        }, piFlags())
 
     private fun scheduleNextUpdate(context: Context) {
         val am = context.getSystemService(Context.ALARM_SERVICE) as? android.app.AlarmManager ?: return

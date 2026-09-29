@@ -39,7 +39,9 @@ data class StandingsRowUi(
     val losses: Int,
     val otLosses: Int,
     val points: Int,
-    val isRedWings: Boolean = false
+    val isRedWings: Boolean = false,
+    val goalDiff: Int = 0,
+    val streak: String = ""
 )
 
 sealed interface ScheduleUiState {

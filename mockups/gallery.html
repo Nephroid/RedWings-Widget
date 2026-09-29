@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detroit Red Wings - Adaptive UI Mockups</title>
+    <style>
+        :root {
+            --bg: #0b0c0e;
+            --card-bg: #16181d;
+            --accent: #ce1126;
+            --text: #f0f0f0;
+            --subtext: #a0a5b0;
+            --border: #2a2d36;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 32px 20px;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 48px; border-bottom: 2px solid var(--accent); padding-bottom: 24px; }
+        h1 { font-size: 2.4rem; color: #fff; letter-spacing: 1px; margin-bottom: 8px; }
+        .subtitle { color: var(--subtext); font-size: 1.1rem; }
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+        }
+        .card-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-title { font-size: 1.25rem; font-weight: 700; color: #fff; }
+        .card-number {
+            background: rgba(206, 17, 38, 0.2);
+            color: #ff5263;
+            border: 1px solid #ce1126;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+        .card-img-wrap {
+            padding: 16px;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card-img-wrap img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            border: 1px solid #333;
+            transition: transform 0.2s ease;
+        }
+        .card-img-wrap img:hover {
+            transform: scale(1.02);
+            cursor: pointer;
+        }
+        .card-body {
+            padding: 20px 24px;
+            flex-grow: 1;
+        }
+        .card-body h4 { color: #fff; margin-bottom: 8px; font-size: 1rem; }
+        .card-body p { color: var(--subtext); font-size: 0.95rem; margin-bottom: 12px; }
+        .card-body ul { padding-left: 20px; color: var(--subtext); font-size: 0.9rem; }
+        .card-body li { margin-bottom: 6px; }
+        .highlight { color: #ff5263; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>DETROIT RED WINGS</h1>
+            <p class="subtitle">Adaptive UI Architecture & Zero Wasted Space Redesign</p>
+            <div class="badge">Google Pixel 9 Pro XL & Pixel 10 Fold</div>
+        </header>
+
+        <div class="grid">
+            <!-- Mockup 1 -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Pixel 9 Pro XL: Portrait Mode</span>
+                    <span class="card-number">Mockup 1</span>
+                </div>
+                <div class="card-img-wrap">
+                    <a href="1_pixel_9_pro_xl_portrait.jpg" target="_blank">
+                        <img src="1_pixel_9_pro_xl_portrait.jpg" alt="Mockup 1: Pixel 9 Pro XL Portrait">
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h4>High-Density Tall Slate Canvas (~448 × 997 dp)</h4>
+                    <p>Resolves vertical dead space and one-handed thumb reachability:</p>
+                    <ul>
+                        <li><span class="highlight">Flanked Flip-Clock</span>: Central split-flap tiles (72dp) flanked by H2H record and broadcast channel.</li>
+                        <li><span class="highlight">Bento Box Last Result</span>: Final score + L5 form strip (<code>[W][W][L][W][W]</code>) + Shots on Goal.</li>
+                        <li><span class="highlight">Full Atlantic Standings</span>: Complete 8-team table with Goal Diff and Playoff Line, visible without scrolling.</li>
+                        <li><span class="highlight">Ergonomic Bottom Dock</span>: Controls anchored at bottom for effortless one-handed thumb interaction.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Mockup 2 -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Pixel 10 Fold: Unfolded Inner Screen</span>
+                    <span class="card-number">Mockup 2</span>
+                </div>
+                <div class="card-img-wrap">
+                    <a href="2_pixel_10_fold_unfolded_dual_pane.jpg" target="_blank">
+                        <img src="2_pixel_10_fold_unfolded_dual_pane.jpg" alt="Mockup 2: Pixel 10 Fold Unfolded Inner Screen">
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h4>Dual-Pane Command Center (~840 × 870 dp)</h4>
+                    <p>Eliminates the 520dp red gradient canyon and stretched table rows:</p>
+                    <ul>
+                        <li><span class="highlight">Left Pane (Game Day Pulse)</span>: Hero card with side-by-side team crests, countdown clock, and Last Result card.</li>
+                        <li><span class="highlight">Right Pane (League Intelligence)</span>: High-density 8-team Atlantic Standings table with <code>DIFF</code>, <code>STRK</code>, and Playoff Cutoff line, plus Upcoming schedule carousel.</li>
+                        <li><span class="highlight">Zero Wasted Whitespace</span>: Perfect 50/50 balance tailored to the 8.0" folding display.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Mockup 3 -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Home Screen Widget Suite</span>
+                    <span class="card-number">Mockup 3</span>
+                </div>
+                <div class="card-img-wrap">
+                    <a href="3_adaptive_home_screen_widgets.jpg" target="_blank">
+                        <img src="3_adaptive_home_screen_widgets.jpg" alt="Mockup 3: Adaptive Home Screen Widgets">
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h4>Android 12+ Size-Mapped RemoteViews</h4>
+                    <p>Dynamic responsive layout switching on the Pixel launcher:</p>
+                    <ul>
+                        <li><span class="highlight">3x2 Compact</span>: Focused Matchup + Hero Countdown + top 4 Atlantic standings.</li>
+                        <li><span class="highlight">4x2 Standard</span>: Canonical Heritage layout with full 2-col x 4-row 8-team standings table.</li>
+                        <li><span class="highlight">5x2 / 6x2 Wide Split</span>: Dynamically splits into side-by-side dual panes (Matchup left, Standings right) to prevent empty space on wide launchers.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Mockup 4 -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Pixel 10 Fold: Tabletop Mode</span>
+                    <span class="card-number">Mockup 4</span>
+                </div>
+                <div class="card-img-wrap">
+                    <a href="4_pixel_10_fold_tabletop_mode.jpg" target="_blank">
+                        <img src="4_pixel_10_fold_tabletop_mode.jpg" alt="Mockup 4: Pixel 10 Fold Tabletop Mode">
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h4>Laptop Hinge 90° Posture Posture-Awareness</h4>
+                    <p>Leverages the physical fold crease when placed on a desk:</p>
+                    <ul>
+                        <li><span class="highlight">Upper Screen (Angled Upward)</span>: Glancable broadcast scoreboard with Detroit vs opponent billboard and large countdown clock.</li>
+                        <li><span class="highlight">Lower Screen (Flat on Desk)</span>: Interactive touch console with Standings table, Last Game box score, and refresh triggers.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Mockup 5 -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Pixel 9 Pro XL: Landscape Mode</span>
+                    <span class="card-number">Mockup 5</span>
+                </div>
+                <div class="card-img-wrap">
+                    <a href="5_pixel_9_pro_xl_landscape.jpg" target="_blank">
+                        <img src="5_pixel_9_pro_xl_landscape.jpg" alt="Mockup 5: Pixel 9 Pro XL Landscape Mode">
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h4>Wide Two-Column Split (~997 × 448 dp)</h4>
+                    <p>Prevents narrow vertical letterboxing when held horizontally:</p>
+                    <ul>
+                        <li><span class="highlight">Left Column</span>: Matchup Hero Card + Last Result Card.</li>
+                        <li><span class="highlight">Right Column</span>: Atlantic Division Standings + Upcoming 3-game schedule strip.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
