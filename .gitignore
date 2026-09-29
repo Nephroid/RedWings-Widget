@@ -18,7 +18,7 @@ local.properties
 debug.keystore
 *.keystore
 *.jks
-release.keystore
+!release.keystore
 .antigravity/
 .vscode/
 *.log
