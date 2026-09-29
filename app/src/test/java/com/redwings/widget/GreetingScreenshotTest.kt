@@ -137,4 +137,28 @@ class GreetingScreenshotTest {
         composeTestRule.onRoot()
             .captureRoboImage(filePath = "src/test/screenshots/redwings_dual_pane_preview.png")
     }
+
+    @Test
+    fun redwings_tabletop_dashboard_screenshot() {
+        val scheduleData = com.redwings.widget.ui.ScheduleUiState.Data(
+            nextGame = NextGameUi("Toronto Maple Leafs", "TOR", "Little Caesars Arena", System.currentTimeMillis() + 86400000L * 2, true),
+            lastGame = LastGameUi("Boston Bruins", "BOS", 4, 2, true, true, "Tue, Sep 30"),
+            standingsSummary = "4th in Atlantic • 94 pts"
+        )
+        val countdown = CountdownState(days = 1, hours = 2, minutes = 15, seconds = 30, text = "1d 02h 15m 30s")
+
+        composeTestRule.setContent {
+            RedWingsTheme {
+                com.redwings.widget.ui.dashboard.TabletopDashboard(
+                    scheduleState = scheduleData,
+                    countdown = countdown,
+                    isRefreshing = false,
+                    onRefresh = {}
+                )
+            }
+        }
+
+        composeTestRule.onRoot()
+            .captureRoboImage(filePath = "src/test/screenshots/redwings_tabletop_preview.png")
+    }
 }

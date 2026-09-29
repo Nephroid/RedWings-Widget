@@ -11,17 +11,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,13 +38,13 @@ import com.redwings.widget.ui.NextGameUi
 import com.redwings.widget.ui.ScheduleUiState
 import com.redwings.widget.ui.theme.AppJersey
 import com.redwings.widget.ui.theme.LocalJerseyPalette
-import com.redwings.widget.ui.theme.WingsRed
 
 /**
- * Tabletop Dashboard for Google Pixel 10 Fold / Pixel 9 Pro Fold (Hinge folded ~90°-120°).
+ * Tabletop / Stand Mode Dashboard for Google Pixel 10 Fold / Pixel 9 Pro Fold (Hinge folded ~90°-120°)
+ * and ASUS Chromebook CM34 Flip (Tent / Stand / Touch Console).
  *
- * Upper Screen (Angled Upward): Broadcast Scoreboard Hero.
- * Lower Screen (Flat on Surface): Interactive Console (Standings + Last Game Box Score).
+ * Upper Screen (Angled Upward / Desk View): Broadcast Scoreboard Hero.
+ * Lower Screen (Flat on Surface / Touch Base): Interactive Console (Standings + Last Game Box Score).
  */
 @Composable
 fun TabletopDashboard(
@@ -45,7 +52,7 @@ fun TabletopDashboard(
     countdown: CountdownState,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
-    activeJersey: AppJersey = AppJersey.HERITAGE,
+    activeJersey: AppJersey = AppJersey.HOME,
     onJerseyThemeToggle: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -64,11 +71,15 @@ fun TabletopDashboard(
                 .fillMaxWidth()
                 .weight(1f)
                 .background(palette.background)
-                .padding(12.dp),
+                .padding(horizontal = 16.dp, vertical = 10.dp),
             contentAlignment = Alignment.Center
         ) {
+            IceRinkBackground()
+
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .widthIn(max = 900.dp)
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -86,21 +97,46 @@ fun TabletopDashboard(
                         )
                     )
 
-                    Surface(
-                        onClick = onJerseyThemeToggle,
-                        shape = RoundedCornerShape(16.dp),
-                        color = palette.chipBg,
-                        border = BorderStroke(1.dp, palette.cardBorder)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text(
-                            text = activeJersey.chipLabel,
-                            color = palette.chipText,
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 10.sp
-                            ),
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                        )
+                        Surface(
+                            onClick = onJerseyThemeToggle,
+                            shape = RoundedCornerShape(16.dp),
+                            color = palette.chipBg,
+                            border = BorderStroke(1.dp, palette.cardBorder),
+                            modifier = Modifier.testTag("jersey_theme_chip")
+                        ) {
+                            Text(
+                                text = activeJersey.chipLabel,
+                                color = palette.chipText,
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 10.sp
+                                ),
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            )
+                        }
+
+                        if (isRefreshing) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                strokeWidth = 2.dp,
+                                color = palette.accentRed
+                            )
+                        } else {
+                            IconButton(
+                                onClick = onRefresh,
+                                modifier = Modifier.testTag("refresh_button").size(28.dp)
+                            ) {
+                                Icon(
+                                    Icons.Default.Refresh,
+                                    contentDescription = "Refresh schedule",
+                                    tint = palette.primaryText
+                                )
+                            }
+                        }
                     }
                 }
 
@@ -115,7 +151,7 @@ fun TabletopDashboard(
 
         // ================= PHYSICAL HINGE ACCENT DIVIDER =================
         HorizontalDivider(
-            color = palette.accentRed.copy(alpha = 0.4f),
+            color = palette.accentRed.copy(alpha = 0.35f),
             thickness = 2.dp
         )
 
@@ -124,11 +160,13 @@ fun TabletopDashboard(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1.05f)
-                .background(palette.cardSurface)
-                .padding(horizontal = 16.dp, vertical = 10.dp)
+                .background(palette.background)
+                .padding(horizontal = 16.dp, vertical = 10.dp),
+            contentAlignment = Alignment.TopCenter
         ) {
             Row(
                 modifier = Modifier
+                    .widthIn(max = 1400.dp)
                     .fillMaxSize()
                     .verticalScroll(bottomScrollState),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)

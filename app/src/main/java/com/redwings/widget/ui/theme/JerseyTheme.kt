@@ -64,19 +64,19 @@ val HeritagePalette = JerseyPalette(
 )
 
 val HomePalette = JerseyPalette(
-    background = Color(0xFF160305),
-    cardSurface = Color(0xFF26080B),
-    cardBorder = Color(0xFF5E0B14),
-    headerBackground = Color(0xFFCE1126),
+    background = Color(0xFFEBF2F7),
+    cardSurface = Color(0xF5F6FAFC),
+    cardBorder = Color(0xE6FFFFFF),
+    headerBackground = Color(0xFFC8102E),
     headerText = Color(0xFFFFFFFF),
-    primaryText = Color(0xFFFFFFFF),
-    secondaryText = Color(0xFFE0E0E0),
-    accentRed = Color(0xFFCE1126),
-    highlightGold = Color(0xFFFFD54F),
-    heroTop = Color(0xFFCE1126),
-    heroBottom = Color(0xFF750713),
-    chipBg = Color(0xFFFFFFFF),
-    chipText = Color(0xFF9E0B1D)
+    primaryText = Color(0xFF111418),
+    secondaryText = Color(0xFF5A6472),
+    accentRed = Color(0xFFC8102E),
+    highlightGold = Color(0xFFC8102E),
+    heroTop = Color(0xFFC8102E),
+    heroBottom = Color(0xFF9E0B1D),
+    chipBg = Color(0x33FFFFFF),
+    chipText = Color(0xFFFFFFFF)
 )
 
 val AwayPalette = JerseyPalette(
@@ -135,4 +135,4 @@ fun AppJersey.toPalette(): JerseyPalette = when (this) {
     AppJersey.STADIUM_SERIES -> StadiumSeriesPalette
 }
 
-val LocalJerseyPalette = staticCompositionLocalOf { HeritagePalette }
+val LocalJerseyPalette = staticCompositionLocalOf { HomePalette }

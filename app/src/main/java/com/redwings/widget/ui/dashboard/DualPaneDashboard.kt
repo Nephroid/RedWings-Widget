@@ -2,6 +2,7 @@ package com.redwings.widget.ui.dashboard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,16 +10,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.redwings.widget.ui.CountdownState
 import com.redwings.widget.ui.LastGameUi
@@ -26,13 +32,12 @@ import com.redwings.widget.ui.NextGameUi
 import com.redwings.widget.ui.ScheduleUiState
 import com.redwings.widget.ui.theme.AppJersey
 import com.redwings.widget.ui.theme.LocalJerseyPalette
-import com.redwings.widget.ui.theme.WingsRed
 
 /**
- * 50/50 Dual-Pane Command Center for Google Pixel 10 Fold (Unfolded Inner Screen)
- * and Google Pixel 9 Pro XL (Landscape Mode).
+ * 50/50 Dual-Pane Command Center for Google Pixel 10 Fold (Unfolded Inner Screen),
+ * Google Pixel 9 Pro XL (Landscape Mode), and ASUS Chromebook CM34 Flip.
  *
- * Left Pane: Game Day Pulse (Hero Card + Last Result)
+ * Left Pane: Game Day Pulse (Hero Card + Last Result + AppFooter)
  * Right Pane: League Intelligence (Atlantic Division Standings + Upcoming Carousel)
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +48,7 @@ fun DualPaneDashboard(
     isRefreshing: Boolean,
     errorMessage: String?,
     onRefresh: () -> Unit,
-    activeJersey: AppJersey = AppJersey.HERITAGE,
+    activeJersey: AppJersey = AppJersey.HOME,
     onJerseyThemeToggle: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -70,10 +75,10 @@ fun DualPaneDashboard(
             .fillMaxSize()
             .background(palette.background)
     ) {
+        IceRinkBackground()
+
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(palette.background)
+            modifier = Modifier.fillMaxSize()
         ) {
             AppHeaderBanner(
                 isRefreshing = isRefreshing,
@@ -83,12 +88,37 @@ fun DualPaneDashboard(
                 onJerseyThemeToggle = onJerseyThemeToggle
             )
 
-            Row(
+            errorMessage?.let { msg ->
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.errorContainer
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 6.dp)
+                ) {
+                    Text(
+                        text = msg,
+                        modifier = Modifier.padding(12.dp),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+
+            Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.TopCenter
             ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .widthIn(max = 1400.dp)
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
                 // LEFT PANE: GAME DAY PULSE (~50% width)
                 Column(
                     modifier = Modifier
@@ -148,4 +178,5 @@ fun DualPaneDashboard(
             }
         }
     }
+}
 }

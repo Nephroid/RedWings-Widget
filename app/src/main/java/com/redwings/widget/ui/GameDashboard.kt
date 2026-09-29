@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.CircularProgressIndicator
@@ -18,6 +19,7 @@ import com.redwings.widget.ui.dashboard.AppDarkBg
 import com.redwings.widget.ui.dashboard.DualPaneDashboard
 import com.redwings.widget.ui.dashboard.IceRinkBackground
 import com.redwings.widget.ui.dashboard.SinglePaneDashboard
+import com.redwings.widget.ui.dashboard.TabletopDashboard
 import com.redwings.widget.ui.theme.AppJersey
 import com.redwings.widget.ui.theme.LocalJerseyPalette
 import com.redwings.widget.ui.theme.WingsRed
@@ -64,17 +66,80 @@ fun UpcomingList(games: List<NextGameUi>, modifier: Modifier = Modifier) =
 fun IceRinkBackground(modifier: Modifier = Modifier) =
     com.redwings.widget.ui.dashboard.IceRinkBackground(modifier = modifier)
 
+@Composable
+fun SinglePaneDashboard(
+    scheduleState: ScheduleUiState,
+    countdown: CountdownState,
+    isRefreshing: Boolean,
+    errorMessage: String?,
+    onRefresh: () -> Unit,
+    activeJersey: AppJersey = AppJersey.HOME,
+    onJerseyThemeToggle: () -> Unit = {},
+    modifier: Modifier = Modifier
+) = com.redwings.widget.ui.dashboard.SinglePaneDashboard(
+    scheduleState = scheduleState,
+    countdown = countdown,
+    isRefreshing = isRefreshing,
+    errorMessage = errorMessage,
+    onRefresh = onRefresh,
+    activeJersey = activeJersey,
+    onJerseyThemeToggle = onJerseyThemeToggle,
+    modifier = modifier
+)
+
+@Composable
+fun DualPaneDashboard(
+    scheduleState: ScheduleUiState,
+    countdown: CountdownState,
+    isRefreshing: Boolean,
+    errorMessage: String?,
+    onRefresh: () -> Unit,
+    activeJersey: AppJersey = AppJersey.HOME,
+    onJerseyThemeToggle: () -> Unit = {},
+    modifier: Modifier = Modifier
+) = com.redwings.widget.ui.dashboard.DualPaneDashboard(
+    scheduleState = scheduleState,
+    countdown = countdown,
+    isRefreshing = isRefreshing,
+    errorMessage = errorMessage,
+    onRefresh = onRefresh,
+    activeJersey = activeJersey,
+    onJerseyThemeToggle = onJerseyThemeToggle,
+    modifier = modifier
+)
+
+@Composable
+fun TabletopDashboard(
+    scheduleState: ScheduleUiState,
+    countdown: CountdownState,
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit,
+    activeJersey: AppJersey = AppJersey.HOME,
+    onJerseyThemeToggle: () -> Unit = {},
+    modifier: Modifier = Modifier
+) = com.redwings.widget.ui.dashboard.TabletopDashboard(
+    scheduleState = scheduleState,
+    countdown = countdown,
+    isRefreshing = isRefreshing,
+    onRefresh = onRefresh,
+    activeJersey = activeJersey,
+    onJerseyThemeToggle = onJerseyThemeToggle,
+    modifier = modifier
+)
+
 /**
  * Entry point: collects ViewModel state and dispatches dynamically to either:
  * - SinglePaneDashboard (Pixel 9 Pro XL Portrait & Pixel 10 Fold Cover)
- * - DualPaneDashboard (Pixel 10 Fold Unfolded Inner Screen & Pixel 9 Pro XL Landscape)
+ * - DualPaneDashboard (Pixel 10 Fold Unfolded Inner Screen, Pixel 9 Pro XL Landscape, & ASUS Chromebook CM34 Flip)
+ * - TabletopDashboard (Pixel 10 Fold & Chromebook CM34 in Tabletop / Stand posture)
  */
 @Composable
 fun GameDashboard(
     viewModel: GameViewModel,
     modifier: Modifier = Modifier,
-    activeJersey: AppJersey = AppJersey.HERITAGE,
-    onJerseyThemeToggle: () -> Unit = {}
+    activeJersey: AppJersey = AppJersey.HOME,
+    onJerseyThemeToggle: () -> Unit = {},
+    isTabletop: Boolean = false
 ) {
     val scheduleState by viewModel.scheduleState.collectAsState()
     val countdown by viewModel.countdown.collectAsState()
@@ -89,6 +154,7 @@ fun GameDashboard(
         onRefresh = { viewModel.triggerManualRefresh() },
         activeJersey = activeJersey,
         onJerseyThemeToggle = onJerseyThemeToggle,
+        isTabletop = isTabletop,
         modifier = modifier
     )
 }
@@ -100,8 +166,9 @@ fun GameDashboardContent(
     isRefreshing: Boolean,
     errorMessage: String?,
     onRefresh: () -> Unit,
-    activeJersey: AppJersey = AppJersey.HERITAGE,
+    activeJersey: AppJersey = AppJersey.HOME,
     onJerseyThemeToggle: () -> Unit = {},
+    isTabletop: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     val config = LocalConfiguration.current
@@ -118,6 +185,7 @@ fun GameDashboardContent(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding)
                 .background(palette.background)
         ) {
             IceRinkBackground()
@@ -131,26 +199,39 @@ fun GameDashboardContent(
                 }
 
                 ScheduleUiState.Empty, is ScheduleUiState.Data -> {
-                    if (isExpanded) {
-                        DualPaneDashboard(
-                            scheduleState = scheduleState,
-                            countdown = countdown,
-                            isRefreshing = isRefreshing,
-                            errorMessage = errorMessage,
-                            onRefresh = onRefresh,
-                            activeJersey = activeJersey,
-                            onJerseyThemeToggle = onJerseyThemeToggle
-                        )
-                    } else {
-                        SinglePaneDashboard(
-                            scheduleState = scheduleState,
-                            countdown = countdown,
-                            isRefreshing = isRefreshing,
-                            errorMessage = errorMessage,
-                            onRefresh = onRefresh,
-                            activeJersey = activeJersey,
-                            onJerseyThemeToggle = onJerseyThemeToggle
-                        )
+                    when {
+                        isTabletop -> {
+                            TabletopDashboard(
+                                scheduleState = scheduleState,
+                                countdown = countdown,
+                                isRefreshing = isRefreshing,
+                                onRefresh = onRefresh,
+                                activeJersey = activeJersey,
+                                onJerseyThemeToggle = onJerseyThemeToggle
+                            )
+                        }
+                        isExpanded -> {
+                            DualPaneDashboard(
+                                scheduleState = scheduleState,
+                                countdown = countdown,
+                                isRefreshing = isRefreshing,
+                                errorMessage = errorMessage,
+                                onRefresh = onRefresh,
+                                activeJersey = activeJersey,
+                                onJerseyThemeToggle = onJerseyThemeToggle
+                            )
+                        }
+                        else -> {
+                            SinglePaneDashboard(
+                                scheduleState = scheduleState,
+                                countdown = countdown,
+                                isRefreshing = isRefreshing,
+                                errorMessage = errorMessage,
+                                onRefresh = onRefresh,
+                                activeJersey = activeJersey,
+                                onJerseyThemeToggle = onJerseyThemeToggle
+                            )
+                        }
                     }
                 }
             }

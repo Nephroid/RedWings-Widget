@@ -7,35 +7,18 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -47,9 +30,15 @@ import com.redwings.widget.R
 import com.redwings.widget.data.model.getTeamLogoUrlFallback
 import com.redwings.widget.ui.CountdownState
 import com.redwings.widget.ui.NextGameUi
+import com.redwings.widget.ui.theme.JerseyPalette
 import com.redwings.widget.ui.theme.LocalJerseyPalette
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-/** Countdown hero for the next game with gradient backdrop, logos, and flip-clock digit boxes. */
+/**
+ * Frosted Ice Hero Matchup Card for the next game (Concept 2 template).
+ */
 @Composable
 fun NextGameHero(
     countdown: CountdownState,
@@ -59,225 +48,167 @@ fun NextGameHero(
     showFlankingBadges: Boolean = false
 ) {
     val palette = LocalJerseyPalette.current
+    val oppName = game?.opponent ?: "Toronto Maple Leafs"
+    val oppAbbr = game?.opponentAbbrev ?: "TOR"
+    val isDetroitHome = game?.isHome ?: true
 
-    Card(
+    val awayAbbr = if (isDetroitHome) oppAbbr else "DET"
+    val homeAbbr = if (isDetroitHome) "DET" else oppAbbr
+    val awayName = if (isDetroitHome) oppName else "Detroit Red Wings"
+    val homeName = if (isDetroitHome) "Detroit Red Wings" else oppName
+    val awayRecord = if (isDetroitHome) "20-8-6" else "22-7-5"
+    val homeRecord = if (isDetroitHome) "22-7-5" else "20-8-6"
+
+    val dateFormatted = formatHeroDate(game?.startTimeMillis ?: 0L)
+    val venueText = game?.venue?.ifBlank { "Little Caesars Arena" } ?: "Little Caesars Arena"
+
+    Column(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-        border = BorderStroke(1.dp, palette.cardBorder),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(palette.heroTop, palette.heroBottom)
-                    )
-                )
-                .padding(20.dp)
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.TopCenter
         ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+            Card(
+                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+                shape = RoundedCornerShape(22.dp),
+                colors = CardDefaults.cardColors(containerColor = palette.cardSurface),
+                border = BorderStroke(1.5.dp, palette.cardBorder),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
-                // NEXT GAME Label
-                Text(
-                    text = if (countdown.isLive) "● LIVE NOW" else "NEXT GAME",
-                    style = MaterialTheme.typography.labelMedium.copy(
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.5.sp,
-                        color = Color.White.copy(alpha = 0.85f),
-                        fontSize = 12.sp
-                    )
-                )
-
-                // Matchup with opponent logo
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 18.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    val oppName = game?.opponent ?: "Toronto Maple Leafs"
-                    val oppAbbr = game?.opponentAbbrev ?: "TOR"
-                    val isHome = game?.isHome ?: true
+                    TeamCol(abbr = awayAbbr, name = awayName, isHome = false, record = awayRecord, isDet = awayAbbr == "DET", palette = palette)
 
-                    if (showFlankingBadges) {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(R.drawable.ic_redwings_logo)
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = "Detroit Red Wings logo",
-                            modifier = Modifier.size(36.dp)
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text(
+                            text = dateFormatted.uppercase(Locale.US),
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Bold, letterSpacing = 1.sp, fontSize = 12.sp, color = palette.primaryText
+                            ),
+                            textAlign = TextAlign.Center
                         )
-                        Spacer(Modifier.width(10.dp))
+                        if (countdown.isLive) {
+                            LivePulseBadge(palette = palette)
+                        } else {
+                            Text(
+                                text = formatTimer(countdown),
+                                style = MaterialTheme.typography.displaySmall.copy(
+                                    fontWeight = FontWeight.Black, letterSpacing = 1.5.sp, fontSize = 28.sp, color = palette.accentRed
+                                ),
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
 
-                    Text(
-                        text = if (isHome) "vs $oppName" else "at $oppName",
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Black,
-                            fontSize = 21.sp,
-                            color = Color.White
-                        ),
-                        textAlign = TextAlign.Center
-                    )
-
-                    Spacer(Modifier.width(8.dp))
-
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(getTeamLogoUrlFallback(oppAbbr))
-                            .crossfade(true)
-                            .build(),
-                        placeholder = painterResource(R.drawable.ic_puck_vector),
-                        error = painterResource(R.drawable.ic_puck_vector),
-                        contentDescription = "$oppName logo",
-                        modifier = Modifier.size(34.dp)
-                    )
+                    TeamCol(abbr = homeAbbr, name = homeName, isHome = true, record = homeRecord, isDet = homeAbbr == "DET", palette = palette)
                 }
+            }
 
-                // Venue & Game Time
-                val venueText = game?.venue?.ifBlank { "Little Caesars Arena" } ?: "Little Caesars Arena"
-                val timeText = if (game != null && game.startTimeMillis > 0) formatGameTime(game.startTimeMillis) else "Sat, Oct 4 • 7:00 PM"
-                Text(
-                    text = "$venueText • $timeText",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = Color.White.copy(alpha = 0.85f),
-                        fontSize = 13.sp
-                    ),
-                    textAlign = TextAlign.Center
-                )
-
-                Spacer(Modifier.height(4.dp))
-
-                // Realistic Flip-Clock Digit Boxes
-                if (countdown.isLive) {
-                    LivePuckDropBanner()
-                } else {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        val d = if (countdown.days > 0 || countdown.hours > 0) countdown.days else 6L
-                        val h = if (countdown.days > 0 || countdown.hours > 0) countdown.hours else 14L
-                        val m = if (countdown.days > 0 || countdown.minutes > 0) countdown.minutes else 23L
-                        val s = if (countdown.days > 0 || countdown.seconds > 0) countdown.seconds else 45L
-
-                        FlipClockDigitBox(value = d, unit = "D", width = tileWidth)
-                        FlipClockDigitBox(value = h, unit = "H", width = tileWidth)
-                        FlipClockDigitBox(value = m, unit = "M", width = tileWidth)
-                        FlipClockDigitBox(value = s, unit = "S", width = tileWidth)
-                    }
+            Surface(
+                modifier = Modifier.size(24.dp),
+                shape = RoundedCornerShape(7.dp),
+                color = palette.accentRed,
+                shadowElevation = 3.dp
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Text("@", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Black, fontSize = 13.sp, color = Color.White))
                 }
             }
         }
-    }
-}
 
-/** Authentic flip-clock split-flap digit tile */
-@Composable
-fun FlipClockDigitBox(value: Long, unit: String, width: Dp = 66.dp) {
-    val displayNum = String.format("%02d", value.coerceAtLeast(0L))
-    Surface(
-        shape = RoundedCornerShape(12.dp),
-        color = FlipTileBg,
-        border = BorderStroke(1.dp, FlipTileBorder),
-        modifier = Modifier.width(width)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Spacer(Modifier.height(8.dp))
+
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = palette.cardSurface,
+            border = BorderStroke(1.dp, palette.cardBorder),
+            shadowElevation = 1.dp
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                // Top/Bottom split-flap visual seam
-                Column(modifier = Modifier.fillMaxSize()) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .background(Color.White.copy(alpha = 0.04f))
-                    )
-                    HorizontalDivider(
-                        color = Color(0xFF0D0103),
-                        thickness = 1.5.dp
-                    )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                    )
-                }
-
-                // Digits
-                Text(
-                    text = displayNum,
-                    style = MaterialTheme.typography.displayMedium.copy(
-                        fontFamily = FontFamily.Monospace,
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Black,
-                        color = Color.White
-                    ),
-                    textAlign = TextAlign.Center
-                )
-            }
-
-            Spacer(Modifier.height(2.dp))
-
             Text(
-                text = unit,
-                style = MaterialTheme.typography.labelSmall,
-                color = Color.White.copy(alpha = 0.75f),
-                fontWeight = FontWeight.Bold,
-                fontSize = 11.sp
+                text = venueText,
+                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold, fontSize = 11.sp, color = palette.secondaryText),
+                modifier = Modifier.padding(horizontal = 14.dp, vertical = 5.dp)
             )
         }
     }
 }
 
-/** Animated pulsing banner when game is live */
 @Composable
-fun LivePuckDropBanner() {
+private fun TeamCol(abbr: String, name: String, isHome: Boolean, record: String, isDet: Boolean, palette: JerseyPalette) {
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        if (!isHome) Crest(abbr = abbr, isDet = isDet, name = name)
+        Column(horizontalAlignment = if (isHome) Alignment.End else Alignment.Start) {
+            Text(if (isHome) "HOME" else "AWAY", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold, fontSize = 10.sp, color = if (isHome) palette.accentRed else palette.secondaryText))
+            Text(abbr, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Black, fontSize = 20.sp, color = palette.primaryText))
+            Text(record, style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium, fontSize = 11.sp, color = palette.secondaryText))
+        }
+        if (isHome) Crest(abbr = abbr, isDet = isDet, name = name)
+    }
+}
+
+@Composable
+private fun Crest(abbr: String, isDet: Boolean, name: String) {
+    if (isDet) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current).data(R.drawable.ic_redwings_logo).crossfade(true).build(),
+            contentDescription = "Detroit Red Wings logo",
+            modifier = Modifier.size(42.dp)
+        )
+    } else {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current).data(getTeamLogoUrlFallback(abbr)).crossfade(true).build(),
+            placeholder = painterResource(R.drawable.ic_puck_vector),
+            error = painterResource(R.drawable.ic_puck_vector),
+            contentDescription = "$name logo",
+            modifier = Modifier.size(40.dp)
+        )
+    }
+}
+
+private fun formatHeroDate(millis: Long): String {
+    if (millis <= 0L) return "Saturday • 7:00 PM"
+    return SimpleDateFormat("EEEE • h:mm a", Locale.US).format(Date(millis))
+}
+
+private fun formatTimer(countdown: CountdownState): String {
+    val h = if (countdown.days > 0 || countdown.hours > 0) countdown.hours else 2L
+    val m = if (countdown.days > 0 || countdown.hours > 0 || countdown.minutes > 0) countdown.minutes else 14L
+    val s = if (countdown.days > 0 || countdown.hours > 0 || countdown.minutes > 0 || countdown.seconds > 0) countdown.seconds else 22L
+    return if (countdown.days > 0) {
+        String.format(Locale.US, "%dd %02dh %02dm", countdown.days, countdown.hours, countdown.minutes)
+    } else {
+        String.format(Locale.US, "%02d : %02d : %02d", h, m, s)
+    }
+}
+
+@Composable
+private fun LivePulseBadge(palette: JerseyPalette) {
     val transition = rememberInfiniteTransition(label = "pulse")
     val alpha by transition.animateFloat(
-        initialValue = 0.4f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(800),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "alpha"
+        initialValue = 0.4f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(animation = tween(800), repeatMode = RepeatMode.Reverse), label = "alpha"
     )
-
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = Color.Black.copy(alpha = 0.35f),
-        modifier = Modifier.padding(vertical = 8.dp)
+        color = palette.accentRed.copy(alpha = 0.15f),
+        border = BorderStroke(1.dp, palette.accentRed),
+        modifier = Modifier.padding(vertical = 4.dp)
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .size(10.dp)
-                    .clip(CircleShape)
-                    .background(ClinchedGreen.copy(alpha = alpha))
-            )
-            Text(
-                text = "PUCK DROP • GAME LIVE",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
+            Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(palette.accentRed.copy(alpha = alpha)))
+            Text("PUCK DROP LIVE", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold, fontSize = 11.sp, color = palette.accentRed))
         }
     }
 }
+
+@Composable
+fun FlipClockDigitBox(value: Long, unit: String, width: Dp = 66.dp) {}

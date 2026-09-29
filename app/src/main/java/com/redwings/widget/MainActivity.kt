@@ -30,9 +30,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             var activeJersey by remember {
                 val initialIndex = if (prefs.contains(KEY_THEME)) {
-                    prefs.getInt(KEY_THEME, 0)
+                    prefs.getInt(KEY_THEME, AppJersey.HOME.id)
                 } else {
-                    legacyPrefs.getInt(KEY_THEME, 0)
+                    legacyPrefs.getInt(KEY_THEME, AppJersey.HOME.id)
                 }
                 mutableStateOf(AppJersey.fromIndex(initialIndex))
             }

@@ -18,7 +18,8 @@ data class NextGameUi(
     val opponentAbbrev: String = "OPP",
     val venue: String = "",
     val startTimeMillis: Long = 0L,
-    val isHome: Boolean = true
+    val isHome: Boolean = true,
+    val broadcast: String = ""
 )
 
 data class LastGameUi(
@@ -28,7 +29,8 @@ data class LastGameUi(
     val oppScore: Int = 0,
     val isWinner: Boolean = false,
     val isHome: Boolean = true,
-    val dateLabel: String = ""
+    val dateLabel: String = "",
+    val recapPills: List<String> = emptyList()
 )
 
 data class StandingsRowUi(

@@ -41,7 +41,7 @@ fun SinglePaneDashboard(
     isRefreshing: Boolean,
     errorMessage: String?,
     onRefresh: () -> Unit,
-    activeJersey: AppJersey = AppJersey.HERITAGE,
+    activeJersey: AppJersey = AppJersey.HOME,
     onJerseyThemeToggle: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -66,10 +66,10 @@ fun SinglePaneDashboard(
             .fillMaxSize()
             .background(palette.background)
     ) {
+        IceRinkBackground()
+
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(palette.background),
+            modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {

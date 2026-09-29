@@ -20,16 +20,16 @@ const val KEY_THEME = "widget_theme_index"
 fun rememberDefaultAppJersey(): AppJersey {
     val currentPalette = LocalJerseyPalette.current
     val matching = AppJersey.values().firstOrNull { it.toPalette() == currentPalette }
-    if (matching != null && matching != AppJersey.HERITAGE) {
+    if (matching != null && matching != AppJersey.HOME) {
         return matching
     }
     val context = LocalContext.current
     val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     val index = if (prefs.contains(KEY_THEME)) {
-        prefs.getInt(KEY_THEME, 0)
+        prefs.getInt(KEY_THEME, AppJersey.HOME.id)
     } else {
         context.getSharedPreferences(LEGACY_PREFS_NAME, Context.MODE_PRIVATE)
-            .getInt(KEY_THEME, 0)
+            .getInt(KEY_THEME, AppJersey.HOME.id)
     }
     return AppJersey.fromIndex(index)
 }
