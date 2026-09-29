@@ -1,15 +1,14 @@
 {
   "name": "Red Wings Widget",
-  "version": "26.9.29.6",
-  "versionCode": 26092906,
+  "version": "26.9.29.7",
+  "versionCode": 26092907,
   "description": "Detroit Red Wings NHL schedule widget + companion app: next-game countdown, last result, and division standings.",
   "changelog": [
-    "Rebuilt the entire Android companion app from scratch using the Frosted Ice & Home Red Sweater template.",
-    "Integrated authentic Home Red sweater stripe header with dual white racing stripes and embossed Winged Wheel crest.",
-    "Added photorealistic frosted ice rink canvas with regulation center red line, neutral zone blue lines, and faceoff circles.",
-    "Rebuilt Hero Matchup Card with frosted acrylic glass, crimson @ puck badge, side-by-side Away/Home layout, and countdown timer.",
-    "Restyled Atlantic Division Standings into the dual-column Playoff Seeds (1-4) & In The Hunt (5-8) matrix with glowing Detroit red pill.",
-    "Added frosted glass Last Result score clash card and Upcoming Games horizontal carousel."
+    "Unified all home screen widget sizes (compact, standard, wide, 4x2, 4x3, 5x2) to the Concept 2 Frosted Ice mockup layout.",
+    "Eliminated legacy split 2-pane and beige Heritage layouts so the widget always displays the full Frosted Ice template.",
+    "Added high-resolution Concept 2 Frosted Ice preview image and layout to the Android Widget Picker.",
+    "Fixed widget root padding so the Detroit Red Wings sweater ribbon sits completely flush with the top and side borders.",
+    "Restored exact responsive boundary thresholds for standings table visibility."
   ],
   "requestFramePermissions": [],
   "majorCapabilities": []

@@ -106,18 +106,13 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
 
                 val views = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     val sizeMap = mapOf(
-                        android.util.SizeF(130f, 90f) to buildWidgetViews(context, R.layout.red_wings_widget_compact, game, theme, prefs, id, 140, 90),
+                        android.util.SizeF(130f, 90f) to buildWidgetViews(context, R.layout.red_wings_widget_layout, game, theme, prefs, id, 140, 90),
                         android.util.SizeF(200f, 110f) to buildWidgetViews(context, R.layout.red_wings_widget_layout, game, theme, prefs, id, 220, 110),
-                        android.util.SizeF(340f, 110f) to buildWidgetViews(context, R.layout.red_wings_widget_wide, game, theme, prefs, id, 390, 110)
+                        android.util.SizeF(340f, 110f) to buildWidgetViews(context, R.layout.red_wings_widget_layout, game, theme, prefs, id, 390, 110)
                     )
                     RemoteViews(sizeMap)
                 } else {
-                    val layoutRes = when {
-                        w >= 340 -> R.layout.red_wings_widget_wide
-                        w < 180 && h < 110 -> R.layout.red_wings_widget_compact
-                        else -> R.layout.red_wings_widget_layout
-                    }
-                    buildWidgetViews(context, layoutRes, game, theme, prefs, id, w, h)
+                    buildWidgetViews(context, R.layout.red_wings_widget_layout, game, theme, prefs, id, w, h)
                 }
                 mgr.updateAppWidget(id, views)
             }
@@ -235,10 +230,6 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         ).forEach {
             views.setTextViewTextSize(it, TypedValue.COMPLEX_UNIT_SP, teamSp)
         }
-        val d = context.resources.displayMetrics.density
-        val padH = ((minW * 0.025f).coerceIn(6f, 12f) * d).toInt()
-        val padV = ((minH * 0.035f).coerceIn(4f, 10f) * d).toInt()
-        views.setViewPadding(R.id.widget_root, padH, padV, padH, padV)
     }
 
     private fun piFlags() =
