@@ -20,15 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
-/**
- * Lean provider (<350 lines): scheduling + theming + responsive tweaks.
- * Game binding -> WidgetBinder, standings text -> StandingsFormatter.
- *
- * Room contract: AppDatabase.getDatabase(ctx).gameDao().getNextGame()
- * returns the next RedWingsGame? (suspend). Entity fields mapped:
- * opponentName / opponentAbbrev / gameTimeMillis / isHomeGame /
- * venueName / standingsSummary / headToHead.
- */
+/** Lean provider (<300 lines per REDWINGS.md): scheduling, theming, and responsive layouts. */
 class RedWingsWidgetProvider : AppWidgetProvider() {
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -189,6 +181,9 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         views.setTextColor(R.id.widget_standing_h2h, ContextCompat.getColor(context, theme.standingColorRes))
         views.setTextColor(R.id.widget_tag, ContextCompat.getColor(context, theme.tagTextColorRes))
         views.setTextColor(R.id.widget_theme_toggle, ContextCompat.getColor(context, theme.tagTextColorRes))
+        views.setTextColor(R.id.widget_away_name, ContextCompat.getColor(context, theme.opponentColorRes))
+        views.setTextColor(R.id.widget_home_name, ContextCompat.getColor(context, theme.opponentColorRes))
+        views.setTextColor(R.id.widget_matchup_badge, ContextCompat.getColor(context, theme.dividerColorRes))
     }
 
     internal fun applyResponsiveLayout(context: Context, views: RemoteViews, minW: Int, minH: Int) {

@@ -49,9 +49,26 @@ object WidgetBinder {
         }
     }
 
+    /** Formats timestamp to 'SAT • 7:00 PM' or 'TODAY • 7:00 PM'. */
+    fun formatGameDateTime(gameTimeMillis: Long, now: Long = System.currentTimeMillis()): String {
+        if (gameTimeMillis <= 0) return "NEXT GAME"
+        val gameCal = java.util.Calendar.getInstance().apply { timeInMillis = gameTimeMillis }
+        val nowCal = java.util.Calendar.getInstance().apply { timeInMillis = now }
+        val isSameDay = gameCal.get(java.util.Calendar.YEAR) == nowCal.get(java.util.Calendar.YEAR) &&
+            gameCal.get(java.util.Calendar.DAY_OF_YEAR) == nowCal.get(java.util.Calendar.DAY_OF_YEAR)
+        val timeFmt = java.text.SimpleDateFormat("h:mm a", java.util.Locale.US).format(java.util.Date(gameTimeMillis))
+        return if (isSameDay) "TODAY • $timeFmt"
+        else java.text.SimpleDateFormat("EEE • h:mm a", java.util.Locale.US).format(java.util.Date(gameTimeMillis)).uppercase()
+    }
+
     suspend fun bindGameData(context: Context, views: RemoteViews, game: WidgetGame, theme: WidgetTheme) {
-        val prefix = if (game.isHomeGame) "vs." else "at"
-        views.setTextViewText(R.id.widget_opponent, "$prefix ${game.opponentName}")
+        val awayAbbr = if (game.isHomeGame) game.opponentAbbrev else DET_ABBR
+        val homeAbbr = if (game.isHomeGame) DET_ABBR else game.opponentAbbrev
+        views.setTextViewText(R.id.widget_away_name, awayAbbr)
+        views.setTextViewText(R.id.widget_home_name, homeAbbr)
+
+        val gameTimeText = formatGameDateTime(game.gameTimeMillis)
+        views.setTextViewText(R.id.widget_opponent, gameTimeText)
         views.setTextViewText(R.id.widget_countdown, formatCountdown(game.gameTimeMillis))
 
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
@@ -98,7 +115,9 @@ object WidgetBinder {
     }
 
     fun bindEmptyState(context: Context, views: RemoteViews, theme: WidgetTheme) {
-        views.setTextViewText(R.id.widget_opponent, "vs. Maple Leafs")
+        views.setTextViewText(R.id.widget_away_name, "TOR")
+        views.setTextViewText(R.id.widget_home_name, "DET")
+        views.setTextViewText(R.id.widget_opponent, "SAT • 7:00 PM")
         views.setTextViewText(R.id.widget_countdown, "1d 02h 45m")
         views.setTextViewText(R.id.widget_standing_h2h, "Little Caesars Arena • Home • 3rd ATL • 4 pts out")
         try {

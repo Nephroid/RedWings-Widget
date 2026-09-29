@@ -136,6 +136,9 @@ class RedWingsWidgetProviderTest {
         assertEquals(ContextCompat.getColor(context, theme.standingColorRes), root.findViewById<TextView>(R.id.widget_standing_h2h).currentTextColor)
         assertEquals(ContextCompat.getColor(context, theme.tagTextColorRes), root.findViewById<TextView>(R.id.widget_tag).currentTextColor)
         assertEquals(ContextCompat.getColor(context, theme.tagTextColorRes), root.findViewById<TextView>(R.id.widget_theme_toggle).currentTextColor)
+        assertEquals(ContextCompat.getColor(context, theme.opponentColorRes), root.findViewById<TextView>(R.id.widget_away_name).currentTextColor)
+        assertEquals(ContextCompat.getColor(context, theme.opponentColorRes), root.findViewById<TextView>(R.id.widget_home_name).currentTextColor)
+        assertEquals(ContextCompat.getColor(context, theme.dividerColorRes), root.findViewById<TextView>(R.id.widget_matchup_badge).currentTextColor)
 
         val dividerBg = root.findViewById<View>(R.id.widget_divider_top).background as? ColorDrawable
         assertNotNull(dividerBg)
@@ -218,13 +221,35 @@ class RedWingsWidgetProviderTest {
     }
 
     @Test
-    fun countdown_prefixDependsOnHomeAway() {
-        // WidgetBinder binds "vs." at home and "at" on the road.
-        val home = if (true) "vs." else "at"
-        val away = if (false) "vs." else "at"
-        assertEquals("vs.", home)
-        assertEquals("at", away)
-        assertTrue(WidgetBinder.formatCountdown(System.currentTimeMillis() + 3_600_000).isNotBlank())
+    fun matchupRow_gameDateTimeFormatting() {
+        val now = 1_700_000_000_000L
+        val sameDay = now + TimeUnit.HOURS.toMillis(4)
+        assertTrue(WidgetBinder.formatGameDateTime(sameDay, now).startsWith("TODAY •"))
+
+        val futureDay = now + TimeUnit.DAYS.toMillis(3)
+        val formatted = WidgetBinder.formatGameDateTime(futureDay, now)
+        assertTrue(formatted.contains("•"))
+    }
+
+    @Test
+    fun standings_orderColumn1Has1to4_column2Has5to8() {
+        val views = RemoteViews(context.packageName, R.layout.red_wings_widget_layout)
+        val inflated = views.apply(context, FrameLayout(context)) as android.view.ViewGroup
+        val standingsTable = inflated.findViewById<android.view.ViewGroup>(R.id.widget_standings_table)
+        val col1 = standingsTable.getChildAt(0) as android.view.ViewGroup
+        val col2 = standingsTable.getChildAt(2) as android.view.ViewGroup
+
+        // Column 1 contains 1, 2, 3, 4
+        assertNotNull(col1.findViewById(R.id.widget_team_1))
+        assertNotNull(col1.findViewById(R.id.widget_team_2))
+        assertNotNull(col1.findViewById(R.id.widget_team_3))
+        assertNotNull(col1.findViewById(R.id.widget_team_4))
+
+        // Column 2 contains 5, 6, 7, 8
+        assertNotNull(col2.findViewById(R.id.widget_team_5))
+        assertNotNull(col2.findViewById(R.id.widget_team_6))
+        assertNotNull(col2.findViewById(R.id.widget_team_7))
+        assertNotNull(col2.findViewById(R.id.widget_team_8))
     }
 
     @Test

@@ -1,13 +1,12 @@
 {
   "name": "Red Wings Widget",
-  "version": "26.9.29.2",
-  "versionCode": 26092902,
+  "version": "26.9.29.3",
+  "versionCode": 26092903,
   "description": "Detroit Red Wings NHL schedule widget + companion app: next-game countdown, last result, and division standings.",
   "changelog": [
-    "Added 5 Official Red Wings Jersey Themes: Heritage 1926 (Cougars/Winter Classic), Home Red (LCA Sweater), Away White (Road Sweater), Reverse Retro 2.0 (2022 Black Sweater), and Stadium Series (2016 Special Alternate).",
-    "Permanently resolved dark theme text legibility issues by standardizing on pure white typography (#FFFFFF) meeting WCAG AAA contrast standards (up to 19.8:1).",
-    "Enabled bidirectional theme synchronization between the home screen widget and companion app via shared preferences.",
-    "Enhanced widget theme toggle with dedicated jersey badge chips and authentic jersey border styling."
+    "Reorganized widget division standings into two columns: 1-4 on the left (playoff tier) and 5-8 on the right (wildcard hunt).",
+    "Redesigned the widget next-game matchup row: Away team logo + abbreviation on the left, Home team abbreviation + logo on the right.",
+    "Replaced generic vs. text with game date & start time (e.g. SAT • 7:00 PM / TODAY • 7:00 PM), @ matchup badge, and big countdown timer."
   ],
   "requestFramePermissions": [],
   "majorCapabilities": []

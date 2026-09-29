@@ -98,37 +98,97 @@
             android:orientation="horizontal"
             android:gravity="center">
 
-            <ImageView
-                android:id="@+id/widget_away_logo"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:scaleType="fitCenter"
-                android:padding="2dp"
-                android:src="@drawable/ic_puck_vector" />
-
-            <TextView
-                android:fontFamily="serif"
-                android:id="@+id/widget_opponent"
+            <LinearLayout
+                android:id="@+id/widget_away_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="vs. Maple Leafs"
-                android:textColor="#1A1210"
-                android:textSize="11.5sp"
-                android:textStyle="bold|italic"
-                android:gravity="center"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:includeFontPadding="false" />
+                android:orientation="vertical"
+                android:gravity="center">
 
-            <ImageView
-                android:id="@+id/widget_home_logo"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:scaleType="fitCenter"
-                android:padding="2dp"
-                android:src="@drawable/ic_redwings_logo" />
+                <ImageView
+                    android:id="@+id/widget_away_logo"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:scaleType="fitCenter"
+                    android:padding="1dp"
+                    android:src="@drawable/ic_puck_vector" />
+
+                <TextView
+                    android:fontFamily="serif"
+                    android:id="@+id/widget_away_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TOR"
+                    android:textColor="#1A1210"
+                    android:textSize="9.5sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:includeFontPadding="false" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp">
+
+                <TextView
+                    android:fontFamily="serif"
+                    android:id="@+id/widget_opponent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SAT • 7:00 PM"
+                    android:textColor="#1A1210"
+                    android:textSize="9sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:includeFontPadding="false" />
+
+                <TextView
+                    android:fontFamily="serif"
+                    android:id="@+id/widget_matchup_badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@"
+                    android:textColor="#CE1126"
+                    android:textSize="9.5sp"
+                    android:textStyle="bold|italic"
+                    android:gravity="center"
+                    android:includeFontPadding="false" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/widget_home_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/widget_home_logo"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:scaleType="fitCenter"
+                    android:padding="1dp"
+                    android:src="@drawable/ic_redwings_logo" />
+
+                <TextView
+                    android:fontFamily="serif"
+                    android:id="@+id/widget_home_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DET"
+                    android:textColor="#1A1210"
+                    android:textSize="9.5sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:includeFontPadding="false" />
+            </LinearLayout>
         </LinearLayout>
 
         <TextView
