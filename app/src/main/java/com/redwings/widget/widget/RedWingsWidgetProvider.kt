@@ -56,7 +56,7 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         when (intent.action) {
             ACTION_TOGGLE_THEME -> {
                 val prefs = context.getSharedPreferences(WidgetBinder.PREFS, Context.MODE_PRIVATE)
-                val next = (prefs.getInt(KEY_THEME, 0) + 1) % WidgetTheme.values().size
+                val next = (prefs.getInt(KEY_THEME, WidgetTheme.HOME.id) + 1) % WidgetTheme.values().size
                 prefs.edit().putInt(KEY_THEME, next).apply()
                 triggerUpdate(context)
             }
@@ -80,7 +80,7 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
     ) {
         try {
             val prefs = context.getSharedPreferences(WidgetBinder.PREFS, Context.MODE_PRIVATE)
-            val theme = WidgetTheme.fromIndex(prefs.getInt(KEY_THEME, 0))
+            val theme = WidgetTheme.fromIndex(prefs.getInt(KEY_THEME, WidgetTheme.HOME.id))
 
             val game = try {
                 AppDatabase.getDatabase(context).gameDao().getNextGame()?.let {
@@ -162,9 +162,14 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         val teamColor = ContextCompat.getColor(context, theme.teamColorRes)
         val detColor = ContextCompat.getColor(context, theme.teamDetRes)
         ids.forEachIndexed { i, id ->
-            val row = rows.getOrNull(i) ?: "${i + 1}. --"
-            views.setTextViewText(id, row)
-            val isDet = row.contains("DET", ignoreCase = true)
+            val raw = rows.getOrNull(i)?.toString() ?: "${i + 1}. --"
+            val text = if (theme == WidgetTheme.HOME) {
+                val clean = raw.replace(Regex("^\\d+[\\.\\s]\\s*"), "").trim()
+                val abbr = Regex("([A-Za-z]{2,3})").find(clean)?.value ?: clean.take(3)
+                "${i + 1} $abbr"
+            } else raw
+            views.setTextViewText(id, text)
+            val isDet = raw.contains("DET", ignoreCase = true)
             views.setTextColor(id, if (isDet) detColor else teamColor)
             val bg = if (isDet && theme == WidgetTheme.HOME) R.drawable.widget_det_highlight_pill else 0
             views.setInt(id, "setBackgroundResource", bg)
@@ -268,11 +273,8 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
 
     private fun cancelUpdate(context: Context) {
         val am = context.getSystemService(Context.ALARM_SERVICE) as? android.app.AlarmManager ?: return
-        val pi = PendingIntent.getBroadcast(
-            context, ALARM_CODE,
-            Intent(context, RedWingsWidgetProvider::class.java).apply { action = ACTION_AUTO_UPDATE },
-            piFlags()
-        )
+        val pi = PendingIntent.getBroadcast(context, ALARM_CODE,
+            Intent(context, RedWingsWidgetProvider::class.java).apply { action = ACTION_AUTO_UPDATE }, piFlags())
         am.cancel(pi)
     }
 
@@ -288,9 +290,7 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         private const val TAG = "WingsWidget"
 
         fun triggerUpdate(context: Context) {
-            context.sendBroadcast(
-                Intent(context, RedWingsWidgetProvider::class.java).apply { action = ACTION_AUTO_UPDATE }
-            )
+            context.sendBroadcast(Intent(context, RedWingsWidgetProvider::class.java).apply { action = ACTION_AUTO_UPDATE })
         }
     }
 }

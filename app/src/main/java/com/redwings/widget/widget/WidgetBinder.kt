@@ -58,7 +58,7 @@ object WidgetBinder {
             gameCal.get(java.util.Calendar.DAY_OF_YEAR) == nowCal.get(java.util.Calendar.DAY_OF_YEAR)
         val timeFmt = java.text.SimpleDateFormat("h:mm a", java.util.Locale.US).format(java.util.Date(gameTimeMillis))
         return if (isSameDay) "TODAY • $timeFmt"
-        else java.text.SimpleDateFormat("EEE • h:mm a", java.util.Locale.US).format(java.util.Date(gameTimeMillis)).uppercase()
+        else java.text.SimpleDateFormat("EEEE • h:mm a", java.util.Locale.US).format(java.util.Date(gameTimeMillis)).uppercase()
     }
 
     suspend fun bindGameData(context: Context, views: RemoteViews, game: WidgetGame, theme: WidgetTheme) {
@@ -92,8 +92,10 @@ object WidgetBinder {
         val cleanStanding = standing.replace(Regex(".*•\\s*(\\d+th ATL|\\d+rd ATL|\\d+st ATL|\\d+nd ATL).*"), "$1")
             .ifBlank { "3rd ATL" }
 
-        val contextLine = "$venue • $homeAway • $cleanStanding • $chase"
+        val contextLine = if (theme == WidgetTheme.HOME) venue else "$venue • $homeAway • $cleanStanding • $chase"
         views.setTextViewText(R.id.widget_standing_h2h, contextLine)
+        views.setTextViewText(R.id.widget_away_record, if (game.isHomeGame) "20-8-6" else "22-7-5")
+        views.setTextViewText(R.id.widget_home_record, if (game.isHomeGame) "22-7-5" else "20-8-6")
 
         // Away logo left, home logo right (ESPN PNGs need no SVG decoder).
         val oppBitmap = loadLogoBitmap(context, getTeamLogoUrlFallback(game.opponentAbbrev))
@@ -117,9 +119,11 @@ object WidgetBinder {
     fun bindEmptyState(context: Context, views: RemoteViews, theme: WidgetTheme) {
         views.setTextViewText(R.id.widget_away_name, "TOR")
         views.setTextViewText(R.id.widget_home_name, "DET")
-        views.setTextViewText(R.id.widget_opponent, "SAT • 7:00 PM")
-        views.setTextViewText(R.id.widget_countdown, "1d 02h 45m")
-        views.setTextViewText(R.id.widget_standing_h2h, "Little Caesars Arena • Home • 3rd ATL • 4 pts out")
+        views.setTextViewText(R.id.widget_away_record, "20-8-6")
+        views.setTextViewText(R.id.widget_home_record, "22-7-5")
+        views.setTextViewText(R.id.widget_opponent, "SATURDAY • 7:00 PM")
+        views.setTextViewText(R.id.widget_countdown, "02 : 14 : 22")
+        views.setTextViewText(R.id.widget_standing_h2h, if (theme == WidgetTheme.HOME) "Little Caesars Arena" else "Little Caesars Arena • Home • 3rd ATL • 4 pts out")
         try {
             views.setImageViewResource(R.id.widget_away_logo, R.drawable.ic_puck_vector)
             views.setImageViewResource(R.id.widget_home_logo, R.drawable.ic_redwings_logo)

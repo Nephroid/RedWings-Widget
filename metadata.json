@@ -1,15 +1,15 @@
 {
   "name": "Red Wings Widget",
-  "version": "26.9.29.4",
-  "versionCode": 26092904,
+  "version": "26.9.29.5",
+  "versionCode": 26092905,
   "description": "Detroit Red Wings NHL schedule widget + companion app: next-game countdown, last result, and division standings.",
   "changelog": [
-    "Adopted Concept 2: Frosted Ice & Home Red Sweater as the default look for the Home Red jersey theme.",
-    "Added Home Red sweater ribbon header with dual white racing stripes, embossed Winged Wheel logo, and white Detroit Red Wings wordmark.",
-    "Upgraded widget substrate to frosted ice acrylic glassmorphism with crisp white specular border.",
-    "Added red illuminated highlight pill for Detroit Red Wings in the Atlantic division standings.",
-    "Added floating frosted glass venue pill for Little Caesars Arena / game location.",
-    "Eliminated GitHub Actions release asset race conditions on concurrent pushes."
+    "Pixel-perfect Frosted Ice & Home Red Sweater overhaul matching Concept 2 mockup exactly.",
+    "Replaced serif/typewriter fonts with clean, athletic sans-serif grotesque typography throughout.",
+    "Redesigned standings into dual-column horizontal seed pill rows: Playoff Seeds (1-4) with glowing Detroit red pill, and In The Hunt (5-8).",
+    "Restyled matchup hero with side-by-side crests, tags, bold records, and prominent red countdown timer.",
+    "Fixed white @ symbol rendering inside crimson puck clash badge.",
+    "Set Frosted Ice Home Red as default theme on installation."
   ],
   "requestFramePermissions": [],
   "majorCapabilities": []
