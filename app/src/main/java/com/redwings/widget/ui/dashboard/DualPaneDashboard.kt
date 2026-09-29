@@ -1,5 +1,6 @@
 package com.redwings.widget.ui.dashboard
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,8 @@ import com.redwings.widget.ui.CountdownState
 import com.redwings.widget.ui.LastGameUi
 import com.redwings.widget.ui.NextGameUi
 import com.redwings.widget.ui.ScheduleUiState
+import com.redwings.widget.ui.theme.AppJersey
+import com.redwings.widget.ui.theme.LocalJerseyPalette
 import com.redwings.widget.ui.theme.WingsRed
 
 /**
@@ -40,12 +43,15 @@ fun DualPaneDashboard(
     isRefreshing: Boolean,
     errorMessage: String?,
     onRefresh: () -> Unit,
+    activeJersey: AppJersey = AppJersey.HERITAGE,
+    onJerseyThemeToggle: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val pullRefreshState = rememberPullToRefreshState()
     val data = scheduleState as? ScheduleUiState.Data
     val scrollStateLeft = rememberScrollState()
     val scrollStateRight = rememberScrollState()
+    val palette = LocalJerseyPalette.current
 
     PullToRefreshBox(
         isRefreshing = isRefreshing,
@@ -55,18 +61,26 @@ fun DualPaneDashboard(
             PullToRefreshDefaults.Indicator(
                 state = pullRefreshState,
                 isRefreshing = isRefreshing,
-                containerColor = WingsRed,
-                color = Color.White,
+                containerColor = palette.accentRed,
+                color = palette.headerText,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
         },
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .background(palette.background)
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(palette.background)
+        ) {
             AppHeaderBanner(
                 isRefreshing = isRefreshing,
                 onRefresh = onRefresh,
-                subtitle = "NHL COMMAND CENTER • ${data?.standingsSummary ?: "4th in Atlantic"}"
+                subtitle = "NHL COMMAND CENTER • ${data?.standingsSummary ?: "4th in Atlantic"}",
+                activeJersey = activeJersey,
+                onJerseyThemeToggle = onJerseyThemeToggle
             )
 
             Row(

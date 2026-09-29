@@ -1,5 +1,6 @@
 package com.redwings.widget.ui.dashboard
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,10 +34,12 @@ import coil.request.ImageRequest
 import com.redwings.widget.R
 import com.redwings.widget.data.model.getTeamLogoUrlFallback
 import com.redwings.widget.ui.NextGameUi
+import com.redwings.widget.ui.theme.LocalJerseyPalette
 
 /** Single upcoming row: logo + vs/at team + date + HOME/AWAY pill */
 @Composable
 fun UpcomingRow(game: NextGameUi, modifier: Modifier = Modifier) {
+    val palette = LocalJerseyPalette.current
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -66,7 +69,7 @@ fun UpcomingRow(game: NextGameUi, modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp,
-                    color = Color.White
+                    color = palette.primaryText
                 )
             )
         }
@@ -75,7 +78,7 @@ fun UpcomingRow(game: NextGameUi, modifier: Modifier = Modifier) {
             Text(
                 text = formatUpcomingDate(game.startTimeMillis),
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    color = Color(0xFFA0A4B0),
+                    color = palette.secondaryText,
                     fontSize = 14.sp
                 ),
                 modifier = Modifier.padding(end = 10.dp)
@@ -83,7 +86,7 @@ fun UpcomingRow(game: NextGameUi, modifier: Modifier = Modifier) {
 
             Surface(
                 shape = RoundedCornerShape(10.dp),
-                color = PillDarkBg
+                color = palette.cardBorder.copy(alpha = 0.5f)
             ) {
                 Text(
                     text = if (game.isHome) "HOME" else "AWAY",
@@ -91,7 +94,7 @@ fun UpcomingRow(game: NextGameUi, modifier: Modifier = Modifier) {
                     style = MaterialTheme.typography.labelSmall.copy(
                         fontWeight = FontWeight.Bold,
                         fontSize = 11.sp,
-                        color = Color(0xFFD0D4DC)
+                        color = palette.primaryText
                     )
                 )
             }
@@ -102,9 +105,11 @@ fun UpcomingRow(game: NextGameUi, modifier: Modifier = Modifier) {
 /** Card for horizontal carousel on wide or foldable screens */
 @Composable
 fun UpcomingCard(game: NextGameUi, modifier: Modifier = Modifier) {
+    val palette = LocalJerseyPalette.current
     Card(
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = CardDarkSurface),
+        colors = CardDefaults.cardColors(containerColor = palette.cardSurface),
+        border = BorderStroke(1.dp, palette.cardBorder),
         modifier = modifier.width(135.dp)
     ) {
         Column(
@@ -117,7 +122,7 @@ fun UpcomingCard(game: NextGameUi, modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFA0A4B0)
+                    color = palette.secondaryText
                 )
             )
             AsyncImage(
@@ -134,12 +139,12 @@ fun UpcomingCard(game: NextGameUi, modifier: Modifier = Modifier) {
                 text = if (game.isHome) "vs ${game.opponentAbbrev}" else "@ ${game.opponentAbbrev}",
                 style = MaterialTheme.typography.bodyMedium.copy(
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = palette.primaryText
                 )
             )
             Surface(
                 shape = RoundedCornerShape(8.dp),
-                color = PillDarkBg
+                color = palette.cardBorder.copy(alpha = 0.5f)
             ) {
                 Text(
                     text = if (game.isHome) "HOME" else "AWAY",
@@ -147,7 +152,7 @@ fun UpcomingCard(game: NextGameUi, modifier: Modifier = Modifier) {
                     style = MaterialTheme.typography.labelSmall.copy(
                         fontSize = 9.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFFD0D4DC)
+                        color = palette.secondaryText
                     )
                 )
             }
@@ -162,12 +167,13 @@ fun UpcomingSection(
     modifier: Modifier = Modifier,
     isExpanded: Boolean = false
 ) {
+    val palette = LocalJerseyPalette.current
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = "Upcoming (${games.take(7).size})",
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = Color.White,
+            color = palette.primaryText,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 

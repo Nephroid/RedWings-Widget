@@ -1,5 +1,6 @@
 package com.redwings.widget.ui.dashboard
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,7 @@ import coil.request.ImageRequest
 import com.redwings.widget.R
 import com.redwings.widget.data.model.getTeamLogoUrlFallback
 import com.redwings.widget.ui.StandingsRowUi
+import com.redwings.widget.ui.theme.LocalJerseyPalette
 import com.redwings.widget.ui.theme.WingsRed
 import com.redwings.widget.widget.StandingsFormatter
 
@@ -45,6 +47,7 @@ fun StandingsCard(
     modifier: Modifier = Modifier,
     showExtendedStats: Boolean = false
 ) {
+    val palette = LocalJerseyPalette.current
     val rows = if (standings.size >= 4) {
         standings
     } else {
@@ -54,7 +57,8 @@ fun StandingsCard(
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = CardDarkSurface),
+        colors = CardDefaults.cardColors(containerColor = palette.cardSurface),
+        border = BorderStroke(1.dp, palette.cardBorder),
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
     ) {
         Column(
@@ -67,7 +71,7 @@ fun StandingsCard(
             Text(
                 text = "ATLANTIC DIVISION",
                 style = MaterialTheme.typography.labelMedium.copy(
-                    color = Color(0xFF9E9EA4),
+                    color = palette.secondaryText,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.sp,
                     fontSize = 13.sp
@@ -83,20 +87,20 @@ fun StandingsCard(
                     .padding(vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("#", modifier = Modifier.width(20.dp), style = MaterialTheme.typography.labelSmall, color = Color(0xFF9E9EA4))
-                Text("Team", modifier = Modifier.weight(1f), style = MaterialTheme.typography.labelSmall, color = Color(0xFF9E9EA4))
-                Text("GP", modifier = Modifier.width(28.dp), textAlign = TextAlign.End, style = MaterialTheme.typography.labelSmall, color = Color(0xFF9E9EA4))
-                Text("W", modifier = Modifier.width(28.dp), textAlign = TextAlign.End, style = MaterialTheme.typography.labelSmall, color = Color(0xFF9E9EA4))
-                Text("L", modifier = Modifier.width(28.dp), textAlign = TextAlign.End, style = MaterialTheme.typography.labelSmall, color = Color(0xFF9E9EA4))
-                Text("OT", modifier = Modifier.width(28.dp), textAlign = TextAlign.End, style = MaterialTheme.typography.labelSmall, color = Color(0xFF9E9EA4))
+                Text("#", modifier = Modifier.width(20.dp), style = MaterialTheme.typography.labelSmall, color = palette.secondaryText)
+                Text("Team", modifier = Modifier.weight(1f), style = MaterialTheme.typography.labelSmall, color = palette.secondaryText)
+                Text("GP", modifier = Modifier.width(28.dp), textAlign = TextAlign.End, style = MaterialTheme.typography.labelSmall, color = palette.secondaryText)
+                Text("W", modifier = Modifier.width(28.dp), textAlign = TextAlign.End, style = MaterialTheme.typography.labelSmall, color = palette.secondaryText)
+                Text("L", modifier = Modifier.width(28.dp), textAlign = TextAlign.End, style = MaterialTheme.typography.labelSmall, color = palette.secondaryText)
+                Text("OT", modifier = Modifier.width(28.dp), textAlign = TextAlign.End, style = MaterialTheme.typography.labelSmall, color = palette.secondaryText)
                 if (showExtendedStats) {
-                    Text("DIFF", modifier = Modifier.width(36.dp), textAlign = TextAlign.End, style = MaterialTheme.typography.labelSmall, color = Color(0xFF9E9EA4))
+                    Text("DIFF", modifier = Modifier.width(36.dp), textAlign = TextAlign.End, style = MaterialTheme.typography.labelSmall, color = palette.secondaryText)
                 }
-                Text("PTS", modifier = Modifier.width(34.dp), textAlign = TextAlign.End, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = Color(0xFF9E9EA4))
+                Text("PTS", modifier = Modifier.width(34.dp), textAlign = TextAlign.End, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = palette.secondaryText)
             }
 
             HorizontalDivider(
-                color = Color.White.copy(alpha = 0.08f),
+                color = palette.cardBorder,
                 thickness = 1.dp
             )
 
@@ -107,8 +111,8 @@ fun StandingsCard(
                 }
 
                 val isDet = row.isRedWings || row.teamAbbrev.equals("DET", ignoreCase = true)
-                val bg = if (isDet) StandingsDetHighlight else Color.Transparent
-                val textColor = if (isDet) WingsRed else Color.White
+                val bg = if (isDet) palette.accentRed.copy(alpha = 0.15f) else Color.Transparent
+                val textColor = if (isDet) palette.accentRed else palette.primaryText
 
                 Row(
                     modifier = Modifier
@@ -187,7 +191,7 @@ fun StandingsCard(
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Black,
                     letterSpacing = 0.5.sp,
-                    color = if (isClinched) ClinchedGreen else Color(0xFFFFD54F)
+                    color = if (isClinched) ClinchedGreen else palette.highlightGold
                 ),
                 modifier = Modifier.padding(top = 2.dp)
             )
@@ -197,6 +201,7 @@ fun StandingsCard(
 
 @Composable
 private fun PlayoffCutoffDivider() {
+    val palette = LocalJerseyPalette.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -205,7 +210,7 @@ private fun PlayoffCutoffDivider() {
     ) {
         HorizontalDivider(
             modifier = Modifier.weight(1f),
-            color = PlayoffCutoffLineColor.copy(alpha = 0.6f),
+            color = palette.highlightGold.copy(alpha = 0.6f),
             thickness = 1.dp
         )
         Text(
@@ -213,12 +218,12 @@ private fun PlayoffCutoffDivider() {
             style = MaterialTheme.typography.labelSmall.copy(
                 fontSize = 8.5.sp,
                 fontWeight = FontWeight.Bold,
-                color = PlayoffCutoffLineColor
+                color = palette.highlightGold
             )
         )
         HorizontalDivider(
             modifier = Modifier.weight(1f),
-            color = PlayoffCutoffLineColor.copy(alpha = 0.6f),
+            color = palette.highlightGold.copy(alpha = 0.6f),
             thickness = 1.dp
         )
     }

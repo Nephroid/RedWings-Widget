@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Reverse Retro 2.0 Black Jersey: deep matte black base with vibrant red piping -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="18dp" />
+    <solid android:color="#0C0D0E" />
+    <stroke android:width="1.5dp" android:color="#FF3B30" />
+</shape>

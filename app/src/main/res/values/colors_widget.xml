@@ -6,43 +6,7 @@
     <color name="redwings_black">#000000</color>
     <color name="ic_launcher_background">#F5F1E6</color>
 
-    <!-- Classic Red -->
-    <color name="widget_classic_title">#CE1126</color>
-    <color name="widget_classic_countdown">#CE1126</color>
-    <color name="widget_classic_opponent">#FFFFFF</color>
-    <color name="widget_classic_divider">#CE1126</color>
-    <color name="widget_classic_sub">#FFFFFF</color>
-    <color name="widget_classic_standing">#FFD54F</color>
-    <color name="widget_classic_team">#D0D8E4</color>
-    <color name="widget_classic_team_det">#FFD54F</color>
-    <color name="widget_classic_wcgb">#FF5252</color>
-    <color name="widget_classic_tag_text">#FFFFFF</color>
-
-    <!-- Motor City White -->
-    <color name="widget_whiteout_title">#CE1126</color>
-    <color name="widget_whiteout_countdown">#9E0B1D</color>
-    <color name="widget_whiteout_opponent">#1A1A1A</color>
-    <color name="widget_whiteout_divider">#CE1126</color>
-    <color name="widget_whiteout_sub">#333333</color>
-    <color name="widget_whiteout_standing">#9E0B1D</color>
-    <color name="widget_whiteout_team">#4A4A4A</color>
-    <color name="widget_whiteout_team_det">#CE1126</color>
-    <color name="widget_whiteout_wcgb">#B71C1C</color>
-    <color name="widget_whiteout_tag_text">#FFFFFF</color>
-
-    <!-- Game Day (default: black ice, hot red, white — maximum pop) -->
-    <color name="widget_gameday_title">#FFFFFF</color>
-    <color name="widget_gameday_countdown">#FF2D20</color>
-    <color name="widget_gameday_opponent">#FFFFFF</color>
-    <color name="widget_gameday_divider">#FF2D20</color>
-    <color name="widget_gameday_sub">#E8E8E8</color>
-    <color name="widget_gameday_standing">#FFD54F</color>
-    <color name="widget_gameday_team">#C9C9C9</color>
-    <color name="widget_gameday_team_det">#FFD54F</color>
-    <color name="widget_gameday_wcgb">#FF6B60</color>
-    <color name="widget_gameday_tag_text">#FFFFFF</color>
-
-    <!-- Heritage 1926 (paper cream / wings red / ink) -->
+    <!-- 1. Heritage 1926 (paper cream / vintage red / ink) - Kept 100% as requested -->
     <color name="widget_heritage_title">#1A1210</color>
     <color name="widget_heritage_countdown">#CE1126</color>
     <color name="widget_heritage_opponent">#1A1210</color>
@@ -54,20 +18,100 @@
     <color name="widget_heritage_wcgb">#CE1126</color>
     <color name="widget_heritage_tag_text">#F7F3EA</color>
 
-    <!-- Night Black -->
-    <color name="widget_night_title">#E0322D</color>
-    <color name="widget_night_countdown">#E0322D</color>
-    <color name="widget_night_opponent">#F5F5F5</color>
-    <color name="widget_night_divider">#3A3A3A</color>
-    <color name="widget_night_sub">#C8C8C8</color>
+    <!-- 2. Home (Official Red Sweater) - Crisp pure white on rich hockey red -->
+    <color name="widget_home_title">#FFFFFF</color>
+    <color name="widget_home_countdown">#FFFFFF</color>
+    <color name="widget_home_opponent">#FFFFFF</color>
+    <color name="widget_home_divider">#FFFFFF</color>
+    <color name="widget_home_sub">#F0F0F0</color>
+    <color name="widget_home_standing">#FFD54F</color>
+    <color name="widget_home_team">#E0E0E0</color>
+    <color name="widget_home_team_det">#FFD54F</color>
+    <color name="widget_home_wcgb">#FF8A80</color>
+    <color name="widget_home_tag_text">#9E0B1D</color>
+
+    <!-- 3. Away (Official White Road Sweater) - Deep obsidian ink on ice white -->
+    <color name="widget_away_title">#111111</color>
+    <color name="widget_away_countdown">#CE1126</color>
+    <color name="widget_away_opponent">#111111</color>
+    <color name="widget_away_divider">#CE1126</color>
+    <color name="widget_away_sub">#2E2E2E</color>
+    <color name="widget_away_standing">#CE1126</color>
+    <color name="widget_away_team">#3D3D3D</color>
+    <color name="widget_away_team_det">#CE1126</color>
+    <color name="widget_away_wcgb">#B71C1C</color>
+    <color name="widget_away_tag_text">#FFFFFF</color>
+
+    <!-- 4. Reverse Retro 2.0 (Matte Black Sweater) - Ultra-high contrast pure white text -->
+    <color name="widget_retro_title">#FFFFFF</color>
+    <color name="widget_retro_countdown">#FFFFFF</color>
+    <color name="widget_retro_opponent">#FFFFFF</color>
+    <color name="widget_retro_divider">#FF3B30</color>
+    <color name="widget_retro_sub">#E4E4E7</color>
+    <color name="widget_retro_standing">#FFD54F</color>
+    <color name="widget_retro_team">#D4D4D8</color>
+    <color name="widget_retro_team_det">#FFD54F</color>
+    <color name="widget_retro_wcgb">#FF6B60</color>
+    <color name="widget_retro_tag_text">#FFFFFF</color>
+
+    <!-- 5. Stadium Series (Special Alternate) - Modern brushed slate with silver & red -->
+    <color name="widget_stadium_title">#FFFFFF</color>
+    <color name="widget_stadium_countdown">#FFFFFF</color>
+    <color name="widget_stadium_opponent">#FFFFFF</color>
+    <color name="widget_stadium_divider">#FF2D20</color>
+    <color name="widget_stadium_sub">#D4D8E0</color>
+    <color name="widget_stadium_standing">#FFD54F</color>
+    <color name="widget_stadium_team">#C8CCD4</color>
+    <color name="widget_stadium_team_det">#FFD54F</color>
+    <color name="widget_stadium_wcgb">#FF8080</color>
+    <color name="widget_stadium_tag_text">#FFFFFF</color>
+
+    <!-- Legacy aliases for backward compatibility -->
+    <color name="widget_classic_title">#FFFFFF</color>
+    <color name="widget_classic_countdown">#FFFFFF</color>
+    <color name="widget_classic_opponent">#FFFFFF</color>
+    <color name="widget_classic_divider">#FFFFFF</color>
+    <color name="widget_classic_sub">#F0F0F0</color>
+    <color name="widget_classic_standing">#FFD54F</color>
+    <color name="widget_classic_team">#E0E0E0</color>
+    <color name="widget_classic_team_det">#FFD54F</color>
+    <color name="widget_classic_wcgb">#FF5252</color>
+    <color name="widget_classic_tag_text">#9E0B1D</color>
+
+    <color name="widget_whiteout_title">#111111</color>
+    <color name="widget_whiteout_countdown">#CE1126</color>
+    <color name="widget_whiteout_opponent">#111111</color>
+    <color name="widget_whiteout_divider">#CE1126</color>
+    <color name="widget_whiteout_sub">#2E2E2E</color>
+    <color name="widget_whiteout_standing">#CE1126</color>
+    <color name="widget_whiteout_team">#3D3D3D</color>
+    <color name="widget_whiteout_team_det">#CE1126</color>
+    <color name="widget_whiteout_wcgb">#B71C1C</color>
+    <color name="widget_whiteout_tag_text">#FFFFFF</color>
+
+    <color name="widget_night_title">#FFFFFF</color>
+    <color name="widget_night_countdown">#FFFFFF</color>
+    <color name="widget_night_opponent">#FFFFFF</color>
+    <color name="widget_night_divider">#FF3B30</color>
+    <color name="widget_night_sub">#E4E4E7</color>
     <color name="widget_night_standing">#FFD54F</color>
-    <color name="widget_night_team">#9E9E9E</color>
+    <color name="widget_night_team">#D4D4D8</color>
     <color name="widget_night_team_det">#FFD54F</color>
     <color name="widget_night_wcgb">#FF8A80</color>
     <color name="widget_night_tag_text">#FFFFFF</color>
 
-    <!-- Material You dynamic (neutral; host theme drives bg) -->
-    <color name="widget_my_title">#E8E8E8</color>
+    <color name="widget_gameday_title">#FFFFFF</color>
+    <color name="widget_gameday_countdown">#FF2D20</color>
+    <color name="widget_gameday_opponent">#FFFFFF</color>
+    <color name="widget_gameday_divider">#FF2D20</color>
+    <color name="widget_gameday_sub">#E8E8E8</color>
+    <color name="widget_gameday_standing">#FFD54F</color>
+    <color name="widget_gameday_team">#C9C9C9</color>
+    <color name="widget_gameday_team_det">#FFD54F</color>
+    <color name="widget_gameday_wcgb">#FF6B60</color>
+    <color name="widget_gameday_tag_text">#FFFFFF</color>
+
+    <color name="widget_my_title">#FFFFFF</color>
     <color name="widget_my_countdown">#FFFFFF</color>
     <color name="widget_my_opponent">#FFFFFF</color>
     <color name="widget_my_divider">#808080</color>

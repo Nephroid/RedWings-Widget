@@ -1,5 +1,6 @@
 package com.redwings.widget.ui.dashboard
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,12 +12,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -30,6 +33,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.redwings.widget.BuildConfig
+import com.redwings.widget.ui.theme.AppJersey
+import com.redwings.widget.ui.theme.LocalJerseyPalette
 import com.redwings.widget.ui.theme.WingsRed
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -55,14 +60,48 @@ fun AppHeaderBanner(
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
-    subtitle: String? = null
+    subtitle: String? = null,
+    activeJersey: AppJersey = AppJersey.HERITAGE,
+    onJerseyThemeToggle: () -> Unit = {}
 ) {
+    val palette = LocalJerseyPalette.current
+    val chipBgColor = if (palette.chipBg == palette.headerBackground) {
+        palette.headerText.copy(alpha = 0.22f)
+    } else {
+        palette.chipBg
+    }
+    val chipTextColor = if (palette.chipBg == palette.headerBackground) {
+        palette.headerText
+    } else {
+        palette.chipText
+    }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(WingsRed)
+            .background(palette.headerBackground)
             .padding(top = 16.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
     ) {
+        Surface(
+            onClick = onJerseyThemeToggle,
+            shape = RoundedCornerShape(16.dp),
+            color = chipBgColor,
+            border = BorderStroke(1.dp, palette.headerText.copy(alpha = 0.4f)),
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .testTag("jersey_theme_chip")
+        ) {
+            Text(
+                text = activeJersey.chipLabel,
+                color = chipTextColor,
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 10.sp
+                ),
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp)
+            )
+        }
+
         Column(
             modifier = Modifier.align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -73,14 +112,14 @@ fun AppHeaderBanner(
                     fontWeight = FontWeight.Black,
                     fontSize = 32.sp,
                     letterSpacing = 4.sp,
-                    color = Color.White
+                    color = palette.headerText
                 )
             )
             if (!subtitle.isNullOrBlank()) {
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.labelSmall.copy(
-                        color = Color.White.copy(alpha = 0.9f),
+                        color = palette.headerText.copy(alpha = 0.9f),
                         letterSpacing = 1.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -93,7 +132,7 @@ fun AppHeaderBanner(
                 CircularProgressIndicator(
                     modifier = Modifier.size(24.dp),
                     strokeWidth = 2.5.dp,
-                    color = Color.White
+                    color = palette.headerText
                 )
             } else {
                 IconButton(
@@ -103,7 +142,7 @@ fun AppHeaderBanner(
                     Icon(
                         Icons.Default.Refresh,
                         contentDescription = "Refresh schedule",
-                        tint = Color.White
+                        tint = palette.headerText
                     )
                 }
             }
@@ -158,6 +197,7 @@ fun formatUpcomingDate(millis: Long): String {
 
 @Composable
 fun AppFooter(modifier: Modifier = Modifier) {
+    val palette = LocalJerseyPalette.current
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -167,14 +207,14 @@ fun AppFooter(modifier: Modifier = Modifier) {
         Text(
             text = "Detroit Red Wings Widget v${BuildConfig.VERSION_NAME}",
             style = MaterialTheme.typography.labelSmall,
-            color = Color(0xFF6E727A),
+            color = palette.secondaryText,
             fontWeight = FontWeight.Medium
         )
         Spacer(Modifier.height(2.dp))
         Text(
             text = "Automated Build • Atlantic Division",
             style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
-            color = Color(0xFF555960)
+            color = palette.secondaryText.copy(alpha = 0.8f)
         )
     }
 }

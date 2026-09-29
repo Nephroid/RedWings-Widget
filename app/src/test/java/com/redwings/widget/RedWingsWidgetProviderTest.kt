@@ -1,9 +1,12 @@
 package com.redwings.widget
 
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.RemoteViews
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.test.core.app.ApplicationProvider
 import com.redwings.widget.widget.RedWingsWidgetProvider
 import com.redwings.widget.widget.WidgetBinder
@@ -99,6 +102,46 @@ class RedWingsWidgetProviderTest {
         assertEquals(View.VISIBLE, wide.vis(R.id.widget_home_logo))
     }
 
+    private val officialJerseyThemes = listOf(
+        WidgetTheme.HERITAGE,
+        WidgetTheme.HOME,
+        WidgetTheme.AWAY,
+        WidgetTheme.REVERSE_RETRO,
+        WidgetTheme.STADIUM_SERIES
+    )
+
+    private fun assertThemeInflationAndColors(
+        layoutRes: Int,
+        minW: Int,
+        minH: Int,
+        theme: WidgetTheme
+    ) {
+        val views = RemoteViews(context.packageName, layoutRes)
+        provider.applyWidgetTheme(context, views, theme)
+        provider.applyResponsiveLayout(context, views, minW, minH)
+        val root = views.apply(context, FrameLayout(context)) as android.view.ViewGroup
+
+        // View visibility
+        assertEquals(View.VISIBLE, root.vis(R.id.widget_header_layout))
+        assertEquals(View.VISIBLE, root.vis(R.id.widget_divider_top))
+        assertEquals(View.VISIBLE, root.vis(R.id.widget_matchup_layout))
+        assertEquals(View.VISIBLE, root.vis(R.id.widget_info_card))
+        assertEquals(View.VISIBLE, root.vis(R.id.widget_standings_table))
+
+        // Text & divider colors
+        assertEquals(ContextCompat.getColor(context, theme.titleColorRes), root.findViewById<TextView>(R.id.widget_title).currentTextColor)
+        assertEquals(ContextCompat.getColor(context, theme.countdownColorRes), root.findViewById<TextView>(R.id.widget_countdown).currentTextColor)
+        assertEquals(ContextCompat.getColor(context, theme.opponentColorRes), root.findViewById<TextView>(R.id.widget_opponent).currentTextColor)
+        assertEquals(ContextCompat.getColor(context, theme.subColorRes), root.findViewById<TextView>(R.id.widget_venue_info).currentTextColor)
+        assertEquals(ContextCompat.getColor(context, theme.standingColorRes), root.findViewById<TextView>(R.id.widget_standing_h2h).currentTextColor)
+        assertEquals(ContextCompat.getColor(context, theme.tagTextColorRes), root.findViewById<TextView>(R.id.widget_tag).currentTextColor)
+        assertEquals(ContextCompat.getColor(context, theme.tagTextColorRes), root.findViewById<TextView>(R.id.widget_theme_toggle).currentTextColor)
+
+        val dividerBg = root.findViewById<View>(R.id.widget_divider_top).background as? ColorDrawable
+        assertNotNull(dividerBg)
+        assertEquals(ContextCompat.getColor(context, theme.dividerColorRes), dividerBg?.color)
+    }
+
     @Test
     fun allWidgetThemes_resolveAndApply() {
         val themes = (0 until 5).map { WidgetTheme.fromIndex(it) }
@@ -107,15 +150,46 @@ class RedWingsWidgetProviderTest {
             assertNotNull(theme.displayName)
             assertNotNull(theme.buttonLabel)
             val views = RemoteViews(context.packageName, R.layout.red_wings_widget_layout)
-            views.setInt(R.id.widget_root, "setBackgroundResource", theme.bgDrawableRes)
-            views.setInt(R.id.widget_tag, "setBackgroundResource", theme.tagDrawableRes)
-            views.setInt(R.id.widget_theme_toggle, "setBackgroundResource", theme.tagDrawableRes)
+            provider.applyWidgetTheme(context, views, theme)
             provider.applyResponsiveLayout(context, views, 180, 110)
             assertNotNull(views)
         }
         // Index wraps around the 5 themes (HERITAGE is index 0).
         assertEquals(WidgetTheme.HERITAGE, WidgetTheme.fromIndex(5))
-        assertEquals(WidgetTheme.MY_DYNAMIC, WidgetTheme.fromIndex(-1))
+        assertEquals(WidgetTheme.STADIUM_SERIES, WidgetTheme.fromIndex(-1))
+    }
+
+    @Test
+    fun officialJerseyThemes_standardLayout_inflateWithCorrectColorsAndVisibility() {
+        assertEquals(5, officialJerseyThemes.size)
+        officialJerseyThemes.forEach { theme ->
+            assertThemeInflationAndColors(
+                layoutRes = R.layout.red_wings_widget_layout,
+                minW = 180,
+                minH = 110,
+                theme = theme
+            )
+        }
+    }
+
+    @Test
+    fun officialJerseyThemes_wideLayout_inflateWithCorrectColorsAndVisibility() {
+        officialJerseyThemes.forEach { theme ->
+            assertThemeInflationAndColors(
+                layoutRes = R.layout.red_wings_widget_wide,
+                minW = 390,
+                minH = 110,
+                theme = theme
+            )
+        }
+    }
+
+    @Test
+    fun officialJerseyThemes_drawablesResolveCleanly() {
+        officialJerseyThemes.forEach { theme ->
+            assertNotNull(ContextCompat.getDrawable(context, theme.bgDrawableRes))
+            assertNotNull(ContextCompat.getDrawable(context, theme.tagDrawableRes))
+        }
     }
 
     @Test

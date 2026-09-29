@@ -47,6 +47,7 @@ import com.redwings.widget.R
 import com.redwings.widget.data.model.getTeamLogoUrlFallback
 import com.redwings.widget.ui.CountdownState
 import com.redwings.widget.ui.NextGameUi
+import com.redwings.widget.ui.theme.LocalJerseyPalette
 
 /** Countdown hero for the next game with gradient backdrop, logos, and flip-clock digit boxes. */
 @Composable
@@ -57,10 +58,13 @@ fun NextGameHero(
     tileWidth: Dp = 66.dp,
     showFlankingBadges: Boolean = false
 ) {
+    val palette = LocalJerseyPalette.current
+
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        border = BorderStroke(1.dp, palette.cardBorder),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Box(
@@ -68,7 +72,7 @@ fun NextGameHero(
                 .fillMaxWidth()
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(HeroGradientTop, HeroGradientBottom)
+                        colors = listOf(palette.heroTop, palette.heroBottom)
                     )
                 )
                 .padding(20.dp)

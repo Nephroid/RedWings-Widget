@@ -1,5 +1,6 @@
 package com.redwings.widget.ui.dashboard
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,6 +25,8 @@ import com.redwings.widget.ui.CountdownState
 import com.redwings.widget.ui.LastGameUi
 import com.redwings.widget.ui.NextGameUi
 import com.redwings.widget.ui.ScheduleUiState
+import com.redwings.widget.ui.theme.AppJersey
+import com.redwings.widget.ui.theme.LocalJerseyPalette
 import com.redwings.widget.ui.theme.WingsRed
 
 /**
@@ -38,10 +41,13 @@ fun SinglePaneDashboard(
     isRefreshing: Boolean,
     errorMessage: String?,
     onRefresh: () -> Unit,
+    activeJersey: AppJersey = AppJersey.HERITAGE,
+    onJerseyThemeToggle: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val pullRefreshState = rememberPullToRefreshState()
     val data = scheduleState as? ScheduleUiState.Data
+    val palette = LocalJerseyPalette.current
 
     PullToRefreshBox(
         isRefreshing = isRefreshing,
@@ -51,15 +57,19 @@ fun SinglePaneDashboard(
             PullToRefreshDefaults.Indicator(
                 state = pullRefreshState,
                 isRefreshing = isRefreshing,
-                containerColor = WingsRed,
-                color = Color.White,
+                containerColor = palette.accentRed,
+                color = palette.headerText,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
         },
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .background(palette.background)
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(palette.background),
             contentPadding = PaddingValues(bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
@@ -68,7 +78,9 @@ fun SinglePaneDashboard(
                 AppHeaderBanner(
                     isRefreshing = isRefreshing,
                     onRefresh = onRefresh,
-                    subtitle = data?.standingsSummary?.ifBlank { "4th in Atlantic • 94 pts" }
+                    subtitle = data?.standingsSummary?.ifBlank { "4th in Atlantic • 94 pts" },
+                    activeJersey = activeJersey,
+                    onJerseyThemeToggle = onJerseyThemeToggle
                 )
             }
 

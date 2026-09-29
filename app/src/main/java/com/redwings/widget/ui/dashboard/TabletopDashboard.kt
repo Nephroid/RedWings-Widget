@@ -1,5 +1,6 @@
 package com.redwings.widget.ui.dashboard
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,9 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,6 +29,8 @@ import com.redwings.widget.ui.CountdownState
 import com.redwings.widget.ui.LastGameUi
 import com.redwings.widget.ui.NextGameUi
 import com.redwings.widget.ui.ScheduleUiState
+import com.redwings.widget.ui.theme.AppJersey
+import com.redwings.widget.ui.theme.LocalJerseyPalette
 import com.redwings.widget.ui.theme.WingsRed
 
 /**
@@ -40,18 +45,25 @@ fun TabletopDashboard(
     countdown: CountdownState,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
+    activeJersey: AppJersey = AppJersey.HERITAGE,
+    onJerseyThemeToggle: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val data = scheduleState as? ScheduleUiState.Data
     val bottomScrollState = rememberScrollState()
+    val palette = LocalJerseyPalette.current
 
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(palette.background)
+    ) {
         // ================= UPPER HALF: UPRIGHT BROADCAST SCOREBOARD =================
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .background(AppDarkBg)
+                .background(palette.background)
                 .padding(12.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -60,14 +72,37 @@ fun TabletopDashboard(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(
-                    text = "GAME NIGHT LIVE • DETROIT RED WINGS",
-                    style = MaterialTheme.typography.labelSmall.copy(
-                        color = WingsRed,
-                        letterSpacing = 2.sp,
-                        fontWeight = FontWeight.Black
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "GAME NIGHT LIVE • DETROIT RED WINGS",
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            color = palette.accentRed,
+                            letterSpacing = 2.sp,
+                            fontWeight = FontWeight.Black
+                        )
                     )
-                )
+
+                    Surface(
+                        onClick = onJerseyThemeToggle,
+                        shape = RoundedCornerShape(16.dp),
+                        color = palette.chipBg,
+                        border = BorderStroke(1.dp, palette.cardBorder)
+                    ) {
+                        Text(
+                            text = activeJersey.chipLabel,
+                            color = palette.chipText,
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 10.sp
+                            ),
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                    }
+                }
 
                 NextGameHero(
                     countdown = countdown,
@@ -80,7 +115,7 @@ fun TabletopDashboard(
 
         // ================= PHYSICAL HINGE ACCENT DIVIDER =================
         HorizontalDivider(
-            color = WingsRed.copy(alpha = 0.4f),
+            color = palette.accentRed.copy(alpha = 0.4f),
             thickness = 2.dp
         )
 
@@ -89,7 +124,7 @@ fun TabletopDashboard(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1.05f)
-                .background(Color(0xFF141519))
+                .background(palette.cardSurface)
                 .padding(horizontal = 16.dp, vertical = 10.dp)
         ) {
             Row(

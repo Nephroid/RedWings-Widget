@@ -176,7 +176,7 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         }
     }
 
-    private fun applyWidgetTheme(context: Context, views: RemoteViews, theme: WidgetTheme) {
+    internal fun applyWidgetTheme(context: Context, views: RemoteViews, theme: WidgetTheme) {
         views.setInt(R.id.widget_root, "setBackgroundResource", theme.bgDrawableRes)
         views.setInt(R.id.widget_tag, "setBackgroundResource", theme.tagDrawableRes)
         views.setInt(R.id.widget_theme_toggle, "setBackgroundResource", theme.tagDrawableRes)
@@ -188,6 +188,7 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         views.setTextColor(R.id.widget_venue_info, ContextCompat.getColor(context, theme.subColorRes))
         views.setTextColor(R.id.widget_standing_h2h, ContextCompat.getColor(context, theme.standingColorRes))
         views.setTextColor(R.id.widget_tag, ContextCompat.getColor(context, theme.tagTextColorRes))
+        views.setTextColor(R.id.widget_theme_toggle, ContextCompat.getColor(context, theme.tagTextColorRes))
     }
 
     internal fun applyResponsiveLayout(context: Context, views: RemoteViews, minW: Int, minH: Int) {

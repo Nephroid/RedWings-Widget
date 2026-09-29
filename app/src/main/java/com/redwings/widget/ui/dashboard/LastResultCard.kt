@@ -1,5 +1,6 @@
 package com.redwings.widget.ui.dashboard
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.redwings.widget.ui.LastGameUi
+import com.redwings.widget.ui.theme.LocalJerseyPalette
 
 /** Final-result card for the last game with prominent W/L badge and optional form guide */
 @Composable
@@ -35,10 +37,13 @@ fun LastResultCard(
     showFormGuide: Boolean = false,
     formHistory: List<String> = listOf("W", "W", "L", "W", "W")
 ) {
+    val palette = LocalJerseyPalette.current
+
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = CardDarkSurface),
+        colors = CardDefaults.cardColors(containerColor = palette.cardSurface),
+        border = BorderStroke(1.dp, palette.cardBorder),
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
     ) {
         Column(
@@ -56,7 +61,7 @@ fun LastResultCard(
                     Text(
                         text = "LAST RESULT • ${lastGame.dateLabel.ifBlank { "Tue, Sep 30" }}",
                         style = MaterialTheme.typography.labelMedium.copy(
-                            color = Color(0xFF9E9EA4),
+                            color = palette.secondaryText,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -66,13 +71,13 @@ fun LastResultCard(
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Black,
                             fontSize = 24.sp,
-                            color = Color.White
+                            color = palette.primaryText
                         )
                     )
                     Text(
                         text = if (lastGame.isHome) "Home" else "Away",
                         style = MaterialTheme.typography.bodySmall.copy(
-                            color = Color(0xFF9E9EA4),
+                            color = palette.secondaryText,
                             fontSize = 13.sp
                         )
                     )
@@ -106,7 +111,7 @@ fun LastResultCard(
                     Text(
                         text = "Form:",
                         style = MaterialTheme.typography.labelSmall.copy(
-                            color = Color(0xFF8E929A),
+                            color = palette.secondaryText,
                             fontWeight = FontWeight.Bold
                         )
                     )

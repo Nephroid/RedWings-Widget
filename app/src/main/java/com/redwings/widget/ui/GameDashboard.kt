@@ -18,6 +18,8 @@ import com.redwings.widget.ui.dashboard.AppDarkBg
 import com.redwings.widget.ui.dashboard.DualPaneDashboard
 import com.redwings.widget.ui.dashboard.IceRinkBackground
 import com.redwings.widget.ui.dashboard.SinglePaneDashboard
+import com.redwings.widget.ui.theme.AppJersey
+import com.redwings.widget.ui.theme.LocalJerseyPalette
 import com.redwings.widget.ui.theme.WingsRed
 
 // Re-exports for backward-compatibility with tests & external callers
@@ -68,7 +70,12 @@ fun IceRinkBackground(modifier: Modifier = Modifier) =
  * - DualPaneDashboard (Pixel 10 Fold Unfolded Inner Screen & Pixel 9 Pro XL Landscape)
  */
 @Composable
-fun GameDashboard(viewModel: GameViewModel, modifier: Modifier = Modifier) {
+fun GameDashboard(
+    viewModel: GameViewModel,
+    modifier: Modifier = Modifier,
+    activeJersey: AppJersey = AppJersey.HERITAGE,
+    onJerseyThemeToggle: () -> Unit = {}
+) {
     val scheduleState by viewModel.scheduleState.collectAsState()
     val countdown by viewModel.countdown.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
@@ -80,6 +87,8 @@ fun GameDashboard(viewModel: GameViewModel, modifier: Modifier = Modifier) {
         isRefreshing = isRefreshing,
         errorMessage = errorMessage,
         onRefresh = { viewModel.triggerManualRefresh() },
+        activeJersey = activeJersey,
+        onJerseyThemeToggle = onJerseyThemeToggle,
         modifier = modifier
     )
 }
@@ -91,22 +100,25 @@ fun GameDashboardContent(
     isRefreshing: Boolean,
     errorMessage: String?,
     onRefresh: () -> Unit,
+    activeJersey: AppJersey = AppJersey.HERITAGE,
+    onJerseyThemeToggle: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val config = LocalConfiguration.current
     val screenWidth = config.screenWidthDp
     val isExpanded = screenWidth >= 600
+    val palette = LocalJerseyPalette.current
 
     Scaffold(
         modifier = modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.safeDrawing),
-        containerColor = AppDarkBg
+        containerColor = palette.background
     ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(AppDarkBg)
+                .background(palette.background)
         ) {
             IceRinkBackground()
 
@@ -115,7 +127,7 @@ fun GameDashboardContent(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = WingsRed)
+                    CircularProgressIndicator(color = palette.accentRed)
                 }
 
                 ScheduleUiState.Empty, is ScheduleUiState.Data -> {
@@ -125,7 +137,9 @@ fun GameDashboardContent(
                             countdown = countdown,
                             isRefreshing = isRefreshing,
                             errorMessage = errorMessage,
-                            onRefresh = onRefresh
+                            onRefresh = onRefresh,
+                            activeJersey = activeJersey,
+                            onJerseyThemeToggle = onJerseyThemeToggle
                         )
                     } else {
                         SinglePaneDashboard(
@@ -133,7 +147,9 @@ fun GameDashboardContent(
                             countdown = countdown,
                             isRefreshing = isRefreshing,
                             errorMessage = errorMessage,
-                            onRefresh = onRefresh
+                            onRefresh = onRefresh,
+                            activeJersey = activeJersey,
+                            onJerseyThemeToggle = onJerseyThemeToggle
                         )
                     }
                 }
