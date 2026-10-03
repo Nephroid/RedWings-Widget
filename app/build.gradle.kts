@@ -27,7 +27,10 @@ val vPatch = (versionProps.getProperty("VERSION_PATCH") ?: "23").toInt()
 val vBuild = (versionProps.getProperty("VERSION_BUILD") ?: "1").toInt()
 
 val appVersionCode = vMajor * 1000000 + vMinor * 10000 + vPatch * 100 + vBuild
-val appVersionName = if (vBuild > 0) "$vMajor.$vMinor.$vPatch.$vBuild" else "$vMajor.$vMinor.$vPatch"
+val formattedMinor = String.format("%02d", vMinor)
+val formattedPatch = String.format("%02d", vPatch)
+val formattedBuild = String.format("%02d", vBuild)
+val appVersionName = if (vBuild > 0) "$vMajor.$formattedMinor.$formattedPatch.$formattedBuild" else "$vMajor.$formattedMinor.$formattedPatch"
 
 android {
   namespace = "com.redwings.widget"
