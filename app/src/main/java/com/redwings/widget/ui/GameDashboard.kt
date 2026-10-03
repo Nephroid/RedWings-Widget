@@ -28,10 +28,10 @@ import com.redwings.widget.ui.theme.WingsRed
 
 @Composable
 fun NextGameHero(
-    countdown: CountdownState,
+    countdownProvider: () -> CountdownState,
     game: NextGameUi?,
     modifier: Modifier = Modifier
-) = com.redwings.widget.ui.dashboard.NextGameHero(countdown = countdown, game = game, modifier = modifier)
+) = com.redwings.widget.ui.dashboard.NextGameHero(countdownProvider = countdownProvider, game = game, modifier = modifier)
 
 @Composable
 fun LastResultCard(
@@ -69,7 +69,7 @@ fun IceRinkBackground(modifier: Modifier = Modifier) =
 @Composable
 fun SinglePaneDashboard(
     scheduleState: ScheduleUiState,
-    countdown: CountdownState,
+    countdownProvider: () -> CountdownState,
     isRefreshing: Boolean,
     errorMessage: String?,
     onRefresh: () -> Unit,
@@ -78,7 +78,7 @@ fun SinglePaneDashboard(
     modifier: Modifier = Modifier
 ) = com.redwings.widget.ui.dashboard.SinglePaneDashboard(
     scheduleState = scheduleState,
-    countdown = countdown,
+    countdownProvider = countdownProvider,
     isRefreshing = isRefreshing,
     errorMessage = errorMessage,
     onRefresh = onRefresh,
@@ -90,7 +90,7 @@ fun SinglePaneDashboard(
 @Composable
 fun DualPaneDashboard(
     scheduleState: ScheduleUiState,
-    countdown: CountdownState,
+    countdownProvider: () -> CountdownState,
     isRefreshing: Boolean,
     errorMessage: String?,
     onRefresh: () -> Unit,
@@ -99,7 +99,7 @@ fun DualPaneDashboard(
     modifier: Modifier = Modifier
 ) = com.redwings.widget.ui.dashboard.DualPaneDashboard(
     scheduleState = scheduleState,
-    countdown = countdown,
+    countdownProvider = countdownProvider,
     isRefreshing = isRefreshing,
     errorMessage = errorMessage,
     onRefresh = onRefresh,
@@ -111,7 +111,7 @@ fun DualPaneDashboard(
 @Composable
 fun TabletopDashboard(
     scheduleState: ScheduleUiState,
-    countdown: CountdownState,
+    countdownProvider: () -> CountdownState,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
@@ -119,7 +119,7 @@ fun TabletopDashboard(
     modifier: Modifier = Modifier
 ) = com.redwings.widget.ui.dashboard.TabletopDashboard(
     scheduleState = scheduleState,
-    countdown = countdown,
+    countdownProvider = countdownProvider,
     isRefreshing = isRefreshing,
     onRefresh = onRefresh,
     activeJersey = activeJersey,
@@ -142,13 +142,12 @@ fun GameDashboard(
     isTabletop: Boolean = false
 ) {
     val scheduleState by viewModel.scheduleState.collectAsState()
-    val countdown by viewModel.countdown.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
 
     GameDashboardContent(
         scheduleState = scheduleState,
-        countdown = countdown,
+        countdownProvider = { viewModel.countdown.value },
         isRefreshing = isRefreshing,
         errorMessage = errorMessage,
         onRefresh = { viewModel.triggerManualRefresh() },
@@ -162,7 +161,7 @@ fun GameDashboard(
 @Composable
 fun GameDashboardContent(
     scheduleState: ScheduleUiState,
-    countdown: CountdownState,
+    countdownProvider: () -> CountdownState,
     isRefreshing: Boolean,
     errorMessage: String?,
     onRefresh: () -> Unit,
@@ -203,7 +202,7 @@ fun GameDashboardContent(
                         isTabletop -> {
                             TabletopDashboard(
                                 scheduleState = scheduleState,
-                                countdown = countdown,
+                                countdownProvider = countdownProvider,
                                 isRefreshing = isRefreshing,
                                 onRefresh = onRefresh,
                                 activeJersey = activeJersey,
@@ -213,7 +212,7 @@ fun GameDashboardContent(
                         isExpanded -> {
                             DualPaneDashboard(
                                 scheduleState = scheduleState,
-                                countdown = countdown,
+                                countdownProvider = countdownProvider,
                                 isRefreshing = isRefreshing,
                                 errorMessage = errorMessage,
                                 onRefresh = onRefresh,
@@ -224,7 +223,7 @@ fun GameDashboardContent(
                         else -> {
                             SinglePaneDashboard(
                                 scheduleState = scheduleState,
-                                countdown = countdown,
+                                countdownProvider = countdownProvider,
                                 isRefreshing = isRefreshing,
                                 errorMessage = errorMessage,
                                 onRefresh = onRefresh,

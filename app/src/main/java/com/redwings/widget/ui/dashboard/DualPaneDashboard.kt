@@ -44,7 +44,7 @@ import com.redwings.widget.ui.theme.LocalJerseyPalette
 @Composable
 fun DualPaneDashboard(
     scheduleState: ScheduleUiState,
-    countdown: CountdownState,
+    countdownProvider: () -> CountdownState,
     isRefreshing: Boolean,
     errorMessage: String?,
     onRefresh: () -> Unit,
@@ -128,7 +128,7 @@ fun DualPaneDashboard(
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
                     NextGameHero(
-                        countdown = countdown,
+                        countdownProvider = countdownProvider,
                         game = data?.nextGame,
                         tileWidth = 72.dp,
                         showFlankingBadges = true

@@ -121,11 +121,36 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ScheduleUiState.Loading)
 
     private var countdownJob: Job? = null
+    private var pollingJob: Job? = null
+    private val pollingRepository = com.redwings.widget.data.polling.GamePollingRepository()
 
     init {
         refreshData()
         viewModelScope.launch {
-            upcomingGames.collect { startCountdownTicker(it.firstOrNull()) }
+            upcomingGames.collect { 
+                startCountdownTicker(it.firstOrNull()) 
+                startPollingJob(it.firstOrNull())
+            }
+        }
+    }
+
+    private fun startPollingJob(nextGame: UpcomingGame?) {
+        pollingJob?.cancel()
+        if (nextGame == null) return
+        pollingJob = viewModelScope.launch {
+            while (isActive) {
+                val diff = nextGame.gameTimeMillis - System.currentTimeMillis()
+                val state = when {
+                    diff > 0 -> com.redwings.widget.data.polling.GameState.PRE_GAME
+                    diff <= 0 && diff > -TimeUnit.HOURS.toMillis(3) -> com.redwings.widget.data.polling.GameState.IN_PROGRESS
+                    else -> com.redwings.widget.data.polling.GameState.FINAL
+                }
+                
+                // In a real app we'd get excitementIndex/period from the live game feed
+                val interval = pollingRepository.calculatePollingIntervalMs(state)
+                delay(interval)
+                refreshData()
+            }
         }
     }
 
@@ -186,6 +211,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     override fun onCleared() {
         countdownJob?.cancel()
+        pollingJob?.cancel()
         super.onCleared()
     }
 

@@ -41,14 +41,15 @@ fun teamDisplayName(abbrev: String?): String {
 }
 
 fun getTeamLogoUrl(abbrev: String?): String {
-    val abbr = abbrev?.uppercase()?.takeIf { it.isNotBlank() } ?: "DET"
-    val safe = if (NHL_TEAMS.containsKey(abbr)) abbr else "DET"
-    return "https://assets.nhle.com/logos/nhl/svg/${safe}_light.svg"
+    val upper = abbrev?.uppercase()?.takeIf { it.isNotBlank() } ?: "DET"
+    val safe = if (NHL_TEAMS.containsKey(upper)) upper.lowercase() else "det"
+    return "https://a.espncdn.com/i/teamlogos/nhl/500/$safe.png"
 }
 
 fun getTeamLogoUrlFallback(abbrev: String?): String {
-    val abbr = abbrev?.lowercase()?.takeIf { it.isNotBlank() } ?: "det"
-    return "https://a.espncdn.com/i/teamlogos/nhl/500/$abbr.png"
+    val upper = abbrev?.uppercase()?.takeIf { it.isNotBlank() } ?: "DET"
+    val safe = if (NHL_TEAMS.containsKey(upper)) upper else "DET"
+    return "https://assets.nhle.com/logos/nhl/svg/${safe}_light.svg"
 }
 
 fun formatOpponentPrefix(isHome: Boolean): String = if (isHome) "vs" else "at"

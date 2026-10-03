@@ -93,6 +93,11 @@ android {
   testOptions { unitTests { isIncludeAndroidResources = true } }
 }
 
+composeCompiler {
+  reportsDestination = layout.buildDirectory.dir("compose_compiler")
+  metricsDestination = layout.buildDirectory.dir("compose_compiler")
+}
+
 tasks.register("packageVersionedApk") {
   description = "Packages and copies versioned APKs to build/outputs/apk/versioned/"
   dependsOn("assembleDebug")
@@ -168,9 +173,7 @@ dependencies {
   implementation(libs.androidx.compose.ui)
   implementation(libs.androidx.compose.ui.graphics)
   implementation(libs.androidx.compose.ui.tooling.preview)
-  implementation(libs.androidx.glance)
-  implementation(libs.androidx.glance.appwidget)
-  implementation(libs.androidx.glance.material3)
+
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.lifecycle.runtime.compose)
   implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -1,9 +1,12 @@
 package com.redwings.widget.ui
 
+import androidx.compose.runtime.Immutable
+
 /**
  * UI-layer state for the tight Red Wings schedule app.
  * No Gemini / weather / roster / transactions types live here.
  */
+@Immutable
 data class CountdownState(
     val days: Long = 0,
     val hours: Long = 0,
@@ -13,6 +16,7 @@ data class CountdownState(
     val text: String = "00d 00h 00m 00s"
 )
 
+@Immutable
 data class NextGameUi(
     val opponent: String = "",
     val opponentAbbrev: String = "OPP",
@@ -22,6 +26,7 @@ data class NextGameUi(
     val broadcast: String = ""
 )
 
+@Immutable
 data class LastGameUi(
     val opponent: String = "",
     val opponentAbbrev: String = "OPP",
@@ -33,6 +38,7 @@ data class LastGameUi(
     val recapPills: List<String> = emptyList()
 )
 
+@Immutable
 data class StandingsRowUi(
     val rank: Int,
     val teamAbbrev: String,
@@ -46,9 +52,11 @@ data class StandingsRowUi(
     val streak: String = ""
 )
 
+@Immutable
 sealed interface ScheduleUiState {
     data object Loading : ScheduleUiState
     data object Empty : ScheduleUiState
+    @Immutable
     data class Data(
         val nextGame: NextGameUi?,
         val upcoming: List<NextGameUi> = emptyList(),

@@ -51,12 +51,8 @@ fun LastResultCard(
         else -> listOf("Larkin 2G", "DeBrincat 1G")
     }
 
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(containerColor = palette.cardSurface),
-        border = BorderStroke(1.5.dp, palette.cardBorder),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    FrostedGlassCard(
+        modifier = modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp).fillMaxWidth(),
@@ -162,12 +158,9 @@ fun LastResultCard(
                             style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold, fontSize = 10.sp, color = if (!lastGame.isHome) palette.accentRed else palette.secondaryText)
                         )
                     }
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current).data(getTeamLogoUrlFallback(oppAbbrev)).crossfade(true).build(),
-                        placeholder = painterResource(R.drawable.ic_puck_vector),
-                        error = painterResource(R.drawable.ic_puck_vector),
-                        contentDescription = "$oppName logo",
-                        modifier = Modifier.size(40.dp)
+                    TeamLogo(
+                        abbrev = oppAbbrev,
+                        size = 40.dp
                     )
                 }
             }

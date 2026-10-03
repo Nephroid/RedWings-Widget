@@ -9,5 +9,5 @@
     android:previewLayout="@layout/red_wings_widget_layout"
     android:previewImage="@drawable/widget_preview_frosted_ice"
     android:description="@string/red_wings_widget_desc"
-    android:resizeMode="none"
+    android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen" />

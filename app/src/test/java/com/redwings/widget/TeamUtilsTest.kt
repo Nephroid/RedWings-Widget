@@ -17,9 +17,9 @@ class TeamUtilsTest {
 
     @Test
     fun logoUrl_containsUppercaseAbbrev() {
-        assertTrue(getTeamLogoUrl("DET").contains("DET"))
-        assertTrue(getTeamLogoUrl("tor").contains("TOR"))
-        assertTrue(getTeamLogoUrlFallback("bos").contains("bos"))
+        assertTrue(getTeamLogoUrl("DET").contains("det.png"))
+        assertTrue(getTeamLogoUrl("tor").contains("tor.png"))
+        assertTrue(getTeamLogoUrlFallback("bos").contains("BOS_light.svg"))
     }
 
     @Test
@@ -35,7 +35,7 @@ class TeamUtilsTest {
             assertEquals(fullName, teamDisplayName(abbrev))
             assertTrue(
                 "$abbrev logo should embed abbrev, got: ${getTeamLogoUrl(abbrev)}",
-                getTeamLogoUrl(abbrev).contains(abbrev)
+                getTeamLogoUrl(abbrev).contains(abbrev.lowercase())
             )
         }
     }
@@ -51,8 +51,8 @@ class TeamUtilsTest {
 
     @Test
     fun unknownAbbrev_fallsBackToDetroit() {
-        assertTrue(getTeamLogoUrl("ZZZ").contains("DET"))
-        assertTrue(getTeamLogoUrl(null).contains("DET"))
+        assertTrue(getTeamLogoUrl("ZZZ").contains("det.png"))
+        assertTrue(getTeamLogoUrl(null).contains("det.png"))
     }
 
     @Test

@@ -49,7 +49,7 @@ import com.redwings.widget.ui.theme.LocalJerseyPalette
 @Composable
 fun TabletopDashboard(
     scheduleState: ScheduleUiState,
-    countdown: CountdownState,
+    countdownProvider: () -> CountdownState,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
@@ -141,7 +141,7 @@ fun TabletopDashboard(
                 }
 
                 NextGameHero(
-                    countdown = countdown,
+                    countdownProvider = countdownProvider,
                     game = data?.nextGame,
                     tileWidth = 72.dp,
                     showFlankingBadges = true

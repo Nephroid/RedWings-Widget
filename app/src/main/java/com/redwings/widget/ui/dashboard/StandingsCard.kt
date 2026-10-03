@@ -45,12 +45,8 @@ fun StandingsCard(
     val detRow = rows.find { it.isRedWings || it.teamAbbrev.equals("DET", ignoreCase = true) }
     val rankBadgeText = if (detRow != null) "${detRow.rank}TH • ${detRow.points} PTS" else summary.substringBefore(" •")
 
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = palette.cardSurface),
-        border = BorderStroke(1.5.dp, palette.cardBorder),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    FrostedGlassCard(
+        modifier = modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier.padding(16.dp).fillMaxWidth(),

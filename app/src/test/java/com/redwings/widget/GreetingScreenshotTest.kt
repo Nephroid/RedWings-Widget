@@ -71,7 +71,7 @@ class GreetingScreenshotTest {
         composeTestRule.setContent {
             RedWingsTheme {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    NextGameHero(countdown = countdown, game = nextGame)
+                    NextGameHero(countdownProvider = { countdown }, game = nextGame)
                     Spacer(Modifier.height(12.dp))
                     LastResultCard(lastGame = lastGame)
                     Spacer(Modifier.height(12.dp))
@@ -101,7 +101,7 @@ class GreetingScreenshotTest {
             RedWingsTheme {
                 com.redwings.widget.ui.dashboard.SinglePaneDashboard(
                     scheduleState = scheduleData,
-                    countdown = countdown,
+                    countdownProvider = { countdown },
                     isRefreshing = false,
                     errorMessage = null,
                     onRefresh = {}
@@ -126,7 +126,7 @@ class GreetingScreenshotTest {
             RedWingsTheme {
                 com.redwings.widget.ui.dashboard.DualPaneDashboard(
                     scheduleState = scheduleData,
-                    countdown = countdown,
+                    countdownProvider = { countdown },
                     isRefreshing = false,
                     errorMessage = null,
                     onRefresh = {}
@@ -151,7 +151,7 @@ class GreetingScreenshotTest {
             RedWingsTheme {
                 com.redwings.widget.ui.dashboard.TabletopDashboard(
                     scheduleState = scheduleData,
-                    countdown = countdown,
+                    countdownProvider = { countdown },
                     isRefreshing = false,
                     onRefresh = {}
                 )

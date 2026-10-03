@@ -1,545 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/widget_bg_home"
-    android:orientation="vertical"
-    android:gravity="fill"
-    android:clipToPadding="false"
-    android:clipChildren="false"
-    android:paddingLeft="14dp"
-    android:paddingRight="14dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
-
-    <!-- COMPOSITE UPPER CARD: Ribbon Header + Matchup Frosted Card + Floating @ Badge (Unfolded 4x2) -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4.3"
-        android:clipToPadding="false"
-        android:clipChildren="false">
-
-        <!-- Stack of Header + Matchup (joined seamlessly) -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <!-- REGION 1: Home Red Sweater Ribbon Header -->
-            <LinearLayout
-                android:id="@+id/widget_header_layout"
-                android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:background="@drawable/widget_header_ribbon"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
-
-                <!-- Left White Racing Stripes -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.2"
-                    android:orientation="vertical"
-                    android:gravity="center">
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="3dp"
-                        android:background="#FFFFFF" />
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="3dp" />
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="3dp"
-                        android:background="#FFFFFF" />
-                </LinearLayout>
-
-                <!-- Embossed Winged Wheel Crest in Header with Circular Badge -->
-                <ImageView
-                    android:id="@+id/widget_header_logo"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_redwings_logo"
-                    android:background="@drawable/widget_header_logo_badge"
-                    android:padding="2.5dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="10dp" />
-
-                <!-- Bold Detroit Red Wings Wordmark -->
-                <TextView
-                    android:id="@+id/widget_title"
-                    android:fontFamily="sans-serif-black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="DETROIT RED WINGS"
-                    android:textColor="#FFFFFF"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.09"
-                    android:includeFontPadding="false" />
-
-                <!-- Right White Racing Stripes -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.8"
-                    android:orientation="vertical"
-                    android:layout_marginStart="10dp"
-                    android:gravity="center">
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="3dp"
-                        android:background="#FFFFFF" />
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="3dp" />
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="3dp"
-                        android:background="#FFFFFF" />
-                </LinearLayout>
-
-                <!-- Invisible ID preservation elements -->
-                <TextView
-                    android:id="@+id/widget_tag"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/widget_theme_toggle"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:visibility="gone" />
-            </LinearLayout>
-
-            <!-- Top Divider Line (crisp hairline border between header ribbon and matchup card) -->
-            <FrameLayout
-                android:id="@+id/widget_divider_top"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="#FFFFFF" />
-
-            <!-- REGION 2: Matchup Hero Frosted Glass Card -->
-            <LinearLayout
-                android:id="@+id/widget_matchup_layout"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@drawable/widget_matchup_frosted_bg"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="8dp">
-
-                <!-- Away Team (Left) -->
-                <LinearLayout
-                    android:id="@+id/widget_away_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.2"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical|start">
-
-                    <ImageView
-                        android:id="@+id/widget_away_logo"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:scaleType="fitCenter"
-                        android:layout_marginEnd="8dp"
-                        android:src="@drawable/ic_puck_vector" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/widget_away_tag"
-                            android:fontFamily="sans-serif-bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="AWAY"
-                            android:textColor="#64748B"
-                            android:textSize="9sp"
-                            android:textStyle="bold"
-                            android:includeFontPadding="false" />
-
-                        <TextView
-                            android:id="@+id/widget_away_name"
-                            android:fontFamily="sans-serif-black"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="TOR"
-                            android:textColor="#0F172A"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:includeFontPadding="false" />
-
-                        <TextView
-                            android:id="@+id/widget_away_record"
-                            android:fontFamily="sans-serif-medium"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="20-8-6"
-                            android:textColor="#475569"
-                            android:textSize="11.5sp"
-                            android:includeFontPadding="false" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- Center: Game Date/Time + Crimson Countdown Numerals -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.6"
-                    android:orientation="vertical"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/widget_opponent"
-                        android:fontFamily="sans-serif-black"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="SATURDAY • 7:00 PM"
-                        android:textColor="#0F172A"
-                        android:textSize="12.5sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.04"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:includeFontPadding="false" />
-
-                    <TextView
-                        android:id="@+id/widget_countdown"
-                        android:fontFamily="sans-serif-black"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="02 : 14 : 22"
-                        android:textColor="#C8102E"
-                        android:textSize="30sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.05"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:includeFontPadding="false" />
-                </LinearLayout>
-
-                <!-- Home Team (Right) -->
-                <LinearLayout
-                    android:id="@+id/widget_home_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.2"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical|end">
-
-                    <ImageView
-                        android:id="@+id/widget_home_logo"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:scaleType="fitCenter"
-                        android:layout_marginEnd="8dp"
-                        android:src="@drawable/ic_redwings_logo" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/widget_home_tag"
-                            android:fontFamily="sans-serif-bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="HOME"
-                            android:textColor="#C8102E"
-                            android:textSize="9sp"
-                            android:textStyle="bold"
-                            android:includeFontPadding="false" />
-
-                        <TextView
-                            android:id="@+id/widget_home_name"
-                            android:fontFamily="sans-serif-black"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="DET"
-                            android:textColor="#0F172A"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:includeFontPadding="false" />
-
-                        <TextView
-                            android:id="@+id/widget_home_record"
-                            android:fontFamily="sans-serif-medium"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="22-7-5"
-                            android:textColor="#475569"
-                            android:textSize="11.5sp"
-                            android:includeFontPadding="false" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Floating Clash Puck Badge directly centered on the seam -->
-        <TextView
-            android:id="@+id/widget_matchup_badge"
-            android:fontFamily="sans-serif-black"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="25dp"
-            android:elevation="8dp"
-            android:text="@"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:background="@drawable/widget_at_puck_badge"
-            android:includeFontPadding="false" />
-    </FrameLayout>
-
-    <!-- REGION 3: Floating Venue Pill overlapping Matchup and Standings -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-10dp"
-        android:layout_marginBottom="-10dp"
-        android:elevation="6dp">
-
-        <LinearLayout
-            android:id="@+id/widget_info_card"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/widget_venue_pill"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:paddingLeft="18dp"
-            android:paddingRight="18dp"
-            android:paddingTop="3.5dp"
-            android:paddingBottom="3.5dp">
-
-            <TextView
-                android:id="@+id/widget_standing_h2h"
-                android:fontFamily="sans-serif-bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Little Caesars Arena"
-                android:textColor="#1E293B"
-                android:textSize="10.5sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:includeFontPadding="false" />
-
-            <TextView
-                android:id="@+id/widget_venue_info"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:visibility="gone" />
-        </LinearLayout>
-    </FrameLayout>
-
-    <!-- REGION 4: Atlantic Division Standings Matrix Card (Unfolded 4x2) -->
-    <LinearLayout
-        android:id="@+id/widget_standings_table"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2.3"
-        android:background="@drawable/widget_standings_frosted_bg"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingLeft="14dp"
-        android:paddingRight="14dp"
-        android:paddingTop="9dp"
-        android:paddingBottom="5dp">
-
-        <!-- Column 1: Playoff Seeds (1-4) -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/widget_seeds_header"
-                android:fontFamily="sans-serif-bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PLAYOFF SEEDS (1-4)"
-                android:textColor="#1E293B"
-                android:textSize="9sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.04"
-                android:gravity="center"
-                android:layout_marginBottom="4dp"
-                android:includeFontPadding="false" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/widget_team_1"
-                    android:fontFamily="sans-serif-bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1 BOS"
-                    android:textColor="#334155"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="10dp"
-                    android:includeFontPadding="false" />
-
-                <TextView
-                    android:id="@+id/widget_team_2"
-                    android:fontFamily="sans-serif-bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2 FLA"
-                    android:textColor="#334155"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="10dp"
-                    android:includeFontPadding="false" />
-
-                <TextView
-                    android:id="@+id/widget_team_3"
-                    android:fontFamily="sans-serif-bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="3 TOR"
-                    android:textColor="#334155"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="10dp"
-                    android:includeFontPadding="false" />
-
-                <TextView
-                    android:id="@+id/widget_team_4"
-                    android:fontFamily="sans-serif-bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="4 DET"
-                    android:textColor="#FFFFFF"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:background="@drawable/widget_det_highlight_pill"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingTop="2.5dp"
-                    android:paddingBottom="2.5dp"
-                    android:includeFontPadding="false" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Vertical Hairline Divider -->
-        <FrameLayout
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#CBD5E1"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp" />
-
-        <!-- Column 2: In The Hunt (5-8) -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/widget_hunt_header"
-                android:fontFamily="sans-serif-bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="IN THE HUNT (5-8)"
-                android:textColor="#1E293B"
-                android:textSize="9sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.04"
-                android:gravity="center"
-                android:layout_marginBottom="4dp"
-                android:includeFontPadding="false" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/widget_team_5"
-                    android:fontFamily="sans-serif-bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="5 TBL"
-                    android:textColor="#334155"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="10dp"
-                    android:includeFontPadding="false" />
-
-                <TextView
-                    android:id="@+id/widget_team_6"
-                    android:fontFamily="sans-serif-bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="6 OTT"
-                    android:textColor="#334155"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="10dp"
-                    android:includeFontPadding="false" />
-
-                <TextView
-                    android:id="@+id/widget_team_7"
-                    android:fontFamily="sans-serif-bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="7 BUF"
-                    android:textColor="#334155"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="10dp"
-                    android:includeFontPadding="false" />
-
-                <TextView
-                    android:id="@+id/widget_team_8"
-                    android:fontFamily="sans-serif-bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="8 MTL"
-                    android:textColor="#334155"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:includeFontPadding="false" />
-            </LinearLayout>
-        </LinearLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/widget_root" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/widget_bg_home" android:orientation="vertical" android:gravity="fill" android:clipToPadding="false" android:clipChildren="false" android:paddingLeft="14dp" android:paddingRight="14dp" android:paddingTop="10dp" android:paddingBottom="10dp">
+  <LinearLayout android:id="@+id/widget_header_layout" android:layout_width="match_parent" android:layout_height="38dp" android:background="@drawable/widget_header_ribbon" android:orientation="horizontal" android:gravity="center_vertical" android:paddingLeft="16dp" android:paddingRight="16dp">
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.2" android:orientation="vertical" android:gravity="center">
+      <FrameLayout android:layout_width="match_parent" android:layout_height="3dp" android:background="#FFFFFF"/>
+      <FrameLayout android:layout_width="match_parent" android:layout_height="3dp"/>
+      <FrameLayout android:layout_width="match_parent" android:layout_height="3dp" android:background="#FFFFFF"/>
     </LinearLayout>
-
+    <ImageView android:id="@+id/widget_header_logo" android:layout_width="28dp" android:layout_height="28dp" android:scaleType="fitCenter" android:src="@drawable/ic_redwings_logo" android:background="@drawable/widget_header_logo_badge" android:padding="2.5dp" android:layout_marginStart="8dp" android:layout_marginEnd="10dp"/>
+    <TextView android:id="@+id/widget_title" android:fontFamily="sans-serif-black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DETROIT RED WINGS" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold" android:letterSpacing="0.09" android:includeFontPadding="false"/>
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.8" android:orientation="vertical" android:layout_marginStart="10dp" android:gravity="center">
+      <FrameLayout android:layout_width="match_parent" android:layout_height="3dp" android:background="#FFFFFF"/>
+      <FrameLayout android:layout_width="match_parent" android:layout_height="3dp"/>
+      <FrameLayout android:layout_width="match_parent" android:layout_height="3dp" android:background="#FFFFFF"/>
+    </LinearLayout>
+    <TextView android:id="@+id/widget_tag" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
+    <Button android:id="@+id/widget_theme_toggle" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
+  </LinearLayout>
+  <FrameLayout android:id="@+id/widget_divider_top" android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#FFFFFF"/>
+  <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="horizontal" android:baselineAligned="false" android:clipToPadding="false" android:clipChildren="false">
+    <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clipToPadding="false" android:clipChildren="false" android:layout_marginEnd="7dp">
+      <LinearLayout android:id="@+id/widget_matchup_layout" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_weight="0" android:background="@drawable/widget_matchup_frosted_bg" android:orientation="horizontal" android:gravity="center_vertical" android:paddingLeft="16dp" android:paddingRight="16dp" android:paddingTop="10dp" android:paddingBottom="8dp" android:layout_marginBottom="12dp">
+        <LinearLayout android:id="@+id/widget_away_layout" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1.2" android:orientation="horizontal" android:gravity="center_vertical|start">
+          <ImageView android:id="@+id/widget_away_logo" android:layout_width="44dp" android:layout_height="44dp" android:scaleType="fitCenter" android:layout_marginEnd="8dp" android:src="@drawable/ic_puck_vector"/>
+          <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+            <TextView android:id="@+id/widget_away_tag" android:fontFamily="sans-serif-bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="AWAY" android:textColor="#64748B" android:textSize="9sp" android:textStyle="bold" android:includeFontPadding="false"/>
+            <TextView android:id="@+id/widget_away_name" android:fontFamily="sans-serif-black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TOR" android:textColor="#0F172A" android:textSize="20sp" android:textStyle="bold" android:includeFontPadding="false"/>
+            <TextView android:id="@+id/widget_away_record" android:fontFamily="sans-serif-medium" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="20-8-6" android:textColor="#475569" android:textSize="11.5sp" android:includeFontPadding="false"/>
+          </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1.6" android:orientation="vertical" android:gravity="center">
+          <TextView android:id="@+id/widget_opponent" android:fontFamily="sans-serif-black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SATURDAY • 7:00 PM" android:textColor="#0F172A" android:textSize="12.5sp" android:textStyle="bold" android:letterSpacing="0.04" android:gravity="center" android:maxLines="1" android:ellipsize="end" android:includeFontPadding="false"/>
+          <TextView android:id="@+id/widget_countdown" android:fontFamily="sans-serif-black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="02 : 14 : 22" android:textColor="#C8102E" android:textSize="30sp" android:textStyle="bold" android:letterSpacing="0.05" android:gravity="center" android:maxLines="1" android:includeFontPadding="false"/>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/widget_home_layout" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1.2" android:orientation="horizontal" android:gravity="center_vertical|end">
+          <ImageView android:id="@+id/widget_home_logo" android:layout_width="44dp" android:layout_height="44dp" android:scaleType="fitCenter" android:layout_marginEnd="8dp" android:src="@drawable/ic_redwings_logo"/>
+          <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+            <TextView android:id="@+id/widget_home_tag" android:fontFamily="sans-serif-bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="HOME" android:textColor="#C8102E" android:textSize="9sp" android:textStyle="bold" android:includeFontPadding="false"/>
+            <TextView android:id="@+id/widget_home_name" android:fontFamily="sans-serif-black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DET" android:textColor="#0F172A" android:textSize="20sp" android:textStyle="bold" android:includeFontPadding="false"/>
+            <TextView android:id="@+id/widget_home_record" android:fontFamily="sans-serif-medium" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="22-7-5" android:textColor="#475569" android:textSize="11.5sp" android:includeFontPadding="false"/>
+          </LinearLayout>
+        </LinearLayout>
+      </LinearLayout>
+      <TextView android:id="@+id/widget_matchup_badge" android:fontFamily="sans-serif-black" android:layout_width="26dp" android:layout_height="26dp" android:layout_gravity="top|center_horizontal" android:layout_marginTop="25dp" android:elevation="8dp" android:text="@" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold" android:gravity="center" android:background="@drawable/widget_at_puck_badge" android:includeFontPadding="false"/>
+      <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="0dp" android:layout_marginBottom="-6dp" android:elevation="6dp" android:layout_gravity="bottom|center_horizontal">
+        <LinearLayout android:id="@+id/widget_info_card" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:background="@drawable/widget_venue_pill" android:orientation="vertical" android:gravity="center" android:paddingLeft="18dp" android:paddingRight="18dp" android:paddingTop="3.5dp" android:paddingBottom="3.5dp">
+          <TextView android:id="@+id/widget_standing_h2h" android:fontFamily="sans-serif-bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Little Caesars Arena" android:textColor="#1E293B" android:textSize="10.5sp" android:textStyle="bold" android:gravity="center" android:maxLines="1" android:ellipsize="end" android:includeFontPadding="false"/>
+          <TextView android:id="@+id/widget_venue_info" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
+        </LinearLayout>
+      </FrameLayout>
+    </FrameLayout>
+    <LinearLayout android:id="@+id/widget_standings_table" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/widget_standings_frosted_bg" android:orientation="horizontal" android:gravity="center_vertical" android:paddingLeft="14dp" android:paddingRight="14dp" android:paddingTop="9dp" android:paddingBottom="5dp" android:layout_marginStart="7dp">
+      <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+        <TextView android:id="@+id/widget_seeds_header" android:fontFamily="sans-serif-bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PLAYOFF SEEDS (1-4)" android:textColor="#1E293B" android:textSize="9sp" android:textStyle="bold" android:letterSpacing="0.04" android:gravity="center" android:layout_marginBottom="4dp" android:includeFontPadding="false"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center">
+          <TextView android:id="@+id/widget_team_1" android:fontFamily="sans-serif-bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1 BOS" android:textColor="#334155" android:textSize="11sp" android:textStyle="bold" android:layout_marginEnd="10dp" android:includeFontPadding="false"/>
+          <TextView android:id="@+id/widget_team_2" android:fontFamily="sans-serif-bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2 FLA" android:textColor="#334155" android:textSize="11sp" android:textStyle="bold" android:layout_marginEnd="10dp" android:includeFontPadding="false"/>
+          <TextView android:id="@+id/widget_team_3" android:fontFamily="sans-serif-bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3 TOR" android:textColor="#334155" android:textSize="11sp" android:textStyle="bold" android:layout_marginEnd="10dp" android:includeFontPadding="false"/>
+          <TextView android:id="@+id/widget_team_4" android:fontFamily="sans-serif-bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="4 DET" android:textColor="#FFFFFF" android:textSize="11sp" android:textStyle="bold" android:background="@drawable/widget_det_highlight_pill" android:paddingStart="8dp" android:paddingEnd="8dp" android:paddingTop="2.5dp" android:paddingBottom="2.5dp" android:includeFontPadding="false"/>
+        </LinearLayout>
+      </LinearLayout>
+      <FrameLayout android:layout_width="1dp" android:layout_height="match_parent" android:background="#CBD5E1" android:layout_marginStart="10dp" android:layout_marginEnd="10dp" android:layout_marginTop="2dp" android:layout_marginBottom="2dp"/>
+      <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+        <TextView android:id="@+id/widget_hunt_header" android:fontFamily="sans-serif-bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="IN THE HUNT (5-8)" android:textColor="#1E293B" android:textSize="9sp" android:textStyle="bold" android:letterSpacing="0.04" android:gravity="center" android:layout_marginBottom="4dp" android:includeFontPadding="false"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center">
+          <TextView android:id="@+id/widget_team_5" android:fontFamily="sans-serif-bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="5 TBL" android:textColor="#334155" android:textSize="11sp" android:textStyle="bold" android:layout_marginEnd="10dp" android:includeFontPadding="false"/>
+          <TextView android:id="@+id/widget_team_6" android:fontFamily="sans-serif-bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="6 OTT" android:textColor="#334155" android:textSize="11sp" android:textStyle="bold" android:layout_marginEnd="10dp" android:includeFontPadding="false"/>
+          <TextView android:id="@+id/widget_team_7" android:fontFamily="sans-serif-bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="7 BUF" android:textColor="#334155" android:textSize="11sp" android:textStyle="bold" android:layout_marginEnd="10dp" android:includeFontPadding="false"/>
+          <TextView android:id="@+id/widget_team_8" android:fontFamily="sans-serif-bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="8 MTL" android:textColor="#334155" android:textSize="11sp" android:textStyle="bold" android:includeFontPadding="false"/>
+        </LinearLayout>
+      </LinearLayout>
+    </LinearLayout>
+  </LinearLayout>
 </LinearLayout>

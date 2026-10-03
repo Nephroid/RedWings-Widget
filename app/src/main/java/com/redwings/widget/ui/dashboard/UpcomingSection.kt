@@ -64,15 +64,15 @@ private fun BroadcastPill(broadcast: String, palette: JerseyPalette) {
 
 @Composable
 private fun TeamCrest(abbr: String, name: String, isDet: Boolean, size: Dp = 32.dp) {
-    val model = if (isDet) R.drawable.ic_redwings_logo else getTeamLogoUrlFallback(abbr)
-    val fallback = if (isDet) R.drawable.ic_redwings_logo else R.drawable.ic_puck_vector
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current).data(model).crossfade(true).build(),
-        placeholder = painterResource(fallback),
-        error = painterResource(fallback),
-        contentDescription = name,
-        modifier = Modifier.size(size)
-    )
+    if (isDet) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current).data(R.drawable.ic_redwings_logo).crossfade(true).build(),
+            contentDescription = name,
+            modifier = Modifier.size(size)
+        )
+    } else {
+        TeamLogo(abbrev = abbr, size = size)
+    }
 }
 
 /**
@@ -86,11 +86,7 @@ fun UpcomingCard(game: NextGameUi, modifier: Modifier = Modifier) {
     val matchup = if (game.isHome) "DET vs ${game.opponentAbbrev}" else "DET @ ${game.opponentAbbrev}"
     val venue = if (game.isHome) "Little Caesars Arena" else game.venue.ifBlank { "Away" }
 
-    Card(
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = palette.cardSurface),
-        border = BorderStroke(1.5.dp, palette.cardBorder),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+    FrostedGlassCard(
         modifier = modifier.width(172.dp)
     ) {
         Column(

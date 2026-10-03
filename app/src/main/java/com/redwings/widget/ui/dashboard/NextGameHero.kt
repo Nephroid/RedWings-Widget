@@ -41,7 +41,7 @@ import java.util.Locale
  */
 @Composable
 fun NextGameHero(
-    countdown: CountdownState,
+    countdownProvider: () -> CountdownState,
     game: NextGameUi?,
     modifier: Modifier = Modifier,
     tileWidth: Dp = 66.dp,
@@ -70,15 +70,11 @@ fun NextGameHero(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.TopCenter
         ) {
-            Card(
-                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
-                shape = RoundedCornerShape(22.dp),
-                colors = CardDefaults.cardColors(containerColor = palette.cardSurface),
-                border = BorderStroke(1.5.dp, palette.cardBorder),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            FrostedGlassCard(
+                modifier = Modifier.fillMaxWidth().padding(top = 10.dp)
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 18.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -92,17 +88,7 @@ fun NextGameHero(
                             ),
                             textAlign = TextAlign.Center
                         )
-                        if (countdown.isLive) {
-                            LivePulseBadge(palette = palette)
-                        } else {
-                            Text(
-                                text = formatTimer(countdown),
-                                style = MaterialTheme.typography.displaySmall.copy(
-                                    fontWeight = FontWeight.Black, letterSpacing = 1.5.sp, fontSize = 28.sp, color = palette.accentRed
-                                ),
-                                textAlign = TextAlign.Center
-                            )
-                        }
+                        CountdownClock(countdownProvider = countdownProvider)
                     }
 
                     TeamCol(abbr = homeAbbr, name = homeName, isHome = true, record = homeRecord, isDet = homeAbbr == "DET", palette = palette)
@@ -119,20 +105,10 @@ fun NextGameHero(
                     Text("@", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Black, fontSize = 13.sp, color = Color.White))
                 }
             }
-        }
-
-        Spacer(Modifier.height(8.dp))
-
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            color = palette.cardSurface,
-            border = BorderStroke(1.dp, palette.cardBorder),
-            shadowElevation = 1.dp
-        ) {
-            Text(
-                text = venueText,
-                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold, fontSize = 11.sp, color = palette.secondaryText),
-                modifier = Modifier.padding(horizontal = 14.dp, vertical = 5.dp)
+            
+            AnchoredArenaCapsule(
+                arenaName = venueText,
+                modifier = Modifier.align(Alignment.BottomCenter).offset(y = 12.dp)
             )
         }
     }
@@ -160,12 +136,9 @@ private fun Crest(abbr: String, isDet: Boolean, name: String) {
             modifier = Modifier.size(42.dp)
         )
     } else {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current).data(getTeamLogoUrlFallback(abbr)).crossfade(true).build(),
-            placeholder = painterResource(R.drawable.ic_puck_vector),
-            error = painterResource(R.drawable.ic_puck_vector),
-            contentDescription = "$name logo",
-            modifier = Modifier.size(40.dp)
+        TeamLogo(
+            abbrev = abbr,
+            size = 40.dp
         )
     }
 }
@@ -175,40 +148,4 @@ private fun formatHeroDate(millis: Long): String {
     return SimpleDateFormat("EEEE • h:mm a", Locale.US).format(Date(millis))
 }
 
-private fun formatTimer(countdown: CountdownState): String {
-    val h = if (countdown.days > 0 || countdown.hours > 0) countdown.hours else 2L
-    val m = if (countdown.days > 0 || countdown.hours > 0 || countdown.minutes > 0) countdown.minutes else 14L
-    val s = if (countdown.days > 0 || countdown.hours > 0 || countdown.minutes > 0 || countdown.seconds > 0) countdown.seconds else 22L
-    return if (countdown.days > 0) {
-        String.format(Locale.US, "%dd %02dh %02dm", countdown.days, countdown.hours, countdown.minutes)
-    } else {
-        String.format(Locale.US, "%02d : %02d : %02d", h, m, s)
-    }
-}
 
-@Composable
-private fun LivePulseBadge(palette: JerseyPalette) {
-    val transition = rememberInfiniteTransition(label = "pulse")
-    val alpha by transition.animateFloat(
-        initialValue = 0.4f, targetValue = 1f,
-        animationSpec = infiniteRepeatable(animation = tween(800), repeatMode = RepeatMode.Reverse), label = "alpha"
-    )
-    Surface(
-        shape = RoundedCornerShape(12.dp),
-        color = palette.accentRed.copy(alpha = 0.15f),
-        border = BorderStroke(1.dp, palette.accentRed),
-        modifier = Modifier.padding(vertical = 4.dp)
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(palette.accentRed.copy(alpha = alpha)))
-            Text("PUCK DROP LIVE", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold, fontSize = 11.sp, color = palette.accentRed))
-        }
-    }
-}
-
-@Composable
-fun FlipClockDigitBox(value: Long, unit: String, width: Dp = 66.dp) {}

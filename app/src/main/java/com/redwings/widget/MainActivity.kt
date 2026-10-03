@@ -47,9 +47,11 @@ class MainActivity : ComponentActivity() {
                 RedWingsWidgetProvider.triggerUpdate(this@MainActivity)
             }
 
-            com.redwings.widget.ui.theme.FrostedIceTheme {
-                com.redwings.widget.ui.screens.RedWingsHomeScreen(
-                    viewModel = viewModel
+            com.redwings.widget.ui.theme.RedWingsTheme(jersey = activeJersey) {
+                com.redwings.widget.ui.GameDashboard(
+                    viewModel = viewModel,
+                    activeJersey = activeJersey,
+                    onJerseyThemeToggle = ::toggleJersey
                 )
             }
         }

@@ -37,7 +37,7 @@ import com.redwings.widget.ui.theme.WingsRed
 @Composable
 fun SinglePaneDashboard(
     scheduleState: ScheduleUiState,
-    countdown: CountdownState,
+    countdownProvider: () -> CountdownState,
     isRefreshing: Boolean,
     errorMessage: String?,
     onRefresh: () -> Unit,
@@ -107,7 +107,7 @@ fun SinglePaneDashboard(
             item {
                 Box(modifier = Modifier.padding(horizontal = 16.dp)) {
                     NextGameHero(
-                        countdown = countdown,
+                        countdownProvider = countdownProvider,
                         game = data?.nextGame,
                         tileWidth = 68.dp,
                         showFlankingBadges = false
