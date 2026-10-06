@@ -10,7 +10,7 @@ import coil.imageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.redwings.widget.R
-import com.redwings.widget.data.model.getTeamLogoUrlFallback
+import com.redwings.widget.data.model.getTeamLogoUrl
 import kotlinx.coroutines.withTimeoutOrNull
 import java.util.concurrent.TimeUnit
 
@@ -96,13 +96,7 @@ object WidgetBinder {
             Regex("(\\d+st ATL|\\d+nd ATL|\\d+rd ATL|\\d+th ATL)").find(standing)?.value ?: ""
         } else ""
 
-        val contextLine = if (theme == WidgetTheme.HOME) {
-            venue
-        } else {
-            listOf(venue, homeAway, cleanStanding, chase)
-                .filter { it.isNotBlank() }
-                .joinToString(" • ")
-        }
+        val contextLine = venue
         views.setTextViewText(R.id.widget_standing_h2h, contextLine)
 
         val detRecord = prefs.getString("team_record_DET", null)
@@ -122,8 +116,8 @@ object WidgetBinder {
         views.setTextViewText(R.id.widget_home_record, homeRec)
 
         // Away logo left, home logo right (ESPN PNGs need no SVG decoder).
-        val oppBitmap = loadLogoBitmap(context, getTeamLogoUrlFallback(game.opponentAbbrev))
-        val detBitmap = loadLogoBitmap(context, getTeamLogoUrlFallback(DET_ABBR))
+        val oppBitmap = loadLogoBitmap(context, getTeamLogoUrl(game.opponentAbbrev))
+        val detBitmap = loadLogoBitmap(context, getTeamLogoUrl(DET_ABBR))
         val (awayBmp, awayFallback) = if (game.isHomeGame) {
             oppBitmap to R.drawable.ic_puck_vector
         } else {
@@ -155,15 +149,7 @@ object WidgetBinder {
         views.setTextViewText(R.id.widget_home_record, detRecord)
         views.setTextViewText(R.id.widget_opponent, "NO UPCOMING GAMES")
         views.setTextViewText(R.id.widget_countdown, "-- : --")
-        val standing = prefs.getString("standings_summary", "") ?: ""
-        val contextLine = if (theme == WidgetTheme.HOME) {
-            "Little Caesars Arena"
-        } else if (standing.isNotBlank()) {
-            "Little Caesars Arena • $standing"
-        } else {
-            "Little Caesars Arena"
-        }
-        views.setTextViewText(R.id.widget_standing_h2h, contextLine)
+        views.setTextViewText(R.id.widget_standing_h2h, "Little Caesars Arena")
 
         val rawAtlantic = prefs.getString("atlantic_standings", null)
         val rows = if (!rawAtlantic.isNullOrBlank()) {
@@ -192,15 +178,10 @@ object WidgetBinder {
             if (isDet) {
                 views.setTextViewText(id, "$num $teamAbbr")
                 views.setTextColor(id, detColor)
-                if (theme == WidgetTheme.HOME) {
-                    views.setInt(id, "setBackgroundResource", R.drawable.widget_det_highlight_pill)
-                    val padH = (6 * context.resources.displayMetrics.density).toInt()
-                    val padV = (2 * context.resources.displayMetrics.density).toInt()
-                    views.setViewPadding(id, padH, padV, padH, padV)
-                } else {
-                    views.setInt(id, "setBackgroundResource", android.R.color.transparent)
-                    views.setViewPadding(id, 0, 0, 0, 0)
-                }
+                views.setInt(id, "setBackgroundResource", theme.detHighlightPillRes)
+                val padH = (6 * context.resources.displayMetrics.density).toInt()
+                val padV = (2 * context.resources.displayMetrics.density).toInt()
+                views.setViewPadding(id, padH, padV, padH, padV)
             } else if (teamAbbr != "--") {
                 val seedHex = String.format("#%06X", 0xFFFFFF and subColor)
                 val teamHex = String.format("#%06X", 0xFFFFFF and teamColor)
@@ -233,7 +214,7 @@ object WidgetBinder {
 
     private suspend fun loadLogoBitmap(context: Context, url: String): Bitmap? {
         logoBitmapLoader?.let { return it(context, url) }
-        return withTimeoutOrNull(2000L) {
+        return withTimeoutOrNull(4000L) {
             try {
                 val result = context.imageLoader.execute(
                     ImageRequest.Builder(context).data(url).allowHardware(false).build()

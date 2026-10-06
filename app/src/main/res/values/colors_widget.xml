@@ -6,15 +6,15 @@
     <color name="redwings_black">#000000</color>
     <color name="ic_launcher_background">#F5F1E6</color>
 
-    <!-- 1. Heritage 1926 (paper cream / vintage red / ink) - Kept 100% as requested -->
+    <!-- 1. Heritage 1926 (paper cream / vintage red / ink) -->
     <color name="widget_heritage_title">#1A1210</color>
     <color name="widget_heritage_countdown">#CE1126</color>
     <color name="widget_heritage_opponent">#1A1210</color>
     <color name="widget_heritage_divider">#CE1126</color>
-    <color name="widget_heritage_sub">#1A1210</color>
+    <color name="widget_heritage_sub">#5A4A45</color>
     <color name="widget_heritage_standing">#1A1210</color>
-    <color name="widget_heritage_team">#5A4A33</color>
-    <color name="widget_heritage_team_det">#CE1126</color>
+    <color name="widget_heritage_team">#1A1210</color>
+    <color name="widget_heritage_team_det">#F7F3EA</color>
     <color name="widget_heritage_wcgb">#CE1126</color>
     <color name="widget_heritage_tag_text">#F7F3EA</color>
 
@@ -23,46 +23,46 @@
     <color name="widget_home_countdown">#C8102E</color>
     <color name="widget_home_opponent">#0F172A</color>
     <color name="widget_home_divider">#FFFFFF</color>
-    <color name="widget_home_sub">#8A99AD</color>
+    <color name="widget_home_sub">#334155</color>
     <color name="widget_home_standing">#1E293B</color>
     <color name="widget_home_team">#0F172A</color>
     <color name="widget_home_team_det">#FFFFFF</color>
     <color name="widget_home_wcgb">#C8102E</color>
     <color name="widget_home_tag_text">#FFFFFF</color>
 
-    <!-- 3. Away (Official White Road Sweater) - Deep obsidian ink on ice white -->
-    <color name="widget_away_title">#111111</color>
-    <color name="widget_away_countdown">#CE1126</color>
-    <color name="widget_away_opponent">#111111</color>
-    <color name="widget_away_divider">#CE1126</color>
-    <color name="widget_away_sub">#2E2E2E</color>
-    <color name="widget_away_standing">#CE1126</color>
-    <color name="widget_away_team">#3D3D3D</color>
-    <color name="widget_away_team_det">#CE1126</color>
-    <color name="widget_away_wcgb">#B71C1C</color>
+    <!-- 3. Away (Official White Road Sweater) - Red ribbon header, deep obsidian ink on ice white -->
+    <color name="widget_away_title">#FFFFFF</color>
+    <color name="widget_away_countdown">#C8102E</color>
+    <color name="widget_away_opponent">#0F172A</color>
+    <color name="widget_away_divider">#C8102E</color>
+    <color name="widget_away_sub">#475569</color>
+    <color name="widget_away_standing">#0F172A</color>
+    <color name="widget_away_team">#0F172A</color>
+    <color name="widget_away_team_det">#FFFFFF</color>
+    <color name="widget_away_wcgb">#C8102E</color>
     <color name="widget_away_tag_text">#FFFFFF</color>
 
-    <!-- 4. Reverse Retro 2.0 (Matte Black Sweater) - Ultra-high contrast pure white text -->
+    <!-- 4. Reverse Retro 2.0 (Matte Black Sweater) - Ultra-high contrast pure white text on dark cards -->
     <color name="widget_retro_title">#FFFFFF</color>
-    <color name="widget_retro_countdown">#FFFFFF</color>
+    <color name="widget_retro_countdown">#FF3B30</color>
     <color name="widget_retro_opponent">#FFFFFF</color>
     <color name="widget_retro_divider">#FF3B30</color>
-    <color name="widget_retro_sub">#E4E4E7</color>
-    <color name="widget_retro_standing">#FFD54F</color>
-    <color name="widget_retro_team">#D4D4D8</color>
-    <color name="widget_retro_team_det">#FFD54F</color>
+    <color name="widget_retro_sub">#A1A1AA</color>
+    <color name="widget_retro_standing">#E4E4E7</color>
+    <color name="widget_retro_team">#FFFFFF</color>
+    <color name="widget_retro_team_det">#FFFFFF</color>
     <color name="widget_retro_wcgb">#FF6B60</color>
     <color name="widget_retro_tag_text">#FFFFFF</color>
 
     <!-- 5. Stadium Series (Special Alternate) - Modern brushed slate with silver & red -->
     <color name="widget_stadium_title">#FFFFFF</color>
-    <color name="widget_stadium_countdown">#FFFFFF</color>
+    <color name="widget_stadium_countdown">#FF2D20</color>
     <color name="widget_stadium_opponent">#FFFFFF</color>
     <color name="widget_stadium_divider">#FF2D20</color>
-    <color name="widget_stadium_sub">#D4D8E0</color>
-    <color name="widget_stadium_standing">#FFD54F</color>
-    <color name="widget_stadium_team">#C8CCD4</color>
-    <color name="widget_stadium_team_det">#FFD54F</color>
+    <color name="widget_stadium_sub">#CBD5E1</color>
+    <color name="widget_stadium_standing">#E2E8F0</color>
+    <color name="widget_stadium_team">#FFFFFF</color>
+    <color name="widget_stadium_team_det">#FFFFFF</color>
     <color name="widget_stadium_wcgb">#FF8080</color>
     <color name="widget_stadium_tag_text">#FFFFFF</color>
 

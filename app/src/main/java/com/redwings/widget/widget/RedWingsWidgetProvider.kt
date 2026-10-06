@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import com.redwings.widget.MainActivity
 import com.redwings.widget.R
 import com.redwings.widget.data.local.AppDatabase
+import com.redwings.widget.data.repository.HockeyRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -83,7 +84,17 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
             val theme = WidgetTheme.fromIndex(prefs.getInt(KEY_THEME, WidgetTheme.HOME.id))
 
             val game = try {
-                AppDatabase.getDatabase(context).gameDao().getNextGame()?.let {
+                val dao = AppDatabase.getDatabase(context).gameDao()
+                var nextGame = dao.getNextGame()
+                if (nextGame == null) {
+                    try {
+                        HockeyRepository(dao, context).refreshGames(context)
+                        nextGame = dao.getNextGame()
+                    } catch (e: Exception) {
+                        Log.w(TAG, "initial refresh failed: ${e.message}")
+                    }
+                }
+                nextGame?.let {
                     val detRecord = prefs.getString("team_record_DET", null)
                         ?: prefs.getString("wings_summary", null)?.substringBefore(" •")
                         ?: ""
@@ -173,15 +184,10 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
             if (isDet) {
                 views.setTextViewText(id, "$seedNum $abbr")
                 views.setTextColor(id, detColor)
-                val bg = if (theme == WidgetTheme.HOME) R.drawable.widget_det_highlight_pill else android.R.color.transparent
-                views.setInt(id, "setBackgroundResource", bg)
-                if (theme == WidgetTheme.HOME) {
-                    val padH = (6 * context.resources.displayMetrics.density).toInt()
-                    val padV = (2 * context.resources.displayMetrics.density).toInt()
-                    views.setViewPadding(id, padH, padV, padH, padV)
-                } else {
-                    views.setViewPadding(id, 0, 0, 0, 0)
-                }
+                views.setInt(id, "setBackgroundResource", theme.detHighlightPillRes)
+                val padH = (6 * context.resources.displayMetrics.density).toInt()
+                val padV = (2 * context.resources.displayMetrics.density).toInt()
+                views.setViewPadding(id, padH, padV, padH, padV)
             } else if (abbr == "--" || abbr.isEmpty()) {
                 views.setTextViewText(id, "$seedNum --")
                 views.setTextColor(id, teamColor)
@@ -208,8 +214,17 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         views.setInt(R.id.widget_root, "setBackgroundResource", theme.bgDrawableRes)
         views.setInt(R.id.widget_tag, "setBackgroundResource", theme.tagDrawableRes)
         views.setInt(R.id.widget_theme_toggle, "setBackgroundResource", theme.tagDrawableRes)
-        views.setInt(R.id.widget_header_layout, "setBackgroundResource",
-            if (theme == WidgetTheme.HOME) R.drawable.widget_header_ribbon else 0)
+        views.setInt(R.id.widget_header_layout, "setBackgroundResource", theme.headerDrawableRes)
+        views.setInt(R.id.widget_matchup_layout, "setBackgroundResource", theme.matchupCardDrawableRes)
+        views.setInt(R.id.widget_standings_table, "setBackgroundResource", theme.standingsCardDrawableRes)
+        views.setInt(R.id.widget_info_card, "setBackgroundResource", theme.venuePillDrawableRes)
+
+        val stripeColor = ContextCompat.getColor(context, theme.stripeColorRes)
+        views.setInt(R.id.widget_header_stripe_l1, "setBackgroundColor", stripeColor)
+        views.setInt(R.id.widget_header_stripe_l2, "setBackgroundColor", stripeColor)
+        views.setInt(R.id.widget_header_stripe_r1, "setBackgroundColor", stripeColor)
+        views.setInt(R.id.widget_header_stripe_r2, "setBackgroundColor", stripeColor)
+
         views.setInt(R.id.widget_divider_top, "setBackgroundColor",
             ContextCompat.getColor(context, theme.dividerColorRes))
         views.setTextColor(R.id.widget_title, ContextCompat.getColor(context, theme.titleColorRes))
@@ -221,7 +236,13 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         views.setTextColor(R.id.widget_theme_toggle, ContextCompat.getColor(context, theme.tagTextColorRes))
         views.setTextColor(R.id.widget_away_name, ContextCompat.getColor(context, theme.opponentColorRes))
         views.setTextColor(R.id.widget_home_name, ContextCompat.getColor(context, theme.opponentColorRes))
-        views.setTextColor(R.id.widget_matchup_badge, ContextCompat.getColor(context, theme.dividerColorRes))
+        views.setTextColor(R.id.widget_away_tag, ContextCompat.getColor(context, theme.subColorRes))
+        views.setTextColor(R.id.widget_home_tag, ContextCompat.getColor(context, theme.subColorRes))
+        views.setTextColor(R.id.widget_away_record, ContextCompat.getColor(context, theme.subColorRes))
+        views.setTextColor(R.id.widget_home_record, ContextCompat.getColor(context, theme.subColorRes))
+        views.setTextColor(R.id.widget_seeds_header, ContextCompat.getColor(context, theme.standingColorRes))
+        views.setTextColor(R.id.widget_hunt_header, ContextCompat.getColor(context, theme.standingColorRes))
+        views.setTextColor(R.id.widget_matchup_badge, ContextCompat.getColor(context, theme.matchupBadgeTextColorRes))
     }
 
     internal fun applyResponsiveLayout(context: Context, views: RemoteViews, minW: Int, minH: Int) {

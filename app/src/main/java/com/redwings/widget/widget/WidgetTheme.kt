@@ -27,7 +27,14 @@ enum class WidgetTheme(
     val teamColorRes: Int,
     val teamDetRes: Int,
     val wcgbColorRes: Int,
-    val tagTextColorRes: Int
+    val tagTextColorRes: Int,
+    val headerDrawableRes: Int = R.drawable.widget_header_ribbon,
+    val matchupCardDrawableRes: Int = R.drawable.widget_matchup_frosted_bg,
+    val standingsCardDrawableRes: Int = R.drawable.widget_standings_frosted_bg,
+    val venuePillDrawableRes: Int = R.drawable.widget_venue_pill,
+    val detHighlightPillRes: Int = R.drawable.widget_det_highlight_pill,
+    val matchupBadgeTextColorRes: Int = R.color.redwings_white,
+    val stripeColorRes: Int = R.color.redwings_white
 ) {
     HERITAGE(
         id = 0, displayName = "Heritage 1926", buttonLabel = "🏛️ HERITAGE",
@@ -44,7 +51,14 @@ enum class WidgetTheme(
         teamColorRes = R.color.widget_heritage_team,
         teamDetRes = R.color.widget_heritage_team_det,
         wcgbColorRes = R.color.widget_heritage_wcgb,
-        tagTextColorRes = R.color.widget_heritage_tag_text
+        tagTextColorRes = R.color.widget_heritage_tag_text,
+        headerDrawableRes = R.drawable.widget_header_heritage,
+        matchupCardDrawableRes = R.drawable.widget_matchup_heritage_bg,
+        standingsCardDrawableRes = R.drawable.widget_standings_heritage_bg,
+        venuePillDrawableRes = R.drawable.widget_venue_pill_heritage,
+        detHighlightPillRes = R.drawable.widget_det_highlight_heritage,
+        matchupBadgeTextColorRes = R.color.redwings_white,
+        stripeColorRes = R.color.widget_heritage_title
     ),
     HOME(
         id = 1, displayName = "Home Red", buttonLabel = "🔴 HOME",
@@ -61,7 +75,14 @@ enum class WidgetTheme(
         teamColorRes = R.color.widget_home_team,
         teamDetRes = R.color.widget_home_team_det,
         wcgbColorRes = R.color.widget_home_wcgb,
-        tagTextColorRes = R.color.widget_home_tag_text
+        tagTextColorRes = R.color.widget_home_tag_text,
+        headerDrawableRes = R.drawable.widget_header_ribbon,
+        matchupCardDrawableRes = R.drawable.widget_matchup_frosted_bg,
+        standingsCardDrawableRes = R.drawable.widget_standings_frosted_bg,
+        venuePillDrawableRes = R.drawable.widget_venue_pill,
+        detHighlightPillRes = R.drawable.widget_det_highlight_pill,
+        matchupBadgeTextColorRes = R.color.redwings_white,
+        stripeColorRes = R.color.redwings_white
     ),
     AWAY(
         id = 2, displayName = "Away White", buttonLabel = "⚪ AWAY",
@@ -78,7 +99,14 @@ enum class WidgetTheme(
         teamColorRes = R.color.widget_away_team,
         teamDetRes = R.color.widget_away_team_det,
         wcgbColorRes = R.color.widget_away_wcgb,
-        tagTextColorRes = R.color.widget_away_tag_text
+        tagTextColorRes = R.color.widget_away_tag_text,
+        headerDrawableRes = R.drawable.widget_header_ribbon,
+        matchupCardDrawableRes = R.drawable.widget_matchup_away_bg,
+        standingsCardDrawableRes = R.drawable.widget_standings_away_bg,
+        venuePillDrawableRes = R.drawable.widget_venue_pill_away,
+        detHighlightPillRes = R.drawable.widget_det_highlight_pill,
+        matchupBadgeTextColorRes = R.color.redwings_white,
+        stripeColorRes = R.color.redwings_white
     ),
     REVERSE_RETRO(
         id = 3, displayName = "Reverse Retro", buttonLabel = "⚫ RETRO",
@@ -95,7 +123,14 @@ enum class WidgetTheme(
         teamColorRes = R.color.widget_retro_team,
         teamDetRes = R.color.widget_retro_team_det,
         wcgbColorRes = R.color.widget_retro_wcgb,
-        tagTextColorRes = R.color.widget_retro_tag_text
+        tagTextColorRes = R.color.widget_retro_tag_text,
+        headerDrawableRes = R.drawable.widget_header_ribbon,
+        matchupCardDrawableRes = R.drawable.widget_matchup_dark_bg,
+        standingsCardDrawableRes = R.drawable.widget_standings_dark_bg,
+        venuePillDrawableRes = R.drawable.widget_venue_pill_dark,
+        detHighlightPillRes = R.drawable.widget_det_highlight_pill,
+        matchupBadgeTextColorRes = R.color.redwings_white,
+        stripeColorRes = R.color.redwings_white
     ),
     STADIUM_SERIES(
         id = 4, displayName = "Stadium Series", buttonLabel = "⭐ SPECIAL",
@@ -112,7 +147,14 @@ enum class WidgetTheme(
         teamColorRes = R.color.widget_stadium_team,
         teamDetRes = R.color.widget_stadium_team_det,
         wcgbColorRes = R.color.widget_stadium_wcgb,
-        tagTextColorRes = R.color.widget_stadium_tag_text
+        tagTextColorRes = R.color.widget_stadium_tag_text,
+        headerDrawableRes = R.drawable.widget_header_ribbon,
+        matchupCardDrawableRes = R.drawable.widget_matchup_dark_bg,
+        standingsCardDrawableRes = R.drawable.widget_standings_dark_bg,
+        venuePillDrawableRes = R.drawable.widget_venue_pill_dark,
+        detHighlightPillRes = R.drawable.widget_det_highlight_pill,
+        matchupBadgeTextColorRes = R.color.redwings_white,
+        stripeColorRes = R.color.redwings_white
     );
 
     companion object {

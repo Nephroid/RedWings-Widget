@@ -1,7 +1,7 @@
 {
   "name": "Red Wings Widget",
-  "version": "26.9.29.8",
-  "versionCode": 26092908,
+  "version": "26.10.06.02",
+  "versionCode": 26100602,
   "description": "Detroit Red Wings NHL schedule widget + companion app: next-game countdown, last result, and division standings.",
   "changelog": [
     "Strictly locked widget to 4x2 cell size with resizing completely disabled (android:resizeMode=none).",

@@ -146,7 +146,7 @@ class RedWingsWidgetProviderTest {
         assertEquals(ContextCompat.getColor(context, theme.tagTextColorRes), root.findViewById<TextView>(R.id.widget_theme_toggle).currentTextColor)
         assertEquals(ContextCompat.getColor(context, theme.opponentColorRes), root.findViewById<TextView>(R.id.widget_away_name).currentTextColor)
         assertEquals(ContextCompat.getColor(context, theme.opponentColorRes), root.findViewById<TextView>(R.id.widget_home_name).currentTextColor)
-        assertEquals(ContextCompat.getColor(context, theme.dividerColorRes), root.findViewById<TextView>(R.id.widget_matchup_badge).currentTextColor)
+        assertEquals(ContextCompat.getColor(context, theme.matchupBadgeTextColorRes), root.findViewById<TextView>(R.id.widget_matchup_badge).currentTextColor)
 
         val dividerBg = root.findViewById<View>(R.id.widget_divider_top).background as? ColorDrawable
         assertNotNull(dividerBg)
