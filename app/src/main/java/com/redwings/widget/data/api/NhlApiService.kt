@@ -22,4 +22,10 @@ interface NhlApiService {
 
     @GET("v1/standings/now")
     suspend fun getStandingsNow(): NhlStandingsResponse
+
+    @GET("v1/gamecenter/{gameId}/landing")
+    suspend fun getGameLanding(
+        @Path("gameId") gameId: Int
+    ): NhlGameLandingResponse
 }
+

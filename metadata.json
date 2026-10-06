@@ -1,9 +1,10 @@
 {
   "name": "Red Wings Widget",
-  "version": "26.10.06.02",
-  "versionCode": 26100602,
+  "version": "26.10.06.03",
+  "versionCode": 26100603,
   "description": "Detroit Red Wings NHL schedule widget + companion app: next-game countdown, last result, and division standings.",
   "changelog": [
+    "Under Last Result in the Compose companion application, display the 3 Players of the Game (Three Stars) with official NHL CDN headshot photos, player names, star indicators, and game stat lines.",
     "Strictly locked widget to 4x2 cell size with resizing completely disabled (android:resizeMode=none).",
     "Tailored pixel-perfect Concept 2 Frosted Ice mockup duplication for Google Pixel 10 Fold dual screens.",
     "Outer cover display 4x2 (~330x140 dp) features seamless Home Red sweater header with dual racing stripes, circular crest badge, floating crimson @ puck badge, frosted matchup card with Away & Home records, floating Little Caesars Arena venue pill, and Playoff Seeds (with glowing red Detroit pill) + In The Hunt standings.",

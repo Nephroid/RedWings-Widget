@@ -142,7 +142,8 @@ fun DualPaneDashboard(
                             oppScore = 2,
                             isWinner = true,
                             isHome = true,
-                            dateLabel = "Tue, Sep 30"
+                            dateLabel = "Tue, Sep 30",
+                            threeStars = com.redwings.widget.data.model.defaultThreeStars()
                         ),
                         showFormGuide = true
                     )

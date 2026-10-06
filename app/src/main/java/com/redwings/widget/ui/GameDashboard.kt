@@ -40,6 +40,13 @@ fun LastResultCard(
 ) = com.redwings.widget.ui.dashboard.LastResultCard(lastGame = lastGame, modifier = modifier)
 
 @Composable
+fun ThreeStarsSection(
+    stars: List<com.redwings.widget.data.model.GameStarUi>,
+    modifier: Modifier = Modifier
+) = com.redwings.widget.ui.dashboard.ThreeStarsSection(stars = stars, modifier = modifier)
+
+
+@Composable
 fun StandingsCard(
     standings: List<StandingsRowUi>,
     playoffChaseText: String = "",

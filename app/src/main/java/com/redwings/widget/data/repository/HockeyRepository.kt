@@ -6,11 +6,15 @@ import com.redwings.widget.data.api.NhlApiClient
 import com.redwings.widget.data.api.NhlApiService
 import com.redwings.widget.data.api.NhlGame
 import com.redwings.widget.data.local.GameDao
+import com.redwings.widget.data.model.GameStarUi
 import com.redwings.widget.data.model.LastGame
 import com.redwings.widget.data.model.RedWingsGame
 import com.redwings.widget.data.model.UpcomingGame
+import com.redwings.widget.data.model.defaultThreeStars
 import com.redwings.widget.data.model.teamDisplayName
+import com.redwings.widget.data.model.toUi
 import com.redwings.widget.data.model.toUpcoming
+import com.squareup.moshi.Types
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -36,6 +40,12 @@ class HockeyRepository(
 
     private val apiService: NhlApiService = NhlApiClient.apiService
 
+    private val starsAdapter by lazy {
+        NhlApiClient.moshi.adapter<List<GameStarUi>>(
+            Types.newParameterizedType(List::class.java, GameStarUi::class.java)
+        )
+    }
+
     companion object {
         const val PREFS = "RedWingsPrefs"
     }
@@ -57,6 +67,16 @@ class HockeyRepository(
         }
         val wings = p.getInt("last_game_wings_score", 4)
         val opp = p.getInt("last_game_opponent_score", 2)
+        val starsJson = p.getString("last_game_three_stars", null)
+        val stars = if (!starsJson.isNullOrBlank()) {
+            try {
+                starsAdapter.fromJson(starsJson)?.takeIf { it.isNotEmpty() } ?: defaultThreeStars()
+            } catch (_: Exception) {
+                defaultThreeStars()
+            }
+        } else {
+            defaultThreeStars()
+        }
         return LastGame(
             opponent = p.getString("last_game_opponent", "Boston Bruins") ?: "Boston Bruins",
             opponentAbbrev = p.getString("last_game_abbrev", "BOS") ?: "BOS",
@@ -64,7 +84,8 @@ class HockeyRepository(
             oppScore = opp,
             isWinner = p.getBoolean("last_game_is_winner", wings > opp),
             isHome = p.getBoolean("last_game_is_home", true),
-            dateLabel = p.getString("last_game_date", "Tue, Sep 30") ?: "Tue, Sep 30"
+            dateLabel = p.getString("last_game_date", "Tue, Sep 30") ?: "Tue, Sep 30",
+            threeStars = stars
         )
     }
 
@@ -216,14 +237,41 @@ class HockeyRepository(
         )
     }
 
-    private fun saveLastGamePrefs(prefs: android.content.SharedPreferences, game: NhlGame) {
+    private suspend fun saveLastGamePrefs(prefs: android.content.SharedPreferences, game: NhlGame) {
         val isHome = game.homeTeam?.abbrev == "DET"
         val opp = if (isHome) game.awayTeam else game.homeTeam
         val oppAbbrev = opp?.abbrev ?: "OPP"
         val wingsScore = (if (isHome) game.homeTeam?.score else game.awayTeam?.score) ?: 0
         val oppScore = (if (isHome) game.awayTeam?.score else game.homeTeam?.score) ?: 0
         val dateFmt = SimpleDateFormat("EEE, MMM d", Locale.US)
-        prefs.edit()
+
+        val previousGameId = prefs.getInt("last_game_id", -1)
+        val existingStarsJson = prefs.getString("last_game_three_stars", null)
+        val isStarsAlreadyCached = (previousGameId == game.id) &&
+            !existingStarsJson.isNullOrBlank() &&
+            prefs.getBoolean("last_game_stars_from_api", false)
+
+        val fetchedStars = if (isStarsAlreadyCached) {
+            null
+        } else {
+            try {
+                val landing = apiService.getGameLanding(game.id)
+                landing.summary?.threeStars?.map { it.toUi() }?.takeIf { it.isNotEmpty() }
+            } catch (e: Exception) {
+                Log.w("HockeyRepository", "Failed to fetch 3 stars for game ${game.id}: ${e.message}")
+                null
+            }
+        }
+
+        val starsToSave = when {
+            fetchedStars != null -> fetchedStars
+            isStarsAlreadyCached -> null
+            previousGameId == game.id && !existingStarsJson.isNullOrBlank() -> null
+            else -> defaultThreeStars()
+        }
+
+        val editor = prefs.edit()
+            .putInt("last_game_id", game.id)
             .putString("last_game_opponent", teamDisplayName(oppAbbrev))
             .putString("last_game_abbrev", oppAbbrev)
             .putInt("last_game_wings_score", wingsScore)
@@ -232,11 +280,28 @@ class HockeyRepository(
             .putBoolean("last_game_is_winner", wingsScore > oppScore)
             .putString("last_game_date", dateFmt.format(java.util.Date(parseUtcToMillis(game.startTimeUTC ?: game.gameDate))))
             .putString("last_game_status", game.gameState ?: "OFF")
-            .apply()
+
+        if (fetchedStars != null) {
+            editor.putBoolean("last_game_stars_from_api", true)
+        } else if (previousGameId != game.id) {
+            editor.putBoolean("last_game_stars_from_api", false)
+        }
+
+        if (starsToSave != null) {
+            try {
+                editor.putString("last_game_three_stars", starsAdapter.toJson(starsToSave))
+            } catch (e: Exception) {
+                Log.w("HockeyRepository", "Failed to serialize three stars: ${e.message}")
+            }
+        }
+        editor.apply()
     }
 
     private fun saveFallbackLastGame(prefs: android.content.SharedPreferences) {
-        prefs.edit()
+        val fallbackStars = defaultThreeStars()
+        val editor = prefs.edit()
+            .putInt("last_game_id", -1)
+            .putBoolean("last_game_stars_from_api", false)
             .putString("last_game_opponent", "Boston Bruins")
             .putString("last_game_abbrev", "BOS")
             .putInt("last_game_wings_score", 4)
@@ -245,7 +310,13 @@ class HockeyRepository(
             .putBoolean("last_game_is_winner", true)
             .putString("last_game_date", "Tue, Sep 30")
             .putString("last_game_status", "FINAL")
-            .apply()
+
+        try {
+            editor.putString("last_game_three_stars", starsAdapter.toJson(fallbackStars))
+        } catch (e: Exception) {
+            Log.w("HockeyRepository", "Failed to serialize fallback three stars: ${e.message}")
+        }
+        editor.apply()
     }
 
     private suspend fun saveSimulatedGames(context: Context) {

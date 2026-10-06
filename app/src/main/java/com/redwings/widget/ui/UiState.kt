@@ -1,6 +1,7 @@
 package com.redwings.widget.ui
 
 import androidx.compose.runtime.Immutable
+import com.redwings.widget.data.model.GameStarUi
 
 /**
  * UI-layer state for the tight Red Wings schedule app.
@@ -37,7 +38,8 @@ data class LastGameUi(
     val isWinner: Boolean = false,
     val isHome: Boolean = true,
     val dateLabel: String = "",
-    val recapPills: List<String> = emptyList()
+    val recapPills: List<String> = emptyList(),
+    val threeStars: List<GameStarUi> = com.redwings.widget.data.model.defaultThreeStars()
 )
 
 @Immutable

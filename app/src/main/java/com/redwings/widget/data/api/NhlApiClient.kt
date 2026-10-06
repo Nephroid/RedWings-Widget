@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 object NhlApiClient {
     private const val BASE_URL = "https://api-web.nhle.com/"
 
-    private val moshi: Moshi = Moshi.Builder()
+    val moshi: Moshi = Moshi.Builder()
         .addLast(KotlinJsonAdapterFactory())
         .build()
 

@@ -97,3 +97,32 @@ data class TeamAbbrev(
 data class TeamName(
     @Json(name = "default") val default: String? = null
 )
+
+@JsonClass(generateAdapter = true)
+data class NhlGameLandingResponse(
+    val id: Int? = null,
+    val gameState: String? = null,
+    val summary: NhlGameSummary? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class NhlGameSummary(
+    val threeStars: List<NhlThreeStar>? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class NhlThreeStar(
+    val star: Int = 1,
+    val playerId: Int = 0,
+    val teamAbbrev: String? = null,
+    val headshot: String? = null,
+    val name: CommonName? = null,
+    val sweaterNo: Int? = null,
+    val position: String? = null,
+    val goals: Int? = null,
+    val assists: Int? = null,
+    val points: Int? = null,
+    val goalsAgainstAverage: Double? = null,
+    val savePctg: Double? = null
+)
+
