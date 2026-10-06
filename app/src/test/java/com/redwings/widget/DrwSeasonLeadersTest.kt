@@ -96,9 +96,9 @@ class DrwSeasonLeadersTest {
     @Test
     fun moshi_serializesAndDeserializesTeamLeadersUi() {
         val leaders = TeamLeadersUi(
-            topPoints = defaultTopPoints(),
             topGoals = defaultTopGoals(),
-            topAssists = defaultTopAssists()
+            topAssists = defaultTopAssists(),
+            topPoints = defaultTopPoints()
         )
 
         val adapter = NhlApiClient.moshi.adapter(TeamLeadersUi::class.java)
@@ -109,11 +109,11 @@ class DrwSeasonLeadersTest {
 
         val parsed = adapter.fromJson(json)
         assertNotNull(parsed)
-        assertEquals(5, parsed?.topPoints?.size)
         assertEquals(5, parsed?.topGoals?.size)
         assertEquals(5, parsed?.topAssists?.size)
-        assertEquals("Lucas Raymond", parsed?.topPoints?.first()?.name)
-        assertEquals("72 PTS", parsed?.topPoints?.first()?.primaryStat)
+        assertEquals(5, parsed?.topPoints?.size)
+        assertEquals("Dylan Larkin", parsed?.topGoals?.first()?.name)
+        assertEquals("33 G", parsed?.topGoals?.first()?.primaryStat)
     }
 
     @Test
@@ -188,10 +188,6 @@ class DrwSeasonLeadersTest {
     @Test
     fun compose_rendersDrwSeasonLeadersCardAndTogglesCategories() {
         val leaders = TeamLeadersUi(
-            topPoints = listOf(
-                TeamLeaderPlayerUi(1, 8482078, "Lucas Raymond", "RW", 23, "", "72 PTS", "31G, 41A • 82 GP"),
-                TeamLeaderPlayerUi(2, 8477940, "Dylan Larkin", "C", 71, "", "69 PTS", "33G, 36A • 68 GP")
-            ),
             topGoals = listOf(
                 TeamLeaderPlayerUi(1, 8477940, "Dylan Larkin", "C", 71, "", "33 G", "68 GP • 69 PTS"),
                 TeamLeaderPlayerUi(2, 8482078, "Lucas Raymond", "RW", 23, "", "31 G", "82 GP • 72 PTS")
@@ -199,6 +195,10 @@ class DrwSeasonLeadersTest {
             topAssists = listOf(
                 TeamLeaderPlayerUi(1, 8482078, "Lucas Raymond", "RW", 23, "", "41 A", "82 GP • 72 PTS"),
                 TeamLeaderPlayerUi(2, 8479337, "Alex DeBrincat", "RW", 93, "", "40 A", "82 GP • 67 PTS")
+            ),
+            topPoints = listOf(
+                TeamLeaderPlayerUi(1, 8482078, "Lucas Raymond", "RW", 23, "", "72 PTS", "31G, 41A • 82 GP"),
+                TeamLeaderPlayerUi(2, 8477940, "Dylan Larkin", "C", 71, "", "69 PTS", "33G, 36A • 68 GP")
             )
         )
 
@@ -213,12 +213,7 @@ class DrwSeasonLeadersTest {
         composeTestRule.onNodeWithText("DRW SEASON LEADERS").assertIsDisplayed()
         composeTestRule.onNodeWithText("TOP 5").assertIsDisplayed()
 
-        // Default tab is POINTS: Lucas Raymond 72 PTS displayed
-        composeTestRule.onNodeWithText("72 PTS").assertIsDisplayed()
-        composeTestRule.onNodeWithText("31G, 41A • 82 GP").assertIsDisplayed()
-
-        // Toggle to GOALS tab
-        composeTestRule.onNodeWithTag("drw_leaders_tab_goals").performClick()
+        // Default tab is GOALS: Dylan Larkin 33 G displayed
         composeTestRule.onNodeWithText("33 G").assertIsDisplayed()
         composeTestRule.onNodeWithText("68 GP • 69 PTS").assertIsDisplayed()
 
@@ -226,5 +221,10 @@ class DrwSeasonLeadersTest {
         composeTestRule.onNodeWithTag("drw_leaders_tab_assists").performClick()
         composeTestRule.onNodeWithText("41 A").assertIsDisplayed()
         composeTestRule.onNodeWithText("Alex DeBrincat").assertIsDisplayed()
+
+        // Toggle to POINTS tab
+        composeTestRule.onNodeWithTag("drw_leaders_tab_points").performClick()
+        composeTestRule.onNodeWithText("72 PTS").assertIsDisplayed()
+        composeTestRule.onNodeWithText("31G, 41A • 82 GP").assertIsDisplayed()
     }
 }

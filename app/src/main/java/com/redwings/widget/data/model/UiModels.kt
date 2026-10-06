@@ -149,17 +149,9 @@ data class TeamLeaderPlayerUi(
 @Immutable
 @JsonClass(generateAdapter = true)
 data class TeamLeadersUi(
-    val topPoints: List<TeamLeaderPlayerUi> = defaultTopPoints(),
     val topGoals: List<TeamLeaderPlayerUi> = defaultTopGoals(),
-    val topAssists: List<TeamLeaderPlayerUi> = defaultTopAssists()
-)
-
-fun defaultTopPoints(): List<TeamLeaderPlayerUi> = listOf(
-    TeamLeaderPlayerUi(1, 8482078, "Lucas Raymond", "RW", 23, "https://assets.nhle.com/mugs/nhl/latest/8482078.png", "72 PTS", "31G, 41A • 82 GP"),
-    TeamLeaderPlayerUi(2, 8477940, "Dylan Larkin", "C", 71, "https://assets.nhle.com/mugs/nhl/latest/8477940.png", "69 PTS", "33G, 36A • 68 GP"),
-    TeamLeaderPlayerUi(3, 8479337, "Alex DeBrincat", "RW", 93, "https://assets.nhle.com/mugs/nhl/latest/8479337.png", "67 PTS", "27G, 40A • 82 GP"),
-    TeamLeaderPlayerUi(4, 8477456, "J.T. Compher", "C", 37, "https://assets.nhle.com/mugs/nhl/latest/8477456.png", "48 PTS", "19G, 29A • 77 GP"),
-    TeamLeaderPlayerUi(5, 8474141, "Patrick Kane", "RW", 88, "https://assets.nhle.com/mugs/nhl/latest/8474141.png", "47 PTS", "20G, 27A • 50 GP")
+    val topAssists: List<TeamLeaderPlayerUi> = defaultTopAssists(),
+    val topPoints: List<TeamLeaderPlayerUi> = defaultTopPoints()
 )
 
 fun defaultTopGoals(): List<TeamLeaderPlayerUi> = listOf(
@@ -176,6 +168,14 @@ fun defaultTopAssists(): List<TeamLeaderPlayerUi> = listOf(
     TeamLeaderPlayerUi(3, 8477940, "Dylan Larkin", "C", 71, "https://assets.nhle.com/mugs/nhl/latest/8477940.png", "36 A", "68 GP • 69 PTS"),
     TeamLeaderPlayerUi(4, 8481542, "Moritz Seider", "D", 53, "https://assets.nhle.com/mugs/nhl/latest/8481542.png", "33 A", "82 GP • 42 PTS"),
     TeamLeaderPlayerUi(5, 8477456, "J.T. Compher", "C", 37, "https://assets.nhle.com/mugs/nhl/latest/8477456.png", "29 A", "77 GP • 48 PTS")
+)
+
+fun defaultTopPoints(): List<TeamLeaderPlayerUi> = listOf(
+    TeamLeaderPlayerUi(1, 8482078, "Lucas Raymond", "RW", 23, "https://assets.nhle.com/mugs/nhl/latest/8482078.png", "72 PTS", "31G, 41A • 82 GP"),
+    TeamLeaderPlayerUi(2, 8477940, "Dylan Larkin", "C", 71, "https://assets.nhle.com/mugs/nhl/latest/8477940.png", "69 PTS", "33G, 36A • 68 GP"),
+    TeamLeaderPlayerUi(3, 8479337, "Alex DeBrincat", "RW", 93, "https://assets.nhle.com/mugs/nhl/latest/8479337.png", "67 PTS", "27G, 40A • 82 GP"),
+    TeamLeaderPlayerUi(4, 8477456, "J.T. Compher", "C", 37, "https://assets.nhle.com/mugs/nhl/latest/8477456.png", "48 PTS", "19G, 29A • 77 GP"),
+    TeamLeaderPlayerUi(5, 8474141, "Patrick Kane", "RW", 88, "https://assets.nhle.com/mugs/nhl/latest/8474141.png", "47 PTS", "20G, 27A • 50 GP")
 )
 
 

@@ -1,9 +1,10 @@
 {
   "name": "Red Wings Widget",
-  "version": "26.10.06.05",
-  "versionCode": 26100605,
+  "version": "26.10.06.06",
+  "versionCode": 26100606,
   "description": "Detroit Red Wings NHL schedule widget + companion app: next-game countdown, last result, and division standings.",
   "changelog": [
+    "Reorder DRW season stat leaders to Goals, Assists, Points (interactive switcher tabs, default selection, and data models updated).",
     "Underneath the 3 Stars, add standalone Frosted Glass card bubble displaying season stats for the Top 5 Detroit Red Wings in Points, Goals (Scoring), and Assists with interactive segmented switcher, medal rank badges, and headshots.",
     "Fix away team logo rendering: add persistent on-disk logo caching, resolve ESPN URL slugs (LAK, SJS, TBL), implement parallel pre-fetching, and generate team color crest badges on offline fallback.",
     "Under Last Result in the Compose companion application, display the 3 Players of the Game (Three Stars) with official NHL CDN headshot photos, player names, star indicators, and game stat lines.",

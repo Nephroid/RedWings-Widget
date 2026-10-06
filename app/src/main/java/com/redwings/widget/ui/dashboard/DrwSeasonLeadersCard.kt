@@ -43,17 +43,17 @@ import com.redwings.widget.data.model.TeamLeadersUi
 import com.redwings.widget.ui.theme.LocalJerseyPalette
 
 /**
- * Category enum for DRW Season Stat Leaders.
+ * Category enum for DRW Season Stat Leaders. Order: Goals, Assists, Points.
  */
 enum class LeaderCategory(val label: String) {
-    POINTS("POINTS"),
     GOALS("GOALS"),
-    ASSISTS("ASSISTS")
+    ASSISTS("ASSISTS"),
+    POINTS("POINTS")
 }
 
 /**
  * Standalone Frosted Glass card bubble displaying season stats for the Top 5
- * Detroit Red Wings in Points, Goals (Scoring), and Assists.
+ * Detroit Red Wings in Goals, Assists, and Points.
  * Includes interactive segmented pill switcher, rank medal badges (#1 Gold, #2 Silver, #3 Bronze),
  * circular headshots, position/sweater info, and stat lines.
  */
@@ -63,12 +63,12 @@ fun DrwSeasonLeadersCard(
     modifier: Modifier = Modifier
 ) {
     val palette = LocalJerseyPalette.current
-    var selectedCategory by remember { mutableStateOf(LeaderCategory.POINTS) }
+    var selectedCategory by remember { mutableStateOf(LeaderCategory.GOALS) }
 
     val currentPlayers = when (selectedCategory) {
-        LeaderCategory.POINTS -> leaders.topPoints
         LeaderCategory.GOALS -> leaders.topGoals
         LeaderCategory.ASSISTS -> leaders.topAssists
+        LeaderCategory.POINTS -> leaders.topPoints
     }
 
     FrostedGlassCard(

@@ -181,9 +181,9 @@ class HockeyRepository(
                     }
 
                     val leaders = TeamLeadersUi(
-                        topPoints = topPoints,
                         topGoals = topGoals,
-                        topAssists = topAssists
+                        topAssists = topAssists,
+                        topPoints = topPoints
                     )
 
                     val p = prefs(context)
