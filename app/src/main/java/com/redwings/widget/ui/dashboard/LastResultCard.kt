@@ -1,6 +1,7 @@
 package com.redwings.widget.ui.dashboard
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -106,10 +107,8 @@ fun LastResultCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current).data(R.drawable.ic_redwings_logo).crossfade(true).build(),
-                        placeholder = painterResource(R.drawable.ic_redwings_logo),
-                        error = painterResource(R.drawable.ic_redwings_logo),
+                    Image(
+                        painter = painterResource(R.drawable.ic_redwings_logo),
                         contentDescription = "Detroit Red Wings logo",
                         modifier = Modifier.size(42.dp)
                     )

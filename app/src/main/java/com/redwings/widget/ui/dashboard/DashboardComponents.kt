@@ -410,6 +410,8 @@ fun CountdownClock(
     val formattedTime = remember(state.days, state.hours, state.minutes, state.seconds, state.isLive, state.text) {
         if (state.isLive) {
             state.text
+        } else if (state.text.isNotBlank() && state.days == 0L && state.hours == 0L && state.minutes == 0L && state.seconds == 0L) {
+            state.text
         } else {
             val d = state.days
             val h = state.hours

@@ -1,6 +1,7 @@
 package com.redwings.widget.ui.dashboard
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -65,8 +66,8 @@ private fun BroadcastPill(broadcast: String, palette: JerseyPalette) {
 @Composable
 private fun TeamCrest(abbr: String, name: String, isDet: Boolean, size: Dp = 32.dp) {
     if (isDet) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current).data(R.drawable.ic_redwings_logo).crossfade(true).build(),
+        Image(
+            painter = painterResource(R.drawable.ic_redwings_logo),
             contentDescription = name,
             modifier = Modifier.size(size)
         )
@@ -90,7 +91,7 @@ fun UpcomingCard(game: NextGameUi, modifier: Modifier = Modifier) {
         modifier = modifier.width(172.dp)
     ) {
         Column(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

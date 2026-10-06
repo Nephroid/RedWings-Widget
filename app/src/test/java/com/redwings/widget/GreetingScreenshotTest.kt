@@ -42,7 +42,9 @@ class GreetingScreenshotTest {
             opponentAbbrev = "TOR",
             venue = "Little Caesars Arena",
             startTimeMillis = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(26),
-            isHome = true
+            isHome = true,
+            awayRecord = "20-8-6",
+            homeRecord = "22-7-5"
         )
         val countdown = CountdownState(
             days = 1, hours = 2, minutes = 15, seconds = 30,
@@ -91,7 +93,7 @@ class GreetingScreenshotTest {
     @Test
     fun redwings_single_pane_dashboard_screenshot() {
         val scheduleData = com.redwings.widget.ui.ScheduleUiState.Data(
-            nextGame = NextGameUi("Toronto Maple Leafs", "TOR", "Little Caesars Arena", System.currentTimeMillis() + 86400000L * 2, true),
+            nextGame = NextGameUi("Toronto Maple Leafs", "TOR", "Little Caesars Arena", System.currentTimeMillis() + 86400000L * 2, true, awayRecord = "20-8-6", homeRecord = "22-7-5"),
             lastGame = LastGameUi("Boston Bruins", "BOS", 4, 2, true, true, "Tue, Sep 30"),
             standingsSummary = "4th in Atlantic • 94 pts"
         )
@@ -117,7 +119,7 @@ class GreetingScreenshotTest {
     @Config(qualifiers = RobolectricDeviceQualifiers.Pixel9ProFold)
     fun redwings_dual_pane_dashboard_screenshot() {
         val scheduleData = com.redwings.widget.ui.ScheduleUiState.Data(
-            nextGame = NextGameUi("Toronto Maple Leafs", "TOR", "Little Caesars Arena", System.currentTimeMillis() + 86400000L * 2, true),
+            nextGame = NextGameUi("Toronto Maple Leafs", "TOR", "Little Caesars Arena", System.currentTimeMillis() + 86400000L * 2, true, awayRecord = "20-8-6", homeRecord = "22-7-5"),
             lastGame = LastGameUi("Boston Bruins", "BOS", 4, 2, true, true, "Tue, Sep 30"),
             standingsSummary = "4th in Atlantic • 94 pts"
         )
@@ -143,7 +145,7 @@ class GreetingScreenshotTest {
     @Config(qualifiers = RobolectricDeviceQualifiers.Pixel9ProFold)
     fun redwings_tabletop_dashboard_screenshot() {
         val scheduleData = com.redwings.widget.ui.ScheduleUiState.Data(
-            nextGame = NextGameUi("Toronto Maple Leafs", "TOR", "Little Caesars Arena", System.currentTimeMillis() + 86400000L * 2, true),
+            nextGame = NextGameUi("Toronto Maple Leafs", "TOR", "Little Caesars Arena", System.currentTimeMillis() + 86400000L * 2, true, awayRecord = "20-8-6", homeRecord = "22-7-5"),
             lastGame = LastGameUi("Boston Bruins", "BOS", 4, 2, true, true, "Tue, Sep 30"),
             standingsSummary = "4th in Atlantic • 94 pts"
         )

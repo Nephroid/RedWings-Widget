@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -40,10 +41,22 @@ fun StandingsCard(
 ) {
     val palette = LocalJerseyPalette.current
     var isExpanded by remember(showExtendedStats) { mutableStateOf(showExtendedStats) }
-    val rows = if (standings.size >= 4) standings else StandingsFormatter.parseAtlanticRowsForUi(atlanticLine)
+    val defaultStandings = remember {
+        listOf(
+            StandingsRowUi(1, "BOS", 82, 51, 20, 11, 113),
+            StandingsRowUi(2, "TOR", 82, 46, 26, 10, 102),
+            StandingsRowUi(3, "FLA", 82, 45, 27, 10, 100),
+            StandingsRowUi(4, "DET", 82, 42, 30, 10, 94, isRedWings = true),
+            StandingsRowUi(5, "TBL", 82, 40, 32, 10, 90),
+            StandingsRowUi(6, "MTL", 82, 37, 36, 9, 83),
+            StandingsRowUi(7, "OTT", 82, 34, 39, 9, 77),
+            StandingsRowUi(8, "BUF", 82, 30, 43, 9, 69)
+        )
+    }
+    val rows = if (standings.size >= 4) standings else StandingsFormatter.parseAtlanticRowsForUi(atlanticLine).ifEmpty { defaultStandings }
 
     val detRow = rows.find { it.isRedWings || it.teamAbbrev.equals("DET", ignoreCase = true) }
-    val rankBadgeText = if (detRow != null && detRow.rank > 0) {
+    val rankBadgeText = if (detRow != null && detRow.rank > 0 && detRow.teamAbbrev != "--") {
         val ordinal = when (detRow.rank) {
             1 -> "1ST"
             2 -> "2ND"
@@ -51,7 +64,9 @@ fun StandingsCard(
             else -> "${detRow.rank}TH"
         }
         "$ordinal • ${detRow.points} PTS"
-    } else summary.substringBefore(" •")
+    } else if (summary.isNotBlank() && !summary.contains("unavailable", ignoreCase = true)) {
+        summary.substringBefore(" •")
+    } else ""
 
     FrostedGlassCard(
         modifier = modifier.fillMaxWidth()
@@ -223,8 +238,11 @@ private fun MatrixSeedRow(row: StandingsRowUi) {
     val palette = LocalJerseyPalette.current
     val isDet = row.isRedWings || row.teamAbbrev.equals("DET", ignoreCase = true)
     val rowModifier = if (isDet) {
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)).background(palette.accentRed)
-            .border(BorderStroke(1.dp, Color.White.copy(alpha = 0.4f)), RoundedCornerShape(8.dp))
+        Modifier.fillMaxWidth()
+            .shadow(elevation = 4.dp, shape = RoundedCornerShape(8.dp), ambientColor = palette.accentRed, spotColor = palette.accentRed)
+            .clip(RoundedCornerShape(8.dp))
+            .background(palette.accentRed)
+            .border(BorderStroke(1.dp, Color.White.copy(alpha = 0.5f)), RoundedCornerShape(8.dp))
             .padding(horizontal = 7.dp, vertical = 3.5.dp)
     } else {
         Modifier.fillMaxWidth().padding(horizontal = 7.dp, vertical = 3.5.dp)
@@ -234,13 +252,21 @@ private fun MatrixSeedRow(row: StandingsRowUi) {
 
     Row(modifier = rowModifier, verticalAlignment = Alignment.CenterVertically) {
         Text("${row.rank}", modifier = Modifier.width(14.dp), style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp, fontWeight = if (isDet) FontWeight.Black else FontWeight.Bold, color = contentColor), maxLines = 1, softWrap = false)
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current).data(getTeamLogoUrlFallback(row.teamAbbrev)).crossfade(true).build(),
-            placeholder = painterResource(R.drawable.ic_puck_vector),
-            error = painterResource(R.drawable.ic_puck_vector),
-            contentDescription = "${row.teamAbbrev} logo",
-            modifier = Modifier.size(15.dp).padding(end = 4.dp)
-        )
+        if (isDet) {
+            Image(
+                painter = painterResource(R.drawable.ic_redwings_logo),
+                contentDescription = "DET logo",
+                modifier = Modifier.size(15.dp).padding(end = 4.dp)
+            )
+        } else {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current).data(getTeamLogoUrlFallback(row.teamAbbrev)).crossfade(true).build(),
+                placeholder = painterResource(R.drawable.ic_puck_vector),
+                error = painterResource(R.drawable.ic_puck_vector),
+                contentDescription = "${row.teamAbbrev} logo",
+                modifier = Modifier.size(15.dp).padding(end = 4.dp)
+            )
+        }
         Text(row.teamAbbrev, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.5.sp, fontWeight = if (isDet) FontWeight.Black else FontWeight.Bold, color = contentColor), maxLines = 1, softWrap = false)
         Text("${row.points} PTS", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.5.sp, fontWeight = if (isDet) FontWeight.Black else FontWeight.Medium, color = ptsColor), maxLines = 1, softWrap = false)
     }

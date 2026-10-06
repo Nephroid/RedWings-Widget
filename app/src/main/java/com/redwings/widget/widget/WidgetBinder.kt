@@ -40,6 +40,7 @@ object WidgetBinder {
 
     /** "3d 04h 12m" / "04h 12m" / "PUCK DROP! LIVE" (<=0 within 3h) / "Final". */
     fun formatCountdown(gameTimeMillis: Long, now: Long = System.currentTimeMillis()): String {
+        if (gameTimeMillis <= 0L) return "-- : --"
         val diff = gameTimeMillis - now
         if (diff <= 0) {
             return if (diff > -TimeUnit.HOURS.toMillis(3)) "PUCK DROP! LIVE" else "Final"
@@ -148,18 +149,12 @@ object WidgetBinder {
         val oppRecord = prefs.getString("team_record_OPP", "") ?: ""
         val oppName = prefs.getString("next_game_opp", "--") ?: "--"
 
-        val isPreviewMock = oppName != "--"
-        val awayName = if (isPreviewMock) oppName else "--"
-        val awayRecord = if (isPreviewMock) oppRecord else ""
-        val gameTimeText = if (isPreviewMock) "SATURDAY • 7:00 PM" else "NO UPCOMING GAMES"
-        val countdownText = if (isPreviewMock) "02 : 14 : 22" else "-- : --"
-
-        views.setTextViewText(R.id.widget_away_name, awayName)
+        views.setTextViewText(R.id.widget_away_name, oppName)
         views.setTextViewText(R.id.widget_home_name, "DET")
-        views.setTextViewText(R.id.widget_away_record, awayRecord)
+        views.setTextViewText(R.id.widget_away_record, oppRecord)
         views.setTextViewText(R.id.widget_home_record, detRecord)
-        views.setTextViewText(R.id.widget_opponent, gameTimeText)
-        views.setTextViewText(R.id.widget_countdown, countdownText)
+        views.setTextViewText(R.id.widget_opponent, "NO UPCOMING GAMES")
+        views.setTextViewText(R.id.widget_countdown, "-- : --")
         val standing = prefs.getString("standings_summary", "") ?: ""
         val contextLine = if (theme == WidgetTheme.HOME) {
             "Little Caesars Arena"
@@ -175,7 +170,6 @@ object WidgetBinder {
             StandingsFormatter.formatAtlanticLine(rawAtlantic)
         } else null
 
-        val defaultTeams = listOf("BOS", "FLA", "TOR", "DET", "TBL", "OTT", "BUF", "MTL")
         val teamIds = listOf(
             R.id.widget_team_1, R.id.widget_team_2, R.id.widget_team_3, R.id.widget_team_4,
             R.id.widget_team_5, R.id.widget_team_6, R.id.widget_team_7, R.id.widget_team_8
@@ -190,8 +184,6 @@ object WidgetBinder {
                 val raw = rows[i].toString()
                 val clean = raw.replace(Regex("^\\d+[\\.\\s]\\s*"), "").trim()
                 Regex("([A-Za-z]{2,3})").find(clean)?.value?.uppercase() ?: clean.take(3).uppercase()
-            } else if (rows == null) {
-                defaultTeams[i]
             } else {
                 "--"
             }

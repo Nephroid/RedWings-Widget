@@ -163,12 +163,11 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         val teamColor = ContextCompat.getColor(context, theme.teamColorRes)
         val detColor = ContextCompat.getColor(context, theme.teamDetRes)
         val subColor = ContextCompat.getColor(context, theme.subColorRes)
-        val defaultTeams = listOf("BOS", "FLA", "TOR", "DET", "TBL", "OTT", "BUF", "MTL")
         ids.forEachIndexed { i, id ->
-            val raw = if (rows.isNotEmpty()) rows.getOrNull(i)?.toString() ?: "${i + 1}. --" else "${i + 1}. ${defaultTeams[i]}"
+            val raw = rows.getOrNull(i)?.toString() ?: "${i + 1}. --"
             val clean = raw.replace(Regex("^\\d+[\\.\\s]\\s*"), "").trim()
             val abbr = Regex("([A-Za-z]{2,3})").find(clean)?.value?.uppercase() ?: clean.take(3).uppercase()
-            val isDet = raw.contains("DET", ignoreCase = true) || abbr == "DET"
+            val isDet = (raw.contains("DET", ignoreCase = true) || abbr == "DET") && abbr != "--"
             val seedNum = i + 1
 
             if (isDet) {
@@ -183,6 +182,11 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
                 } else {
                     views.setViewPadding(id, 0, 0, 0, 0)
                 }
+            } else if (abbr == "--" || abbr.isEmpty()) {
+                views.setTextViewText(id, "$seedNum --")
+                views.setTextColor(id, teamColor)
+                views.setInt(id, "setBackgroundResource", android.R.color.transparent)
+                views.setViewPadding(id, 0, 0, 0, 0)
             } else {
                 val seedHex = String.format("#%06X", 0xFFFFFF and subColor)
                 val teamHex = String.format("#%06X", 0xFFFFFF and teamColor)

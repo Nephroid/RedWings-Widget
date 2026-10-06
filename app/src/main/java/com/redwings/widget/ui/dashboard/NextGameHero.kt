@@ -6,6 +6,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -48,8 +49,8 @@ fun NextGameHero(
     showFlankingBadges: Boolean = false
 ) {
     val palette = LocalJerseyPalette.current
-    val oppName = game?.opponent ?: "Toronto Maple Leafs"
-    val oppAbbr = game?.opponentAbbrev ?: "TOR"
+    val oppName = game?.opponent ?: "No Upcoming Game"
+    val oppAbbr = game?.opponentAbbrev ?: "--"
     val isDetroitHome = game?.isHome ?: true
 
     val awayAbbr = if (isDetroitHome) oppAbbr else "DET"
@@ -60,7 +61,7 @@ fun NextGameHero(
     val homeRecord = game?.homeRecord?.ifBlank { "" } ?: ""
 
     val dateFormatted = formatHeroDate(game?.startTimeMillis ?: 0L)
-    val venueText = game?.venue?.ifBlank { "Little Caesars Arena" } ?: "Little Caesars Arena"
+    val venueText = game?.venue?.ifBlank { if (game == null) "TBD" else "Little Caesars Arena" } ?: "TBD"
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -135,8 +136,8 @@ private fun TeamCol(abbr: String, name: String, isHome: Boolean, record: String,
 @Composable
 private fun Crest(abbr: String, isDet: Boolean, name: String) {
     if (isDet) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current).data(R.drawable.ic_redwings_logo).crossfade(true).build(),
+        Image(
+            painter = painterResource(R.drawable.ic_redwings_logo),
             contentDescription = "Detroit Red Wings logo",
             modifier = Modifier.size(42.dp)
         )

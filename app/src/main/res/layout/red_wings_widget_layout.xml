@@ -48,16 +48,16 @@
 
                     <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="2.5dp"
                         android:background="#FFFFFF" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="2dp" />
+                        android:layout_height="2.5dp" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="2.5dp"
                         android:background="#FFFFFF" />
                 </LinearLayout>
 
@@ -95,16 +95,16 @@
 
                     <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="2.5dp"
                         android:background="#FFFFFF" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="2dp" />
+                        android:layout_height="2.5dp" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="2.5dp"
                         android:background="#FFFFFF" />
                 </LinearLayout>
 
