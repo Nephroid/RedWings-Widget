@@ -23,9 +23,9 @@
     <color name="widget_home_countdown">#C8102E</color>
     <color name="widget_home_opponent">#0F172A</color>
     <color name="widget_home_divider">#FFFFFF</color>
-    <color name="widget_home_sub">#475569</color>
+    <color name="widget_home_sub">#8A99AD</color>
     <color name="widget_home_standing">#1E293B</color>
-    <color name="widget_home_team">#334155</color>
+    <color name="widget_home_team">#0F172A</color>
     <color name="widget_home_team_det">#FFFFFF</color>
     <color name="widget_home_wcgb">#C8102E</color>
     <color name="widget_home_tag_text">#FFFFFF</color>

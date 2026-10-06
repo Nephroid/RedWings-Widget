@@ -84,6 +84,10 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
 
             val game = try {
                 AppDatabase.getDatabase(context).gameDao().getNextGame()?.let {
+                    val detRecord = prefs.getString("team_record_DET", null)
+                        ?: prefs.getString("wings_summary", null)?.substringBefore(" •")
+                        ?: ""
+                    val oppRecord = prefs.getString("team_record_${it.opponentAbbrev}", "") ?: ""
                     WidgetBinder.WidgetGame(
                         opponentName = it.opponentName,
                         opponentAbbrev = it.opponentAbbrev,
@@ -91,7 +95,9 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
                         isHomeGame = it.isHomeGame,
                         venue = it.venueName,
                         standingLine = it.standingsSummary,
-                        h2hLine = it.headToHead
+                        h2hLine = it.headToHead,
+                        awayRecord = if (it.isHomeGame) oppRecord else detRecord,
+                        homeRecord = if (it.isHomeGame) detRecord else oppRecord
                     )
                 }
             } catch (e: Exception) {
@@ -145,7 +151,7 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         return views
     }
 
-    private fun bindStandings(
+    internal fun bindStandings(
         context: Context, views: RemoteViews,
         prefs: android.content.SharedPreferences, theme: WidgetTheme
     ) {
@@ -156,18 +162,41 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         )
         val teamColor = ContextCompat.getColor(context, theme.teamColorRes)
         val detColor = ContextCompat.getColor(context, theme.teamDetRes)
+        val subColor = ContextCompat.getColor(context, theme.subColorRes)
+        val defaultTeams = listOf("BOS", "FLA", "TOR", "DET", "TBL", "OTT", "BUF", "MTL")
         ids.forEachIndexed { i, id ->
-            val raw = rows.getOrNull(i)?.toString() ?: "${i + 1}. --"
-            val text = if (theme == WidgetTheme.HOME) {
-                val clean = raw.replace(Regex("^\\d+[\\.\\s]\\s*"), "").trim()
-                val abbr = Regex("([A-Za-z]{2,3})").find(clean)?.value ?: clean.take(3)
-                "${i + 1} $abbr"
-            } else raw
-            views.setTextViewText(id, text)
-            val isDet = raw.contains("DET", ignoreCase = true)
-            views.setTextColor(id, if (isDet) detColor else teamColor)
-            val bg = if (isDet && theme == WidgetTheme.HOME) R.drawable.widget_det_highlight_pill else 0
-            views.setInt(id, "setBackgroundResource", bg)
+            val raw = if (rows.isNotEmpty()) rows.getOrNull(i)?.toString() ?: "${i + 1}. --" else "${i + 1}. ${defaultTeams[i]}"
+            val clean = raw.replace(Regex("^\\d+[\\.\\s]\\s*"), "").trim()
+            val abbr = Regex("([A-Za-z]{2,3})").find(clean)?.value?.uppercase() ?: clean.take(3).uppercase()
+            val isDet = raw.contains("DET", ignoreCase = true) || abbr == "DET"
+            val seedNum = i + 1
+
+            if (isDet) {
+                views.setTextViewText(id, "$seedNum $abbr")
+                views.setTextColor(id, detColor)
+                val bg = if (theme == WidgetTheme.HOME) R.drawable.widget_det_highlight_pill else android.R.color.transparent
+                views.setInt(id, "setBackgroundResource", bg)
+                if (theme == WidgetTheme.HOME) {
+                    val padH = (6 * context.resources.displayMetrics.density).toInt()
+                    val padV = (2 * context.resources.displayMetrics.density).toInt()
+                    views.setViewPadding(id, padH, padV, padH, padV)
+                } else {
+                    views.setViewPadding(id, 0, 0, 0, 0)
+                }
+            } else {
+                val seedHex = String.format("#%06X", 0xFFFFFF and subColor)
+                val teamHex = String.format("#%06X", 0xFFFFFF and teamColor)
+                val htmlString = "<font color='$seedHex'>$seedNum</font> <font color='$teamHex'><b>$abbr</b></font>"
+                val spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    android.text.Html.fromHtml(htmlString, android.text.Html.FROM_HTML_MODE_LEGACY)
+                } else {
+                    @Suppress("DEPRECATION")
+                    android.text.Html.fromHtml(htmlString)
+                }
+                views.setTextViewText(id, spanned)
+                views.setInt(id, "setBackgroundResource", android.R.color.transparent)
+                views.setViewPadding(id, 0, 0, 0, 0)
+            }
         }
     }
 

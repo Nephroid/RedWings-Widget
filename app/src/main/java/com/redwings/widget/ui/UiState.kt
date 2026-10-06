@@ -23,7 +23,9 @@ data class NextGameUi(
     val venue: String = "",
     val startTimeMillis: Long = 0L,
     val isHome: Boolean = true,
-    val broadcast: String = ""
+    val broadcast: String = "",
+    val awayRecord: String = "",
+    val homeRecord: String = ""
 )
 
 @Immutable

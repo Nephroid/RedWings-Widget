@@ -153,4 +153,15 @@ class StandingsCalculatorTest {
         // Pool minus leaders {BOS, CAR} = TOR 65, NYR 64, DET 60...; cutoff 64 -> 64-60 = 4
         assertEquals("4", wings.wcBack)
     }
+
+    @Test
+    fun atlanticRecordLine_containsTrueRecordAndGoalDiff() {
+        val rows = listOf(
+            row("BOS", 70, "A", wins = 33, losses = 15, otl = 4),
+            row("DET", 55, "A", wins = 25, losses = 20, otl = 5)
+        )
+        val line = StandingsCalculator.atlanticRecordLine(rows)
+        assertTrue("Contains BOS record, got: $line", line.contains("BOS: 33-15-4 (70pts)"))
+        assertTrue("Contains DET record, got: $line", line.contains("DET: 25-20-5 (55pts)"))
+    }
 }

@@ -28,34 +28,35 @@ import java.util.Locale
  * Frosted Ice glassmorphism card for the last game result.
  * Displays specular acrylic finish, score clash with team crests, bold W/L badge, and recap pills.
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LastResultCard(
     lastGame: LastGameUi,
     modifier: Modifier = Modifier,
     showFormGuide: Boolean = false,
-    formHistory: List<String> = listOf("W", "W", "L", "W", "W"),
+    formHistory: List<String> = emptyList(),
     recapPills: List<String> = emptyList()
 ) {
     val palette = LocalJerseyPalette.current
-    val oppAbbrev = lastGame.opponentAbbrev.ifBlank { "BOS" }
-    val oppName = lastGame.opponent.ifBlank { "Boston Bruins" }
-    val dateText = lastGame.dateLabel.ifBlank { "Tue, Sep 30" }
+    val oppAbbrev = lastGame.opponentAbbrev.ifBlank { "OPP" }
+    val oppName = lastGame.opponent.ifBlank { "Opponent" }
+    val dateText = lastGame.dateLabel.ifBlank { "Recent" }
 
-    val detScore = if (lastGame.wingsScore == 0 && lastGame.oppScore == 0 && lastGame.opponent.isEmpty()) 4 else lastGame.wingsScore
-    val oppScore = if (lastGame.wingsScore == 0 && lastGame.oppScore == 0 && lastGame.opponent.isEmpty()) 2 else lastGame.oppScore
+    val detScore = lastGame.wingsScore
+    val oppScore = lastGame.oppScore
     val isWin = lastGame.isWinner || (detScore > oppScore)
 
     val pills = when {
         lastGame.recapPills.isNotEmpty() -> lastGame.recapPills
         recapPills.isNotEmpty() -> recapPills
-        else -> listOf("Larkin 2G", "DeBrincat 1G")
+        else -> emptyList()
     }
 
     FrostedGlassCard(
         modifier = modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp).fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             // Header Row: "LAST RESULT • Tue, Sep 30" + Bold W/L badge
@@ -167,10 +168,10 @@ fun LastResultCard(
 
             // Clean goal scorer / recap pills
             if (pills.isNotEmpty()) {
-                Row(
+                FlowRow(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     pills.forEach { pillText ->
                         Surface(
@@ -186,7 +187,9 @@ fun LastResultCard(
                                 Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(palette.accentRed))
                                 Text(
                                     text = pillText,
-                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold, fontSize = 11.sp, color = palette.primaryText)
+                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold, fontSize = 11.sp, color = palette.primaryText),
+                                    maxLines = 1,
+                                    softWrap = false
                                 )
                             }
                         }

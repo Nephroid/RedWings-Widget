@@ -83,34 +83,56 @@ class HockeyRepository(
                 val atlanticLine = if (rows.isNotEmpty()) {
                     StandingsCalculator.atlanticStandingsLine(rows)
                 } else ""
+                val atlanticRecordLine = if (rows.isNotEmpty()) {
+                    StandingsCalculator.atlanticRecordLine(rows)
+                } else ""
                 val wings = if (rows.isNotEmpty()) {
                     StandingsCalculator.wingsSummary(rows)
                 } else null
 
                 val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+                val editor = prefs.edit()
+
+                if (atlanticRecordLine.isNotBlank()) {
+                    editor.putString("atlantic_standings", atlanticRecordLine)
+                }
                 if (atlanticLine.isNotBlank()) {
-                    prefs.edit()
-                        .putString("atlantic_standings", atlanticLine)
-                        .putString("atlantic_line", atlanticLine)
-                        .apply()
+                    editor.putString("atlantic_line", atlanticLine)
                 }
                 if (wings != null) {
+                    val divOrdinal = when (wings.divRank) {
+                        1 -> "1st"
+                        2 -> "2nd"
+                        3 -> "3rd"
+                        else -> "${wings.divRank}th"
+                    }
                     val summary =
-                        "${wings.wins}-${wings.losses}-${wings.otl} • ${wings.points} pts • ${wings.divRank}th ATL"
-                    prefs.edit()
-                        .putString(
-                            "wings_summary",
-                            summary
-                        )
+                        "${wings.wins}-${wings.losses}-${wings.otl} • ${wings.points} pts • $divOrdinal ATL"
+                    editor.putString("wings_summary", summary)
                         .putString("standings_summary", summary)
                         .putString("games_back_wild_card", wings.wcBack)
                         .putString("playoff_status", if (wings.playoffIn) "IN" else "OUT")
-                        .apply()
+                        .putString("team_record_DET", "${wings.wins}-${wings.losses}-${wings.otl}")
                 }
+                // Cache all 32 team records for fast widget & UI lookup
+                rows.forEach { row ->
+                    val abbr = row.resolvedAbbrev
+                    if (abbr.isNotBlank()) {
+                        val w = row.wins ?: 0
+                        val l = row.losses ?: 0
+                        val otl = row.otLosses ?: 0
+                        editor.putString("team_record_$abbr", "$w-$l-$otl")
+                    }
+                }
+                editor.putBoolean("is_simulated_fallback", false)
+                editor.apply()
 
                 val allGames = schedule.games.orEmpty()
                 if (allGames.isEmpty()) {
-                    saveSimulatedGames(context)
+                    val existing = gameDao.getNextGame()
+                    if (existing == null) {
+                        saveSimulatedGames(context)
+                    }
                     return@withContext
                 }
 
@@ -132,14 +154,29 @@ class HockeyRepository(
                     t > now - TimeUnit.HOURS.toMillis(4) && !isFinalState(it.gameState)
                 }.take(7)
 
-                val mapped = upcoming.map { mapGame(it, atlanticLine) }
+                val nextGame = upcoming.firstOrNull()
+                if (nextGame != null) {
+                    val isHome = nextGame.homeTeam?.abbrev == "DET"
+                    val nextVenue = nextGame.venue?.default
+                        ?: if (isHome) "Little Caesars Arena" else "Away"
+                    val oppAbbrev = if (isHome) nextGame.awayTeam?.abbrev else nextGame.homeTeam?.abbrev
+                    prefs.edit()
+                        .putString("next_game_venue", nextVenue)
+                        .putString("next_game_opponent_abbrev", oppAbbrev ?: "OPP")
+                        .apply()
+                }
+
+                val mapped = upcoming.map { mapGame(it, if (atlanticRecordLine.isNotBlank()) atlanticRecordLine else atlanticLine) }
                 val finalMapped = if (lastFinal != null) {
-                    listOf(mapGame(lastFinal, atlanticLine))
+                    listOf(mapGame(lastFinal, if (atlanticRecordLine.isNotBlank()) atlanticRecordLine else atlanticLine))
                 } else emptyList()
 
                 val combined = (finalMapped + mapped).take(8)
                 if (combined.isEmpty()) {
-                    saveSimulatedGames(context)
+                    val existing = gameDao.getNextGame()
+                    if (existing == null) {
+                        saveSimulatedGames(context)
+                    }
                 } else {
                     gameDao.replaceGames(combined)
                     Log.d("HockeyRepository", "Cached ${combined.size} Red Wings games")
@@ -147,7 +184,10 @@ class HockeyRepository(
             } catch (e: Exception) {
                 if (e is kotlinx.coroutines.CancellationException) throw e
                 Log.e("HockeyRepository", "Refresh failed: ${e.message}", e)
-                saveSimulatedGames(context)
+                val existing = gameDao.getNextGame()
+                if (existing == null) {
+                    saveSimulatedGames(context)
+                }
             }
         }
     }
@@ -221,6 +261,7 @@ class HockeyRepository(
             .putString("wings_summary", "42-30-10 • 94 pts • 4th ATL")
             .putString("games_back_wild_card", "IN")
             .putString("playoff_status", "CLINCHED")
+            .putBoolean("is_simulated_fallback", true)
             .apply()
 
         val list = listOf(

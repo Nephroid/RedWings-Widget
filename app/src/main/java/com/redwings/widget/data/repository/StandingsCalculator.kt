@@ -31,6 +31,24 @@ object StandingsCalculator {
         }.ifBlank { "Atlantic standings unavailable" }
     }
 
+    /** Formats Atlantic division with true W-L-OTL record and goal differential for widgets/dashboard */
+    fun atlanticRecordLine(rows: List<NhlStandingRow>): String {
+        val atlantic = rows.filter { it.divisionAbbrev == "A" }
+            .sortedWith(compareByDescending<NhlStandingRow> { it.points ?: 0 }
+                .thenByDescending { it.regulationWins ?: 0 })
+        if (atlantic.isEmpty()) return "Atlantic standings unavailable"
+        return atlantic.joinToString(" • ") { row ->
+            val abbr = row.resolvedAbbrev.ifBlank { "?" }
+            val w = row.wins ?: 0
+            val l = row.losses ?: 0
+            val otl = row.otLosses ?: 0
+            val pts = row.points ?: (w * 2 + otl)
+            val diff = row.resolvedGoalDiff
+            val diffStr = if (diff >= 0) "+$diff" else "$diff"
+            "$abbr: $w-$l-$otl (${pts}pts) [diff: $diffStr]"
+        }.ifBlank { "Atlantic standings unavailable" }
+    }
+
     fun wingsSummary(rows: List<NhlStandingRow>): WingsStanding {
         val atlantic = rows.filter { it.divisionAbbrev == "A" }
             .sortedWith(compareByDescending<NhlStandingRow> { it.points ?: 0 }

@@ -14,7 +14,14 @@ import android.text.Spanned
  */
 object StandingsFormatter {
 
-    private data class Row(val abbr: String, val wins: Int, val losses: Int, val otl: Int, val pts: Int)
+    private data class Row(
+        val abbr: String,
+        val wins: Int,
+        val losses: Int,
+        val otl: Int,
+        val pts: Int,
+        val goalDiff: Int = 0
+    )
 
     @Suppress("DEPRECATION")
     private fun html(s: String): CharSequence =
@@ -28,6 +35,9 @@ object StandingsFormatter {
 
     private fun parse(rawItem: String): Row {
         val clean = rawItem.replace(Regex("^\\d+[\\.\\s]\\s*"), "").trim()
+        val diffMatch = Regex("(?:\\[diff:?\\s*|diff:?\\s*)([+-]?\\d+)\\]?", RegexOption.IGNORE_CASE).find(clean)
+        val goalDiff = diffMatch?.groupValues?.get(1)?.toIntOrNull() ?: 0
+
         val m = Regex("([A-Za-z]{2,3}):?\\s*(\\d+)[\\-\\s]+(\\d+)(?:[\\-\\s]+(\\d+))?(?:\\s*\\((\\d+)\\s*pts?\\))?")
             .find(clean)
         return if (m != null) {
@@ -35,15 +45,15 @@ object StandingsFormatter {
             val l = m.groupValues[3].toIntOrNull() ?: 0
             val o = m.groupValues[4].toIntOrNull() ?: 0
             val p = m.groupValues[5].toIntOrNull() ?: (w * 2 + o)
-            Row(m.groupValues[1].uppercase(), w, l, o, p)
+            Row(m.groupValues[1].uppercase(), w, l, o, p, goalDiff)
         } else {
             val m2 = Regex("([A-Za-z]{2,3}):?\\s*(\\d+)\\s*pts", RegexOption.IGNORE_CASE).find(clean)
             if (m2 != null) {
                 val abbr = m2.groupValues[1].uppercase()
                 val pts = m2.groupValues[2].toIntOrNull() ?: 0
-                Row(abbr, 0, 0, 0, pts)
+                Row(abbr, 0, 0, 0, pts, goalDiff)
             } else {
-                Row(clean.take(3).uppercase(), 0, 0, 0, 0)
+                Row(clean.take(3).uppercase(), 0, 0, 0, 0, goalDiff)
             }
         }
     }
@@ -115,16 +125,17 @@ object StandingsFormatter {
         }.sortedWith(compareByDescending<Row> { it.pts }.thenByDescending { it.wins }).take(8)
 
         return rows.mapIndexed { i, r ->
-            val gp = (r.wins + r.losses + r.otl).coerceAtLeast(if (r.pts > 0) 1 else 0)
+            val gp = (r.wins + r.losses + r.otl)
             com.redwings.widget.ui.StandingsRowUi(
                 rank = i + 1,
                 teamAbbrev = r.abbr,
-                gamesPlayed = if (gp > 0) gp else 82,
+                gamesPlayed = if (gp > 0) gp else if (r.pts > 0) 1 else 0,
                 wins = r.wins,
                 losses = r.losses,
                 otLosses = r.otl,
                 points = r.pts,
-                isRedWings = r.abbr == "DET"
+                isRedWings = r.abbr == "DET",
+                goalDiff = r.goalDiff
             )
         }
     }

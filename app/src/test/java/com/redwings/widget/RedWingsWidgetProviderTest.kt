@@ -14,6 +14,7 @@ import com.redwings.widget.widget.WidgetTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -40,7 +41,14 @@ class RedWingsWidgetProviderTest {
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
+        context.getSharedPreferences(WidgetBinder.PREFS, Context.MODE_PRIVATE).edit().clear().commit()
         provider = RedWingsWidgetProvider()
+        WidgetBinder.logoBitmapLoader = { _, _ -> null }
+    }
+
+    @After
+    fun tearDown() {
+        WidgetBinder.logoBitmapLoader = null
     }
 
     private fun inflated(minW: Int, minH: Int): android.view.ViewGroup {
@@ -277,5 +285,40 @@ class RedWingsWidgetProviderTest {
         val inflated = views.apply(context, FrameLayout(context)) as android.view.ViewGroup
         assertNotNull(inflated.findViewById(R.id.widget_info_card))
         assertNotNull(inflated.findViewById(R.id.widget_header_logo))
+    }
+
+    @Test
+    fun bindGameData_dynamicallyPopulatesTrueRecords() = kotlinx.coroutines.runBlocking {
+        val views = RemoteViews(context.packageName, R.layout.red_wings_widget_layout)
+        val game = WidgetBinder.WidgetGame(
+            opponentName = "Ottawa Senators",
+            opponentAbbrev = "OTT",
+            gameTimeMillis = System.currentTimeMillis() + 86400000L,
+            isHomeGame = true,
+            venue = "Little Caesars Arena",
+            standingLine = "4th in Atlantic",
+            h2hLine = "DET leads 2-1",
+            awayRecord = "1-2-0",
+            homeRecord = "0-2-0"
+        )
+        WidgetBinder.bindGameData(context, views, game, WidgetTheme.HOME)
+        val inflated = views.apply(context, FrameLayout(context)) as android.view.ViewGroup
+        val awayRecView = inflated.findViewById<TextView>(R.id.widget_away_record)
+        val homeRecView = inflated.findViewById<TextView>(R.id.widget_home_record)
+        assertEquals("1-2-0", awayRecView.text.toString())
+        assertEquals("0-2-0", homeRecView.text.toString())
+    }
+
+    @Test
+    fun bindEmptyState_doesNotContainMockRecords() {
+        val views = RemoteViews(context.packageName, R.layout.red_wings_widget_layout)
+        WidgetBinder.bindEmptyState(context, views, WidgetTheme.HOME)
+        val inflated = views.apply(context, FrameLayout(context)) as android.view.ViewGroup
+        val awayRecView = inflated.findViewById<TextView>(R.id.widget_away_record)
+        val homeNameView = inflated.findViewById<TextView>(R.id.widget_home_name)
+        val awayNameView = inflated.findViewById<TextView>(R.id.widget_away_name)
+        assertEquals("", awayRecView.text.toString())
+        assertEquals("DET", homeNameView.text.toString())
+        assertEquals("--", awayNameView.text.toString())
     }
 }

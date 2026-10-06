@@ -114,6 +114,7 @@ class GreetingScreenshotTest {
     }
 
     @Test
+    @Config(qualifiers = RobolectricDeviceQualifiers.Pixel9ProFold)
     fun redwings_dual_pane_dashboard_screenshot() {
         val scheduleData = com.redwings.widget.ui.ScheduleUiState.Data(
             nextGame = NextGameUi("Toronto Maple Leafs", "TOR", "Little Caesars Arena", System.currentTimeMillis() + 86400000L * 2, true),
@@ -139,6 +140,7 @@ class GreetingScreenshotTest {
     }
 
     @Test
+    @Config(qualifiers = RobolectricDeviceQualifiers.Pixel9ProFold)
     fun redwings_tabletop_dashboard_screenshot() {
         val scheduleData = com.redwings.widget.ui.ScheduleUiState.Data(
             nextGame = NextGameUi("Toronto Maple Leafs", "TOR", "Little Caesars Arena", System.currentTimeMillis() + 86400000L * 2, true),

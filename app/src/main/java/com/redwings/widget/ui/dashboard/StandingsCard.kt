@@ -43,13 +43,21 @@ fun StandingsCard(
     val rows = if (standings.size >= 4) standings else StandingsFormatter.parseAtlanticRowsForUi(atlanticLine)
 
     val detRow = rows.find { it.isRedWings || it.teamAbbrev.equals("DET", ignoreCase = true) }
-    val rankBadgeText = if (detRow != null) "${detRow.rank}TH • ${detRow.points} PTS" else summary.substringBefore(" •")
+    val rankBadgeText = if (detRow != null && detRow.rank > 0) {
+        val ordinal = when (detRow.rank) {
+            1 -> "1ST"
+            2 -> "2ND"
+            3 -> "3RD"
+            else -> "${detRow.rank}TH"
+        }
+        "$ordinal • ${detRow.points} PTS"
+    } else summary.substringBefore(" •")
 
     FrostedGlassCard(
         modifier = modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(16.dp).fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             // Header Row: "ATLANTIC DIVISION STANDINGS" with subtle division rank indicator
@@ -225,7 +233,7 @@ private fun MatrixSeedRow(row: StandingsRowUi) {
     val ptsColor = if (isDet) Color.White.copy(alpha = 0.95f) else palette.secondaryText
 
     Row(modifier = rowModifier, verticalAlignment = Alignment.CenterVertically) {
-        Text("${row.rank}", modifier = Modifier.width(14.dp), style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp, fontWeight = if (isDet) FontWeight.Black else FontWeight.Bold, color = contentColor))
+        Text("${row.rank}", modifier = Modifier.width(14.dp), style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp, fontWeight = if (isDet) FontWeight.Black else FontWeight.Bold, color = contentColor), maxLines = 1, softWrap = false)
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current).data(getTeamLogoUrlFallback(row.teamAbbrev)).crossfade(true).build(),
             placeholder = painterResource(R.drawable.ic_puck_vector),
@@ -233,8 +241,8 @@ private fun MatrixSeedRow(row: StandingsRowUi) {
             contentDescription = "${row.teamAbbrev} logo",
             modifier = Modifier.size(15.dp).padding(end = 4.dp)
         )
-        Text(row.teamAbbrev, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.5.sp, fontWeight = if (isDet) FontWeight.Black else FontWeight.Bold, color = contentColor))
-        Text("${row.points} PTS", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.5.sp, fontWeight = if (isDet) FontWeight.Black else FontWeight.Medium, color = ptsColor))
+        Text(row.teamAbbrev, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.5.sp, fontWeight = if (isDet) FontWeight.Black else FontWeight.Bold, color = contentColor), maxLines = 1, softWrap = false)
+        Text("${row.points} PTS", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.5.sp, fontWeight = if (isDet) FontWeight.Black else FontWeight.Medium, color = ptsColor), maxLines = 1, softWrap = false)
     }
 }
 

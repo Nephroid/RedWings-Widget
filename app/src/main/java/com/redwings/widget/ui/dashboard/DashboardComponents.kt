@@ -237,12 +237,12 @@ fun IceRinkBackground(modifier: Modifier = Modifier) {
 
 @Composable
 fun formatGameTime(millis: Long): String {
-    if (millis <= 0L) return "Sat, Oct 4 • 7:00 PM"
+    if (millis <= 0L) return "TBD"
     return remember(millis) { SimpleDateFormat("EEE, MMM d • h:mm a", Locale.US).format(Date(millis)) }
 }
 
 fun formatUpcomingDate(millis: Long): String {
-    if (millis <= 0L) return "Sat, Oct 4"
+    if (millis <= 0L) return "TBD"
     return SimpleDateFormat("EEE, MMM d", Locale.US).format(Date(millis))
 }
 
@@ -428,10 +428,12 @@ fun CountdownClock(
         style = MaterialTheme.typography.headlineMedium.copy(
             fontFamily = FontFamily.Monospace,
             fontWeight = FontWeight.Black,
-            letterSpacing = 2.sp,
-            fontSize = 24.sp
+            letterSpacing = 1.sp,
+            fontSize = 22.sp
         ),
         color = palette.accentRed,
+        maxLines = 1,
+        softWrap = false,
         modifier = modifier
     )
 }

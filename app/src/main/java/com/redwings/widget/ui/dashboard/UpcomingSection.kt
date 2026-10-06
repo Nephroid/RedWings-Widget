@@ -37,11 +37,11 @@ fun getBroadcastChannel(game: NextGameUi): String =
 
 /** Formats game start time (e.g. 7:00 PM) */
 private fun formatTileTime(millis: Long): String =
-    if (millis <= 0L) "7:00 PM" else SimpleDateFormat("h:mm a", Locale.US).format(Date(millis))
+    if (millis <= 0L) "TBD" else SimpleDateFormat("h:mm a", Locale.US).format(Date(millis))
 
 /** Formats combined game date and time */
 fun formatUpcomingDateTime(millis: Long): String =
-    if (millis <= 0L) "Sat, Oct 4 • 7:00 PM" else SimpleDateFormat("EEE, MMM d • h:mm a", Locale.US).format(Date(millis))
+    if (millis <= 0L) "TBD" else SimpleDateFormat("EEE, MMM d • h:mm a", Locale.US).format(Date(millis))
 
 @Composable
 private fun BroadcastPill(broadcast: String, palette: JerseyPalette) {
@@ -236,6 +236,8 @@ fun UpcomingSection(
                 Text(
                     text = "${displayGames.size} GAMES",
                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold, fontSize = 10.sp, color = palette.secondaryText),
+                    maxLines = 1,
+                    softWrap = false,
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                 )
             }

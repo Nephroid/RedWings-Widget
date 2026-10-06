@@ -4,12 +4,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
 import android.widget.RemoteViews
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.redwings.widget.R
 import com.redwings.widget.data.model.getTeamLogoUrlFallback
+import kotlinx.coroutines.withTimeoutOrNull
 import java.util.concurrent.TimeUnit
 
 /**
@@ -27,7 +29,9 @@ object WidgetBinder {
         val isHomeGame: Boolean,
         val venue: String = "",
         val standingLine: String = "",
-        val h2hLine: String = ""
+        val h2hLine: String = "",
+        val awayRecord: String = "",
+        val homeRecord: String = ""
     )
 
     const val PREFS = "RedWingsPrefs"
@@ -57,7 +61,7 @@ object WidgetBinder {
         val isSameDay = gameCal.get(java.util.Calendar.YEAR) == nowCal.get(java.util.Calendar.YEAR) &&
             gameCal.get(java.util.Calendar.DAY_OF_YEAR) == nowCal.get(java.util.Calendar.DAY_OF_YEAR)
         val timeFmt = java.text.SimpleDateFormat("h:mm a", java.util.Locale.US).format(java.util.Date(gameTimeMillis))
-        return if (isSameDay) "TODAY • $timeFmt"
+        return if (isSameDay) "TODAY • ${timeFmt.uppercase()}"
         else java.text.SimpleDateFormat("EEEE • h:mm a", java.util.Locale.US).format(java.util.Date(gameTimeMillis)).uppercase()
     }
 
@@ -79,23 +83,42 @@ object WidgetBinder {
         views.setTextViewText(R.id.widget_venue_info, "$venue • $homeAway")
 
         val standing = game.standingLine.ifEmpty {
-            prefs.getString("redwings_standing_summary", null)
-                ?: prefs.getString("standings_summary", null)
-                ?: "3rd ATL"
+            prefs.getString("standings_summary", null) ?: ""
         }
-        val wcBack = prefs.getString("games_back_wild_card", "4") ?: "4"
+        val wcBack = prefs.getString("games_back_wild_card", "-") ?: "-"
         val poStatus = prefs.getString("playoff_status", "OUT") ?: "OUT"
         val inPlayoffs = poStatus.equals("IN", ignoreCase = true) ||
             poStatus.contains("CLINCHED", ignoreCase = true)
         val chase = StandingsFormatter.formatPlayoffChase(wcBack, inPlayoffs).toString()
 
-        val cleanStanding = standing.replace(Regex(".*•\\s*(\\d+th ATL|\\d+rd ATL|\\d+st ATL|\\d+nd ATL).*"), "$1")
-            .ifBlank { "3rd ATL" }
+        val cleanStanding = if (standing.isNotBlank()) {
+            Regex("(\\d+st ATL|\\d+nd ATL|\\d+rd ATL|\\d+th ATL)").find(standing)?.value ?: ""
+        } else ""
 
-        val contextLine = if (theme == WidgetTheme.HOME) venue else "$venue • $homeAway • $cleanStanding • $chase"
+        val contextLine = if (theme == WidgetTheme.HOME) {
+            venue
+        } else {
+            listOf(venue, homeAway, cleanStanding, chase)
+                .filter { it.isNotBlank() }
+                .joinToString(" • ")
+        }
         views.setTextViewText(R.id.widget_standing_h2h, contextLine)
-        views.setTextViewText(R.id.widget_away_record, if (game.isHomeGame) "20-8-6" else "22-7-5")
-        views.setTextViewText(R.id.widget_home_record, if (game.isHomeGame) "22-7-5" else "20-8-6")
+
+        val detRecord = prefs.getString("team_record_DET", null)
+            ?: prefs.getString("wings_summary", null)?.substringBefore(" •")
+            ?: ""
+        val oppRecord = prefs.getString("team_record_${game.opponentAbbrev}", "") ?: ""
+
+        val awayRec = if (game.awayRecord.isNotBlank()) game.awayRecord
+            else if (game.isHomeGame) oppRecord
+            else detRecord
+
+        val homeRec = if (game.homeRecord.isNotBlank()) game.homeRecord
+            else if (game.isHomeGame) detRecord
+            else oppRecord
+
+        views.setTextViewText(R.id.widget_away_record, awayRec)
+        views.setTextViewText(R.id.widget_home_record, homeRec)
 
         // Away logo left, home logo right (ESPN PNGs need no SVG decoder).
         val oppBitmap = loadLogoBitmap(context, getTeamLogoUrlFallback(game.opponentAbbrev))
@@ -117,13 +140,95 @@ object WidgetBinder {
     }
 
     fun bindEmptyState(context: Context, views: RemoteViews, theme: WidgetTheme) {
-        views.setTextViewText(R.id.widget_away_name, "TOR")
+        val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val detRecord = prefs.getString("team_record_DET", null)
+            ?: prefs.getString("wings_summary", null)?.substringBefore(" •")
+            ?: ""
+
+        val oppRecord = prefs.getString("team_record_OPP", "") ?: ""
+        val oppName = prefs.getString("next_game_opp", "--") ?: "--"
+
+        val isPreviewMock = oppName != "--"
+        val awayName = if (isPreviewMock) oppName else "--"
+        val awayRecord = if (isPreviewMock) oppRecord else ""
+        val gameTimeText = if (isPreviewMock) "SATURDAY • 7:00 PM" else "NO UPCOMING GAMES"
+        val countdownText = if (isPreviewMock) "02 : 14 : 22" else "-- : --"
+
+        views.setTextViewText(R.id.widget_away_name, awayName)
         views.setTextViewText(R.id.widget_home_name, "DET")
-        views.setTextViewText(R.id.widget_away_record, "20-8-6")
-        views.setTextViewText(R.id.widget_home_record, "22-7-5")
-        views.setTextViewText(R.id.widget_opponent, "SATURDAY • 7:00 PM")
-        views.setTextViewText(R.id.widget_countdown, "02 : 14 : 22")
-        views.setTextViewText(R.id.widget_standing_h2h, if (theme == WidgetTheme.HOME) "Little Caesars Arena" else "Little Caesars Arena • Home • 3rd ATL • 4 pts out")
+        views.setTextViewText(R.id.widget_away_record, awayRecord)
+        views.setTextViewText(R.id.widget_home_record, detRecord)
+        views.setTextViewText(R.id.widget_opponent, gameTimeText)
+        views.setTextViewText(R.id.widget_countdown, countdownText)
+        val standing = prefs.getString("standings_summary", "") ?: ""
+        val contextLine = if (theme == WidgetTheme.HOME) {
+            "Little Caesars Arena"
+        } else if (standing.isNotBlank()) {
+            "Little Caesars Arena • $standing"
+        } else {
+            "Little Caesars Arena"
+        }
+        views.setTextViewText(R.id.widget_standing_h2h, contextLine)
+
+        val rawAtlantic = prefs.getString("atlantic_standings", null)
+        val rows = if (!rawAtlantic.isNullOrBlank()) {
+            StandingsFormatter.formatAtlanticLine(rawAtlantic)
+        } else null
+
+        val defaultTeams = listOf("BOS", "FLA", "TOR", "DET", "TBL", "OTT", "BUF", "MTL")
+        val teamIds = listOf(
+            R.id.widget_team_1, R.id.widget_team_2, R.id.widget_team_3, R.id.widget_team_4,
+            R.id.widget_team_5, R.id.widget_team_6, R.id.widget_team_7, R.id.widget_team_8
+        )
+        val teamColor = ContextCompat.getColor(context, theme.teamColorRes)
+        val detColor = ContextCompat.getColor(context, theme.teamDetRes)
+        val subColor = ContextCompat.getColor(context, theme.subColorRes)
+
+        teamIds.forEachIndexed { i, id ->
+            val num = i + 1
+            val teamAbbr = if (rows != null && i < rows.size) {
+                val raw = rows[i].toString()
+                val clean = raw.replace(Regex("^\\d+[\\.\\s]\\s*"), "").trim()
+                Regex("([A-Za-z]{2,3})").find(clean)?.value?.uppercase() ?: clean.take(3).uppercase()
+            } else if (rows == null) {
+                defaultTeams[i]
+            } else {
+                "--"
+            }
+            val isDet = teamAbbr.equals("DET", ignoreCase = true)
+
+            if (isDet) {
+                views.setTextViewText(id, "$num $teamAbbr")
+                views.setTextColor(id, detColor)
+                if (theme == WidgetTheme.HOME) {
+                    views.setInt(id, "setBackgroundResource", R.drawable.widget_det_highlight_pill)
+                    val padH = (6 * context.resources.displayMetrics.density).toInt()
+                    val padV = (2 * context.resources.displayMetrics.density).toInt()
+                    views.setViewPadding(id, padH, padV, padH, padV)
+                } else {
+                    views.setInt(id, "setBackgroundResource", android.R.color.transparent)
+                    views.setViewPadding(id, 0, 0, 0, 0)
+                }
+            } else if (teamAbbr != "--") {
+                val seedHex = String.format("#%06X", 0xFFFFFF and subColor)
+                val teamHex = String.format("#%06X", 0xFFFFFF and teamColor)
+                val htmlString = "<font color='$seedHex'>$num</font> <font color='$teamHex'><b>$teamAbbr</b></font>"
+                val spanned = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    android.text.Html.fromHtml(htmlString, android.text.Html.FROM_HTML_MODE_LEGACY)
+                } else {
+                    @Suppress("DEPRECATION")
+                    android.text.Html.fromHtml(htmlString)
+                }
+                views.setTextViewText(id, spanned)
+                views.setInt(id, "setBackgroundResource", android.R.color.transparent)
+                views.setViewPadding(id, 0, 0, 0, 0)
+            } else {
+                views.setTextViewText(id, "$num --")
+                views.setTextColor(id, teamColor)
+                views.setInt(id, "setBackgroundResource", android.R.color.transparent)
+                views.setViewPadding(id, 0, 0, 0, 0)
+            }
+        }
         try {
             views.setImageViewResource(R.id.widget_away_logo, R.drawable.ic_puck_vector)
             views.setImageViewResource(R.id.widget_home_logo, R.drawable.ic_redwings_logo)
@@ -132,28 +237,33 @@ object WidgetBinder {
         }
     }
 
+    internal var logoBitmapLoader: (suspend (Context, String) -> Bitmap?)? = null
+
     private suspend fun loadLogoBitmap(context: Context, url: String): Bitmap? {
-        return try {
-            val result = context.imageLoader.execute(
-                ImageRequest.Builder(context).data(url).allowHardware(false).build()
-            )
-            if (result is SuccessResult) {
-                val raw = result.drawable.toBitmap()
-                if (raw.width <= 0 || raw.height <= 0) return null
-                val maxDim = 120 // avoid TransactionTooLargeException
-                if (raw.width > maxDim || raw.height > maxDim) {
-                    val ratio = raw.width.toFloat() / raw.height.toFloat()
-                    val (w, h) = if (raw.width > raw.height) {
-                        maxDim to (maxDim / ratio).toInt().coerceAtLeast(1)
-                    } else {
-                        (maxDim * ratio).toInt().coerceAtLeast(1) to maxDim
-                    }
-                    Bitmap.createScaledBitmap(raw, w, h, true)
-                } else raw
-            } else null
-        } catch (e: Exception) {
-            Log.e(TAG, "logo load failed $url: ${e.message}")
-            null
+        logoBitmapLoader?.let { return it(context, url) }
+        return withTimeoutOrNull(2000L) {
+            try {
+                val result = context.imageLoader.execute(
+                    ImageRequest.Builder(context).data(url).allowHardware(false).build()
+                )
+                if (result is SuccessResult) {
+                    val raw = result.drawable.toBitmap()
+                    if (raw.width <= 0 || raw.height <= 0) return@withTimeoutOrNull null
+                    val maxDim = 120 // avoid TransactionTooLargeException
+                    if (raw.width > maxDim || raw.height > maxDim) {
+                        val ratio = raw.width.toFloat() / raw.height.toFloat()
+                        val (w, h) = if (raw.width > raw.height) {
+                            maxDim to (maxDim / ratio).toInt().coerceAtLeast(1)
+                        } else {
+                            (maxDim * ratio).toInt().coerceAtLeast(1) to maxDim
+                        }
+                        Bitmap.createScaledBitmap(raw, w, h, true)
+                    } else raw
+                } else null
+            } catch (e: Exception) {
+                Log.e(TAG, "logo load failed $url: ${e.message}")
+                null
+            }
         }
     }
 }

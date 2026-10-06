@@ -28,6 +28,12 @@ class WidgetScreenshotTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val provider = RedWingsWidgetProvider()
 
+        context.getSharedPreferences(WidgetBinder.PREFS, Context.MODE_PRIVATE).edit()
+            .putString("team_record_DET", "22-7-5")
+            .putString("team_record_OPP", "20-8-6")
+            .putString("next_game_opp", "TOR")
+            .commit()
+
         // 1. Outer Screen 4x2 Render (red_wings_widget_layout)
         renderWidget(
             context = context,

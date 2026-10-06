@@ -70,8 +70,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             poStatus.contains("CLINCHED", ignoreCase = true)
         val chaseText = com.redwings.widget.widget.StandingsFormatter
             .formatPlayoffChase(wcBack, inPlayoffs).toString()
+        val rawAtlantic = prefs.getString("atlantic_standings", null) ?: line
         val standingsList = com.redwings.widget.widget.StandingsFormatter
-            .parseAtlanticRowsForUi(line)
+            .parseAtlanticRowsForUi(rawAtlantic)
 
         val fallbackLast = last ?: repository.lastSavedGame()?.toUi() ?: LastGameUi(
             opponent = "Boston Bruins",
@@ -111,7 +112,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                     nextGame = fallbackUpcoming.first(),
                     upcoming = fallbackUpcoming,
                     lastGame = fallbackLast,
-                    standingsSummary = "4th in Atlantic • 94 pts",
+                    standingsSummary = summary.ifBlank { "Atlantic Division" },
                     atlanticLine = line,
                     standings = standingsList,
                     playoffChaseText = chaseText
@@ -215,13 +216,23 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         super.onCleared()
     }
 
-    private fun UpcomingGame.toUi() = NextGameUi(
-        opponent = opponentName,
-        opponentAbbrev = opponentAbbrev,
-        venue = stadiumName,
-        startTimeMillis = gameTimeMillis,
-        isHome = isHomeGame
-    )
+    private fun UpcomingGame.toUi(): NextGameUi {
+        val detRecord = prefs.getString("team_record_DET", null)
+            ?: prefs.getString("wings_summary", null)?.substringBefore(" •")
+            ?: ""
+        val oppRecord = prefs.getString("team_record_$opponentAbbrev", "") ?: ""
+        val awayRec = if (isHomeGame) oppRecord else detRecord
+        val homeRec = if (isHomeGame) detRecord else oppRecord
+        return NextGameUi(
+            opponent = opponentName,
+            opponentAbbrev = opponentAbbrev,
+            venue = stadiumName,
+            startTimeMillis = gameTimeMillis,
+            isHome = isHomeGame,
+            awayRecord = awayRec,
+            homeRecord = homeRec
+        )
+    }
 
     private fun LastGame.toUi() = LastGameUi(
         opponent = opponent,
