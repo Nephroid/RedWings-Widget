@@ -321,4 +321,57 @@ class RedWingsWidgetProviderTest {
         assertEquals("DET", homeNameView.text.toString())
         assertEquals("--", awayNameView.text.toString())
     }
+
+    @Test
+    fun generateTeamBadge_returnsCrispSquareBitmapWithTeamColors() {
+        val badge = WidgetBinder.generateTeamBadge("OTT", size = 120)
+        assertNotNull(badge)
+        assertEquals(120, badge.width)
+        assertEquals(120, badge.height)
+
+        val detBadge = WidgetBinder.generateTeamBadge("DET", size = 80)
+        assertNotNull(detBadge)
+        assertEquals(80, detBadge.width)
+        assertEquals(80, detBadge.height)
+    }
+
+    @Test
+    fun logoDiskCaching_readsDirectlyFromFilesDir() = kotlinx.coroutines.runBlocking {
+        val diskFile = WidgetBinder.getLogoDiskFile(context, "OTT")
+        assertTrue(diskFile.parentFile?.exists() == true)
+
+        val sampleBmp = WidgetBinder.generateTeamBadge("OTT", 120)
+        java.io.FileOutputStream(diskFile).use { out ->
+            sampleBmp.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, out)
+        }
+        assertTrue(diskFile.exists() && diskFile.length() > 0)
+
+        // Reset any mock loader so real disk loader is exercised
+        WidgetBinder.logoBitmapLoader = null
+
+        val loadedBmp = WidgetBinder.loadLogoBitmap(context, "OTT")
+        assertNotNull(loadedBmp)
+        assertEquals(120, loadedBmp?.width)
+        assertEquals(120, loadedBmp?.height)
+    }
+
+    @Test
+    fun bindEmptyState_bindsOpponentFromSharedPreferences() {
+        context.getSharedPreferences(WidgetBinder.PREFS, Context.MODE_PRIVATE).edit()
+            .putString("next_game_opponent_abbrev", "OTT")
+            .putString("team_record_OPP", "2-1-0")
+            .putBoolean("next_game_is_home", true)
+            .commit()
+
+        val views = RemoteViews(context.packageName, R.layout.red_wings_widget_layout)
+        WidgetBinder.bindEmptyState(context, views, WidgetTheme.HOME)
+        val inflated = views.apply(context, FrameLayout(context)) as android.view.ViewGroup
+        val awayNameView = inflated.findViewById<TextView>(R.id.widget_away_name)
+        val awayRecView = inflated.findViewById<TextView>(R.id.widget_away_record)
+        val homeNameView = inflated.findViewById<TextView>(R.id.widget_home_name)
+
+        assertEquals("OTT", awayNameView.text.toString())
+        assertEquals("2-1-0", awayRecView.text.toString())
+        assertEquals("DET", homeNameView.text.toString())
+    }
 }

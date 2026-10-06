@@ -33,11 +33,20 @@ class TeamUtilsTest {
         assertEquals("NHL has 32 teams", expected, NHL_TEAMS.keys)
         NHL_TEAMS.forEach { (abbrev, fullName) ->
             assertEquals(fullName, teamDisplayName(abbrev))
+            val expectedSlug = com.redwings.widget.data.model.ESPN_SLUG_MAP[abbrev] ?: abbrev.lowercase()
             assertTrue(
-                "$abbrev logo should embed abbrev, got: ${getTeamLogoUrl(abbrev)}",
-                getTeamLogoUrl(abbrev).contains(abbrev.lowercase())
+                "$abbrev logo should embed expected slug $expectedSlug.png, got: ${getTeamLogoUrl(abbrev)}",
+                getTeamLogoUrl(abbrev).contains("$expectedSlug.png")
             )
         }
+    }
+
+    @Test
+    fun espnSlugMappings_specialCasesResolveCorrectly() {
+        assertEquals("https://a.espncdn.com/i/teamlogos/nhl/500/la.png", getTeamLogoUrl("LAK"))
+        assertEquals("https://a.espncdn.com/i/teamlogos/nhl/500/sj.png", getTeamLogoUrl("SJS"))
+        assertEquals("https://a.espncdn.com/i/teamlogos/nhl/500/tb.png", getTeamLogoUrl("TBL"))
+        assertEquals("https://a.espncdn.com/i/teamlogos/nhl/500/ott.png", getTeamLogoUrl("OTT"))
     }
 
     @Test

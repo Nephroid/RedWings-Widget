@@ -184,6 +184,8 @@ class HockeyRepository(
                     prefs.edit()
                         .putString("next_game_venue", nextVenue)
                         .putString("next_game_opponent_abbrev", oppAbbrev ?: "OPP")
+                        .putString("next_game_opp", oppAbbrev ?: "OPP")
+                        .putBoolean("next_game_is_home", isHome)
                         .apply()
                 }
 
@@ -201,6 +203,23 @@ class HockeyRepository(
                 } else {
                     gameDao.replaceGames(combined)
                     Log.d("HockeyRepository", "Cached ${combined.size} Red Wings games")
+
+                    // Pre-warm upcoming opponent logos onto disk cache
+                    try {
+                        val upcomingOpponents = combined.map { it.opponentAbbrev }.filter { it.isNotBlank() && it != "OPP" }.toSet() + "DET"
+                        upcomingOpponents.forEach { opp ->
+                            com.redwings.widget.widget.WidgetBinder.loadLogoBitmap(context, opp)
+                        }
+                    } catch (e: Exception) {
+                        Log.w("HockeyRepository", "Pre-warming logos failed: ${e.message}")
+                    }
+
+                    // Refresh launcher widgets immediately with fresh schedule & logos
+                    try {
+                        com.redwings.widget.widget.RedWingsWidgetProvider.triggerUpdate(appContext ?: context)
+                    } catch (e: Exception) {
+                        Log.w("HockeyRepository", "Triggering widget update failed: ${e.message}")
+                    }
                 }
             } catch (e: Exception) {
                 if (e is kotlinx.coroutines.CancellationException) throw e
@@ -332,6 +351,9 @@ class HockeyRepository(
             .putString("wings_summary", "42-30-10 • 94 pts • 4th ATL")
             .putString("games_back_wild_card", "IN")
             .putString("playoff_status", "CLINCHED")
+            .putString("next_game_opp", "TOR")
+            .putString("next_game_opponent_abbrev", "TOR")
+            .putBoolean("next_game_is_home", true)
             .putBoolean("is_simulated_fallback", true)
             .apply()
 

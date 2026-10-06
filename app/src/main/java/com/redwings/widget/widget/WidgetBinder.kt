@@ -2,6 +2,13 @@ package com.redwings.widget.widget
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.Typeface
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
@@ -10,9 +17,13 @@ import coil.imageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.redwings.widget.R
+import com.redwings.widget.data.model.getTeamColor
 import com.redwings.widget.data.model.getTeamLogoUrl
 import kotlinx.coroutines.withTimeoutOrNull
+import java.io.File
+import java.io.FileOutputStream
 import java.util.concurrent.TimeUnit
+
 
 /**
  * Binds game data into RemoteViews. Seam type [WidgetGame] decouples the
@@ -66,7 +77,14 @@ object WidgetBinder {
         else java.text.SimpleDateFormat("EEEE • h:mm a", java.util.Locale.US).format(java.util.Date(gameTimeMillis)).uppercase()
     }
 
-    suspend fun bindGameData(context: Context, views: RemoteViews, game: WidgetGame, theme: WidgetTheme) {
+    suspend fun bindGameData(
+        context: Context,
+        views: RemoteViews,
+        game: WidgetGame,
+        theme: WidgetTheme,
+        preloadedOppBitmap: Bitmap? = null,
+        preloadedDetBitmap: Bitmap? = null
+    ) {
         val awayAbbr = if (game.isHomeGame) game.opponentAbbrev else DET_ABBR
         val homeAbbr = if (game.isHomeGame) DET_ABBR else game.opponentAbbrev
         views.setTextViewText(R.id.widget_away_name, awayAbbr)
@@ -115,9 +133,9 @@ object WidgetBinder {
         views.setTextViewText(R.id.widget_away_record, awayRec)
         views.setTextViewText(R.id.widget_home_record, homeRec)
 
-        // Away logo left, home logo right (ESPN PNGs need no SVG decoder).
-        val oppBitmap = loadLogoBitmap(context, getTeamLogoUrl(game.opponentAbbrev))
-        val detBitmap = loadLogoBitmap(context, getTeamLogoUrl(DET_ABBR))
+        // Away logo left, home logo right (ESPN PNGs with persistent disk cache & badge fallback).
+        val oppBitmap = preloadedOppBitmap ?: loadLogoBitmap(context, game.opponentAbbrev)
+        val detBitmap = preloadedDetBitmap ?: loadLogoBitmap(context, DET_ABBR)
         val (awayBmp, awayFallback) = if (game.isHomeGame) {
             oppBitmap to R.drawable.ic_puck_vector
         } else {
@@ -134,19 +152,33 @@ object WidgetBinder {
         else views.setImageViewResource(R.id.widget_home_logo, homeFallback)
     }
 
-    fun bindEmptyState(context: Context, views: RemoteViews, theme: WidgetTheme) {
+    fun bindEmptyState(
+        context: Context,
+        views: RemoteViews,
+        theme: WidgetTheme,
+        preloadedOppBitmap: Bitmap? = null,
+        preloadedDetBitmap: Bitmap? = null
+    ) {
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val detRecord = prefs.getString("team_record_DET", null)
             ?: prefs.getString("wings_summary", null)?.substringBefore(" •")
             ?: ""
 
         val oppRecord = prefs.getString("team_record_OPP", "") ?: ""
-        val oppName = prefs.getString("next_game_opp", "--") ?: "--"
+        val oppName = prefs.getString("next_game_opponent_abbrev", null)
+            ?: prefs.getString("next_game_opp", null)
+            ?: "--"
+        val isHome = prefs.getBoolean("next_game_is_home", true)
 
-        views.setTextViewText(R.id.widget_away_name, oppName)
-        views.setTextViewText(R.id.widget_home_name, "DET")
-        views.setTextViewText(R.id.widget_away_record, oppRecord)
-        views.setTextViewText(R.id.widget_home_record, detRecord)
+        val awayName = if (isHome) oppName else "DET"
+        val homeName = if (isHome) "DET" else oppName
+        val awayRec = if (isHome) oppRecord else detRecord
+        val homeRec = if (isHome) detRecord else oppRecord
+
+        views.setTextViewText(R.id.widget_away_name, awayName)
+        views.setTextViewText(R.id.widget_home_name, homeName)
+        views.setTextViewText(R.id.widget_away_record, awayRec)
+        views.setTextViewText(R.id.widget_home_record, homeRec)
         views.setTextViewText(R.id.widget_opponent, "NO UPCOMING GAMES")
         views.setTextViewText(R.id.widget_countdown, "-- : --")
         views.setTextViewText(R.id.widget_standing_h2h, "Little Caesars Arena")
@@ -203,8 +235,30 @@ object WidgetBinder {
             }
         }
         try {
-            views.setImageViewResource(R.id.widget_away_logo, R.drawable.ic_puck_vector)
-            views.setImageViewResource(R.id.widget_home_logo, R.drawable.ic_redwings_logo)
+            val oppBmp = preloadedOppBitmap ?: if (oppName != "--") {
+                val diskFile = getLogoDiskFile(context, oppName)
+                if (diskFile.exists() && diskFile.length() > 0) {
+                    BitmapFactory.decodeFile(diskFile.absolutePath)
+                } else {
+                    generateTeamBadge(oppName)
+                }
+            } else null
+
+            val detBmp = preloadedDetBitmap ?: run {
+                val diskFile = getLogoDiskFile(context, "DET")
+                if (diskFile.exists() && diskFile.length() > 0) {
+                    BitmapFactory.decodeFile(diskFile.absolutePath)
+                } else null
+            }
+
+            val awayBmp = if (isHome) oppBmp else detBmp
+            val homeBmp = if (isHome) detBmp else oppBmp
+
+            if (awayBmp != null) views.setImageViewBitmap(R.id.widget_away_logo, awayBmp)
+            else views.setImageViewResource(R.id.widget_away_logo, if (isHome) R.drawable.ic_puck_vector else R.drawable.ic_redwings_logo)
+
+            if (homeBmp != null) views.setImageViewBitmap(R.id.widget_home_logo, homeBmp)
+            else views.setImageViewResource(R.id.widget_home_logo, if (isHome) R.drawable.ic_redwings_logo else R.drawable.ic_puck_vector)
         } catch (e: Exception) {
             Log.e(TAG, "empty-state logos missing: ${e.message}")
         }
@@ -212,9 +266,72 @@ object WidgetBinder {
 
     internal var logoBitmapLoader: (suspend (Context, String) -> Bitmap?)? = null
 
-    private suspend fun loadLogoBitmap(context: Context, url: String): Bitmap? {
-        logoBitmapLoader?.let { return it(context, url) }
-        return withTimeoutOrNull(4000L) {
+    fun getLogoDiskFile(context: Context, abbrev: String): File {
+        val upper = abbrev.uppercase().takeIf { it.isNotBlank() } ?: "DET"
+        val dir = File(context.filesDir, "logos").apply { if (!exists()) mkdirs() }
+        return File(dir, "${upper.lowercase()}.png")
+    }
+
+    fun generateTeamBadge(abbrev: String?, size: Int = 120): Bitmap {
+        val upper = abbrev?.uppercase()?.takeIf { it.isNotBlank() } ?: "DET"
+        val bmp = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bmp)
+        val teamColorInt = getTeamColor(upper).toInt()
+        val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = teamColorInt
+            style = Paint.Style.FILL
+        }
+        val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.WHITE
+            style = Paint.Style.STROKE
+            strokeWidth = (size * 0.05f).coerceAtLeast(2f)
+        }
+        val radius = (size / 2f) - (strokePaint.strokeWidth / 2f)
+        canvas.drawCircle(size / 2f, size / 2f, radius, bgPaint)
+        canvas.drawCircle(size / 2f, size / 2f, radius, strokePaint)
+
+        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.WHITE
+            textSize = size * (if (upper.length > 3) 0.30f else 0.36f)
+            textAlign = Paint.Align.CENTER
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        }
+        val textBounds = Rect()
+        textPaint.getTextBounds(upper, 0, upper.length, textBounds)
+        val y = (size / 2f) + (textBounds.height() / 2f) - textBounds.bottom
+        canvas.drawText(upper, size / 2f, y, textPaint)
+        return bmp
+    }
+
+    suspend fun loadLogoBitmap(context: Context, identifier: String): Bitmap? {
+        val upper = if (identifier.startsWith("http")) {
+            val slug = identifier.substringAfterLast("/").substringBefore(".").uppercase()
+            when (slug) {
+                "LA" -> "LAK"
+                "SJ" -> "SJS"
+                "TB" -> "TBL"
+                else -> slug
+            }
+        } else {
+            identifier.uppercase()
+        }
+        val url = if (identifier.startsWith("http")) identifier else getTeamLogoUrl(upper)
+
+        logoBitmapLoader?.let { loader ->
+            return loader(context, url)
+        }
+
+        val diskFile = getLogoDiskFile(context, upper)
+        if (diskFile.exists() && diskFile.length() > 0) {
+            try {
+                val diskBmp = BitmapFactory.decodeFile(diskFile.absolutePath)
+                if (diskBmp != null && diskBmp.width > 0) return diskBmp
+            } catch (e: Exception) {
+                Log.w(TAG, "failed to decode disk cached logo for $upper: ${e.message}")
+            }
+        }
+
+        val netBmp = withTimeoutOrNull(4000L) {
             try {
                 val result = context.imageLoader.execute(
                     ImageRequest.Builder(context).data(url).allowHardware(false).build()
@@ -223,7 +340,7 @@ object WidgetBinder {
                     val raw = result.drawable.toBitmap()
                     if (raw.width <= 0 || raw.height <= 0) return@withTimeoutOrNull null
                     val maxDim = 120 // avoid TransactionTooLargeException
-                    if (raw.width > maxDim || raw.height > maxDim) {
+                    val scaled = if (raw.width > maxDim || raw.height > maxDim) {
                         val ratio = raw.width.toFloat() / raw.height.toFloat()
                         val (w, h) = if (raw.width > raw.height) {
                             maxDim to (maxDim / ratio).toInt().coerceAtLeast(1)
@@ -232,11 +349,22 @@ object WidgetBinder {
                         }
                         Bitmap.createScaledBitmap(raw, w, h, true)
                     } else raw
+
+                    try {
+                        FileOutputStream(diskFile).use { out ->
+                            scaled.compress(Bitmap.CompressFormat.PNG, 100, out)
+                        }
+                    } catch (e: Exception) {
+                        Log.w(TAG, "failed to cache logo to disk for $upper: ${e.message}")
+                    }
+                    scaled
                 } else null
             } catch (e: Exception) {
                 Log.e(TAG, "logo load failed $url: ${e.message}")
                 null
             }
         }
+
+        return netBmp ?: generateTeamBadge(upper)
     }
 }

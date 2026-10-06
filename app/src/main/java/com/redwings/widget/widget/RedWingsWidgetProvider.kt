@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Build
 import android.util.Log
 import android.util.TypedValue
@@ -19,6 +20,8 @@ import com.redwings.widget.data.repository.HockeyRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 /** Lean provider (<300 lines per REDWINGS.md): scheduling, theming, and responsive layouts. */
@@ -116,6 +119,21 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
                 null
             }
 
+            val oppAbbrev = game?.opponentAbbrev
+                ?: prefs.getString("next_game_opponent_abbrev", null)
+                ?: prefs.getString("next_game_opp", null)
+                ?: "--"
+
+            val (oppBitmap, detBitmap) = coroutineScope {
+                val oppDeferred = async(Dispatchers.IO) {
+                    if (oppAbbrev != "--") WidgetBinder.loadLogoBitmap(context, oppAbbrev) else null
+                }
+                val detDeferred = async(Dispatchers.IO) {
+                    WidgetBinder.loadLogoBitmap(context, "DET")
+                }
+                oppDeferred.await() to detDeferred.await()
+            }
+
             ids.forEach { id ->
                 val options = opts ?: mgr.getAppWidgetOptions(id)
                 val w = options?.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 180)?.takeIf { it > 0 } ?: 180
@@ -123,13 +141,13 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
 
                 val views = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     val sizeMap = mapOf(
-                        android.util.SizeF(280f, 110f) to buildWidgetViews(context, R.layout.red_wings_widget_layout, game, theme, prefs, id, 320, 140),
-                        android.util.SizeF(460f, 130f) to buildWidgetViews(context, R.layout.red_wings_widget_wide, game, theme, prefs, id, 540, 170)
+                        android.util.SizeF(280f, 110f) to buildWidgetViews(context, R.layout.red_wings_widget_layout, game, theme, prefs, id, 320, 140, oppBitmap, detBitmap),
+                        android.util.SizeF(460f, 130f) to buildWidgetViews(context, R.layout.red_wings_widget_wide, game, theme, prefs, id, 540, 170, oppBitmap, detBitmap)
                     )
                     RemoteViews(sizeMap)
                 } else {
                     val layout = if (w >= 450) R.layout.red_wings_widget_wide else R.layout.red_wings_widget_layout
-                    buildWidgetViews(context, layout, game, theme, prefs, id, w, h)
+                    buildWidgetViews(context, layout, game, theme, prefs, id, w, h, oppBitmap, detBitmap)
                 }
                 mgr.updateAppWidget(id, views)
             }
@@ -146,15 +164,17 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         prefs: android.content.SharedPreferences,
         widgetId: Int,
         minW: Int,
-        minH: Int
+        minH: Int,
+        oppBitmap: Bitmap? = null,
+        detBitmap: Bitmap? = null
     ): RemoteViews {
         val views = RemoteViews(context.packageName, layoutResId)
         views.setOnClickPendingIntent(R.id.widget_theme_toggle, togglePI(context, widgetId))
         views.setTextViewText(R.id.widget_theme_toggle, theme.buttonLabel)
         applyWidgetTheme(context, views, theme)
 
-        if (game != null) WidgetBinder.bindGameData(context, views, game, theme)
-        else WidgetBinder.bindEmptyState(context, views, theme)
+        if (game != null) WidgetBinder.bindGameData(context, views, game, theme, oppBitmap, detBitmap)
+        else WidgetBinder.bindEmptyState(context, views, theme, oppBitmap, detBitmap)
 
         bindStandings(context, views, prefs, theme)
         applyResponsiveLayout(context, views, minW, minH)

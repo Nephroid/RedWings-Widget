@@ -57,6 +57,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        RedWingsWidgetProvider.triggerUpdate(this)
+    }
+
+
     companion object {
         const val PREFS_NAME = "com.redwings.widget.PREFS"
         const val KEY_THEME = "widget_theme_index"
