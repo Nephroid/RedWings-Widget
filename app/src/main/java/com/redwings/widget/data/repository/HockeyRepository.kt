@@ -6,9 +6,12 @@ import com.redwings.widget.data.api.NhlApiClient
 import com.redwings.widget.data.api.NhlApiService
 import com.redwings.widget.data.api.NhlGame
 import com.redwings.widget.data.local.GameDao
+import com.redwings.widget.data.api.NhlClubSkater
 import com.redwings.widget.data.model.GameStarUi
 import com.redwings.widget.data.model.LastGame
 import com.redwings.widget.data.model.RedWingsGame
+import com.redwings.widget.data.model.TeamLeaderPlayerUi
+import com.redwings.widget.data.model.TeamLeadersUi
 import com.redwings.widget.data.model.UpcomingGame
 import com.redwings.widget.data.model.defaultThreeStars
 import com.redwings.widget.data.model.teamDisplayName
@@ -44,6 +47,10 @@ class HockeyRepository(
         NhlApiClient.moshi.adapter<List<GameStarUi>>(
             Types.newParameterizedType(List::class.java, GameStarUi::class.java)
         )
+    }
+
+    private val leadersAdapter by lazy {
+        NhlApiClient.moshi.adapter(TeamLeadersUi::class.java)
     }
 
     companion object {
@@ -87,6 +94,112 @@ class HockeyRepository(
             dateLabel = p.getString("last_game_date", "Tue, Sep 30") ?: "Tue, Sep 30",
             threeStars = stars
         )
+    }
+
+    /** Prefs-backed DRW season leaders for UI. */
+    fun getCachedSeasonLeaders(): TeamLeadersUi {
+        val ctx = appContext ?: return TeamLeadersUi()
+        val p = prefs(ctx)
+        val json = p.getString("drw_season_leaders", null)
+        if (!json.isNullOrBlank()) {
+            try {
+                leadersAdapter.fromJson(json)?.let { return it }
+            } catch (e: Exception) {
+                Log.w("HockeyRepository", "Failed to parse cached leaders: ${e.message}")
+            }
+        }
+        return TeamLeadersUi()
+    }
+
+    suspend fun refreshSeasonLeaders(context: Context): TeamLeadersUi {
+        return withContext(Dispatchers.IO) {
+            try {
+                val stats = apiService.getClubStatsNow("DET")
+                val skaters = stats.skaters.orEmpty()
+                if (skaters.isNotEmpty()) {
+                    val topPoints = skaters.sortedWith(
+                        compareByDescending<NhlClubSkater> { it.points }
+                            .thenByDescending { it.goals }
+                            .thenByDescending { it.assists }
+                    ).take(5).mapIndexed { idx, s ->
+                        val fullName = listOfNotNull(s.firstName?.default, s.lastName?.default)
+                            .joinToString(" ").trim().ifEmpty { "Skater #${s.playerId}" }
+                        val headshot = s.headshot?.takeIf { it.isNotBlank() }
+                            ?: "https://assets.nhle.com/mugs/nhl/latest/${s.playerId}.png"
+                        TeamLeaderPlayerUi(
+                            rank = idx + 1,
+                            playerId = s.playerId,
+                            name = fullName,
+                            position = s.positionCode.orEmpty(),
+                            sweaterNo = null,
+                            headshotUrl = headshot,
+                            primaryStat = "${s.points} PTS",
+                            secondaryStat = "${s.goals}G, ${s.assists}A • ${s.gamesPlayed} GP"
+                        )
+                    }
+
+                    val topGoals = skaters.sortedWith(
+                        compareByDescending<NhlClubSkater> { it.goals }
+                            .thenByDescending { it.points }
+                            .thenByDescending { it.shots }
+                    ).take(5).mapIndexed { idx, s ->
+                        val fullName = listOfNotNull(s.firstName?.default, s.lastName?.default)
+                            .joinToString(" ").trim().ifEmpty { "Skater #${s.playerId}" }
+                        val headshot = s.headshot?.takeIf { it.isNotBlank() }
+                            ?: "https://assets.nhle.com/mugs/nhl/latest/${s.playerId}.png"
+                        TeamLeaderPlayerUi(
+                            rank = idx + 1,
+                            playerId = s.playerId,
+                            name = fullName,
+                            position = s.positionCode.orEmpty(),
+                            sweaterNo = null,
+                            headshotUrl = headshot,
+                            primaryStat = "${s.goals} G",
+                            secondaryStat = "${s.gamesPlayed} GP • ${s.points} PTS"
+                        )
+                    }
+
+                    val topAssists = skaters.sortedWith(
+                        compareByDescending<NhlClubSkater> { it.assists }
+                            .thenByDescending { it.points }
+                            .thenBy { it.gamesPlayed }
+                    ).take(5).mapIndexed { idx, s ->
+                        val fullName = listOfNotNull(s.firstName?.default, s.lastName?.default)
+                            .joinToString(" ").trim().ifEmpty { "Skater #${s.playerId}" }
+                        val headshot = s.headshot?.takeIf { it.isNotBlank() }
+                            ?: "https://assets.nhle.com/mugs/nhl/latest/${s.playerId}.png"
+                        TeamLeaderPlayerUi(
+                            rank = idx + 1,
+                            playerId = s.playerId,
+                            name = fullName,
+                            position = s.positionCode.orEmpty(),
+                            sweaterNo = null,
+                            headshotUrl = headshot,
+                            primaryStat = "${s.assists} A",
+                            secondaryStat = "${s.gamesPlayed} GP • ${s.points} PTS"
+                        )
+                    }
+
+                    val leaders = TeamLeadersUi(
+                        topPoints = topPoints,
+                        topGoals = topGoals,
+                        topAssists = topAssists
+                    )
+
+                    val p = prefs(context)
+                    try {
+                        p.edit().putString("drw_season_leaders", leadersAdapter.toJson(leaders)).apply()
+                    } catch (e: Exception) {
+                        Log.w("HockeyRepository", "Failed to cache season leaders: ${e.message}")
+                    }
+                    return@withContext leaders
+                }
+            } catch (e: Exception) {
+                if (e is kotlinx.coroutines.CancellationException) throw e
+                Log.w("HockeyRepository", "Failed to fetch club stats: ${e.message}")
+            }
+            getCachedSeasonLeaders()
+        }
     }
 
     suspend fun refreshGames(context: Context) {
@@ -219,6 +332,13 @@ class HockeyRepository(
                         com.redwings.widget.widget.RedWingsWidgetProvider.triggerUpdate(appContext ?: context)
                     } catch (e: Exception) {
                         Log.w("HockeyRepository", "Triggering widget update failed: ${e.message}")
+                    }
+
+                    // Refresh DRW season stat leaders
+                    try {
+                        refreshSeasonLeaders(context)
+                    } catch (e: Exception) {
+                        Log.w("HockeyRepository", "Refreshing season leaders failed: ${e.message}")
                     }
                 }
             } catch (e: Exception) {
@@ -368,6 +488,11 @@ class HockeyRepository(
         )
         gameDao.replaceGames(list)
         saveFallbackLastGame(prefs)
+        if (!prefs.contains("drw_season_leaders")) {
+            try {
+                prefs.edit().putString("drw_season_leaders", leadersAdapter.toJson(TeamLeadersUi())).apply()
+            } catch (_: Exception) {}
+        }
         Log.d("HockeyRepository", "Cached 7 simulated games (offline fallback)")
     }
 

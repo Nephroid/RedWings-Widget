@@ -27,5 +27,10 @@ interface NhlApiService {
     suspend fun getGameLanding(
         @Path("gameId") gameId: Int
     ): NhlGameLandingResponse
+
+    @GET("v1/club-stats/{team}/now")
+    suspend fun getClubStatsNow(
+        @Path("team") team: String = "DET"
+    ): NhlClubStatsResponse
 }
 

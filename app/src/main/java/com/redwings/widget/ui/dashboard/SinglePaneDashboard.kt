@@ -134,6 +134,15 @@ fun SinglePaneDashboard(
                 }
             }
 
+            // 2.5. DRW Season Stat Leaders Card
+            item {
+                Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    DrwSeasonLeadersCard(
+                        leaders = data?.teamLeaders ?: com.redwings.widget.data.model.TeamLeadersUi()
+                    )
+                }
+            }
+
             // 3. Upcoming Schedule Section
             val upcomingList = data?.upcoming?.takeIf { it.isNotEmpty() } ?: listOf(
                 NextGameUi("Toronto Maple Leafs", "TOR", "Little Caesars Arena", System.currentTimeMillis() + 86400000L * 2, true),

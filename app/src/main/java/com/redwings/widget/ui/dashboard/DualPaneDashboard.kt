@@ -148,6 +148,10 @@ fun DualPaneDashboard(
                         showFormGuide = true
                     )
 
+                    DrwSeasonLeadersCard(
+                        leaders = data?.teamLeaders ?: com.redwings.widget.data.model.TeamLeadersUi()
+                    )
+
                     Spacer(Modifier.height(8.dp))
                     AppFooter()
                 }

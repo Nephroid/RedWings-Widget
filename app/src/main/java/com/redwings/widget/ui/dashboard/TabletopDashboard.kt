@@ -204,6 +204,10 @@ fun TabletopDashboard(
                         showFormGuide = true
                     )
 
+                    DrwSeasonLeadersCard(
+                        leaders = data?.teamLeaders ?: com.redwings.widget.data.model.TeamLeadersUi()
+                    )
+
                     val upcomingList = data?.upcoming?.takeIf { it.isNotEmpty() } ?: listOf(
                         NextGameUi("Toronto Maple Leafs", "TOR", "Little Caesars Arena", System.currentTimeMillis() + 86400000L * 2, true),
                         NextGameUi("Montreal Canadiens", "MTL", "Bell Centre", System.currentTimeMillis() + 86400000L * 4, false)

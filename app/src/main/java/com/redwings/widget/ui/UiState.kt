@@ -68,6 +68,7 @@ sealed interface ScheduleUiState {
         val standingsSummary: String = "",
         val atlanticLine: String = "",
         val standings: List<StandingsRowUi> = emptyList(),
-        val playoffChaseText: String = ""
+        val playoffChaseText: String = "",
+        val teamLeaders: com.redwings.widget.data.model.TeamLeadersUi = com.redwings.widget.data.model.TeamLeadersUi()
     ) : ScheduleUiState
 }

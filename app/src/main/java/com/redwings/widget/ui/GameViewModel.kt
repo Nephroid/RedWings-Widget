@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.redwings.widget.RedWingsApp
 import com.redwings.widget.data.model.LastGame
+import com.redwings.widget.data.model.TeamLeadersUi
 import com.redwings.widget.data.model.UpcomingGame
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -61,9 +62,13 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val _atlanticLine = MutableStateFlow(prefs.getString(KEY_LINE, "DET —") ?: "DET —")
     val atlanticLine: StateFlow<String> = _atlanticLine.asStateFlow()
 
+    private val _teamLeaders =
+        MutableStateFlow(repository.getCachedSeasonLeaders())
+    val teamLeaders: StateFlow<TeamLeadersUi> = _teamLeaders.asStateFlow()
+
     val scheduleState: StateFlow<ScheduleUiState> = combine(
-        upcomingGames, lastGame, standingsSummary, atlanticLine, isRefreshing
-    ) { games, last, summary, line, refreshing ->
+        upcomingGames, lastGame, standingsSummary, atlanticLine, teamLeaders
+    ) { games, last, summary, line, leaders ->
         val wcBack = prefs.getString("games_back_wild_card", "IN") ?: "IN"
         val poStatus = prefs.getString("playoff_status", "CLINCHED") ?: "CLINCHED"
         val inPlayoffs = poStatus.equals("IN", ignoreCase = true) ||
@@ -94,10 +99,10 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                     standingsSummary = summary,
                     atlanticLine = line,
                     standings = standingsList,
-                    playoffChaseText = chaseText
+                    playoffChaseText = chaseText,
+                    teamLeaders = leaders
                 )
             }
-            refreshing -> ScheduleUiState.Loading
             else -> {
                 val now = System.currentTimeMillis()
                 val fallbackUpcoming = listOf(
@@ -116,7 +121,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                     standingsSummary = summary.ifBlank { "Atlantic Division" },
                     atlanticLine = line,
                     standings = standingsList,
-                    playoffChaseText = chaseText
+                    playoffChaseText = chaseText,
+                    teamLeaders = leaders
                 )
             }
         }
@@ -167,12 +173,14 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                     prefs.getString(KEY_SUMMARY, _standingsSummary.value) ?: _standingsSummary.value
                 _atlanticLine.value =
                     prefs.getString(KEY_LINE, _atlanticLine.value) ?: _atlanticLine.value
+                _teamLeaders.value = repository.getCachedSeasonLeaders()
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
                 Log.e("GameViewModel", "Refresh failed", e)
                 _errorMessage.value = "Couldn't reach the network. Showing offline data."
                 _lastGame.value = _lastGame.value
                     ?: runCatching { repository.lastSavedGame()?.toUi() }.getOrNull()
+                _teamLeaders.value = repository.getCachedSeasonLeaders()
             } finally {
                 _isRefreshing.value = false
             }

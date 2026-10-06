@@ -126,3 +126,28 @@ data class NhlThreeStar(
     val savePctg: Double? = null
 )
 
+@JsonClass(generateAdapter = true)
+data class NhlClubStatsResponse(
+    val season: Int? = null,
+    val gameType: Int? = null,
+    val skaters: List<NhlClubSkater>? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class NhlClubSkater(
+    val playerId: Int = 0,
+    val headshot: String? = null,
+    val firstName: CommonName? = null,
+    val lastName: CommonName? = null,
+    val positionCode: String? = null,
+    val gamesPlayed: Int = 0,
+    val goals: Int = 0,
+    val assists: Int = 0,
+    val points: Int = 0,
+    val plusMinus: Int = 0,
+    val penaltyMinutes: Int = 0,
+    val shots: Int = 0,
+    val shootingPctg: Double = 0.0
+)
+
+

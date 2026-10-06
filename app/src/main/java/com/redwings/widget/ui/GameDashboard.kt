@@ -45,6 +45,12 @@ fun ThreeStarsSection(
     modifier: Modifier = Modifier
 ) = com.redwings.widget.ui.dashboard.ThreeStarsSection(stars = stars, modifier = modifier)
 
+@Composable
+fun DrwSeasonLeadersCard(
+    leaders: com.redwings.widget.data.model.TeamLeadersUi,
+    modifier: Modifier = Modifier
+) = com.redwings.widget.ui.dashboard.DrwSeasonLeadersCard(leaders = leaders, modifier = modifier)
+
 
 @Composable
 fun StandingsCard(
