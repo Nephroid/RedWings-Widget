@@ -22,6 +22,11 @@ class RedWingsApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        try {
+            com.google.firebase.FirebaseApp.initializeApp(this)
+        } catch (t: Throwable) {
+            android.util.Log.w("RedWingsApp", "FirebaseApp initializeApp warning: ${t.message}")
+        }
         val database = AppDatabase.getDatabase(this)
         val repository = HockeyRepository(
             gameDao = database.gameDao(),

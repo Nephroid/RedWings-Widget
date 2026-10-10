@@ -29,11 +29,11 @@ class FanPulseRepository(
 ) {
 
     private val auth by lazy {
-        try { FirebaseAuth.getInstance() } catch (_: Exception) { null }
+        try { FirebaseAuth.getInstance() } catch (_: Throwable) { null }
     }
 
     private val firestore by lazy {
-        try { FirebaseFirestore.getInstance() } catch (_: Exception) { null }
+        try { FirebaseFirestore.getInstance() } catch (_: Throwable) { null }
     }
 
     private val prefs = context.getSharedPreferences(HockeyRepository.PREFS, Context.MODE_PRIVATE)
@@ -51,7 +51,11 @@ class FanPulseRepository(
     private var currentGameId: Int = 0
 
     init {
-        ensureAnonymousAuth()
+        try {
+            ensureAnonymousAuth()
+        } catch (t: Throwable) {
+            Log.w("FanPulseRepository", "init warning: ${t.message}")
+        }
     }
 
     private fun ensureAnonymousAuth() {
@@ -62,8 +66,8 @@ class FanPulseRepository(
                     a.signInAnonymously().await()
                     Log.d("FanPulseRepository", "Signed in anonymously as ${a.currentUser?.uid}")
                     listenToUserPreferences()
-                } catch (e: Exception) {
-                    Log.w("FanPulseRepository", "Anonymous auth fallback: ${e.message}")
+                } catch (t: Throwable) {
+                    Log.w("FanPulseRepository", "Anonymous auth fallback: ${t.message}")
                 }
             }
         } else {

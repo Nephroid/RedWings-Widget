@@ -48,6 +48,16 @@ class RemoteConfigManager(
                 .build()
 
             rc.setConfigSettingsAsync(settings)
+            val defaultMap: Map<String, Any> = mapOf(
+                "widget_off_day_poll_ms" to 14400000L,
+                "widget_game_day_pre_poll_ms" to 1800000L,
+                "widget_live_poll_ms" to 60000L,
+                "feature_card_season_leaders_enabled" to true,
+                "feature_card_playoff_chase_enabled" to true,
+                "emergency_widget_circuit_breaker" to false,
+                "max_logo_dim_px" to 120L
+            )
+            rc.setDefaultsAsync(defaultMap)
             rc.setDefaultsAsync(R.xml.remote_config_defaults).addOnCompleteListener {
                 updateStateFromConfig(rc)
             }
@@ -66,8 +76,8 @@ class RemoteConfigManager(
             })
 
             fetchAndActivate()
-        } catch (e: Exception) {
-            Log.w("RemoteConfigManager", "Firebase Remote Config initialization fallback: ${e.message}")
+        } catch (t: Throwable) {
+            Log.w("RemoteConfigManager", "Firebase Remote Config initialization fallback: ${t.message}")
         }
     }
 
@@ -80,22 +90,27 @@ class RemoteConfigManager(
                 }.addOnFailureListener { e ->
                     Log.w("RemoteConfigManager", "Remote Config fetch failed: ${e.message}")
                 }
-            } catch (e: Exception) {
-                Log.w("RemoteConfigManager", "Fetch exception: ${e.message}")
+            } catch (t: Throwable) {
+                Log.w("RemoteConfigManager", "Fetch exception: ${t.message}")
             }
         }
     }
 
     private fun updateStateFromConfig(rc: FirebaseRemoteConfig) {
-        val values = RemoteConfigValues(
-            widgetOffDayPollMs = rc.getLong("widget_off_day_poll_ms").takeIf { it > 0 } ?: 14400000L,
-            widgetGameDayPrePollMs = rc.getLong("widget_game_day_pre_poll_ms").takeIf { it > 0 } ?: 1800000L,
-            widgetLivePollMs = rc.getLong("widget_live_poll_ms").takeIf { it > 0 } ?: 60000L,
-            isSeasonLeadersEnabled = rc.getBoolean("feature_card_season_leaders_enabled"),
-            isPlayoffChaseEnabled = rc.getBoolean("feature_card_playoff_chase_enabled"),
-            emergencyWidgetCircuitBreaker = rc.getBoolean("emergency_widget_circuit_breaker"),
-            maxLogoDimPx = rc.getLong("max_logo_dim_px").toInt().takeIf { it > 0 } ?: 120
-        )
-        _configState.value = values
+        try {
+            val allKeys = runCatching { rc.all }.getOrDefault(emptyMap())
+            val values = RemoteConfigValues(
+                widgetOffDayPollMs = rc.getLong("widget_off_day_poll_ms").takeIf { it > 0 } ?: 14400000L,
+                widgetGameDayPrePollMs = rc.getLong("widget_game_day_pre_poll_ms").takeIf { it > 0 } ?: 1800000L,
+                widgetLivePollMs = rc.getLong("widget_live_poll_ms").takeIf { it > 0 } ?: 60000L,
+                isSeasonLeadersEnabled = if (allKeys.containsKey("feature_card_season_leaders_enabled")) rc.getBoolean("feature_card_season_leaders_enabled") else true,
+                isPlayoffChaseEnabled = if (allKeys.containsKey("feature_card_playoff_chase_enabled")) rc.getBoolean("feature_card_playoff_chase_enabled") else true,
+                emergencyWidgetCircuitBreaker = rc.getBoolean("emergency_widget_circuit_breaker"),
+                maxLogoDimPx = rc.getLong("max_logo_dim_px").toInt().takeIf { it > 0 } ?: 120
+            )
+            _configState.value = values
+        } catch (t: Throwable) {
+            Log.w("RemoteConfigManager", "updateStateFromConfig warning: ${t.message}")
+        }
     }
 }

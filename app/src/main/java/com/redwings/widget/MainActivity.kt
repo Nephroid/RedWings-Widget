@@ -45,7 +45,9 @@ class MainActivity : ComponentActivity() {
                 // Synchronize with widget preferences and trigger widget update
                 legacyPrefs.edit().putInt(KEY_THEME, nextJersey.id).apply()
                 RedWingsWidgetProvider.triggerUpdate(this@MainActivity)
-                (application as? RedWingsApp)?.container?.fanPulseRepository?.syncThemeToCloud(nextJersey.id)
+                try {
+                    (application as? RedWingsApp)?.container?.fanPulseRepository?.syncThemeToCloud(nextJersey.id)
+                } catch (_: Throwable) { }
             }
 
             com.redwings.widget.ui.theme.RedWingsTheme(jersey = activeJersey) {

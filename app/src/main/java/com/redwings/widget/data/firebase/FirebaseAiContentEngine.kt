@@ -137,8 +137,8 @@ class FirebaseAiContentEngine(
                     savePreGamePrefs(aiStoryline, aiBattle)
                     Log.d("FirebaseAiContentEngine", "Generated AI pre-game preview: $aiStoryline")
                 }
-            } catch (e: Exception) {
-                Log.w("FirebaseAiContentEngine", "AI generation fallback to heuristics: ${e.message}")
+            } catch (t: Throwable) {
+                Log.w("FirebaseAiContentEngine", "AI generation fallback to heuristics: ${t.message}")
             }
         }
     }
@@ -202,8 +202,8 @@ class FirebaseAiContentEngine(
                     }
                     savePostGamePrefs(pill, commentaries)
                 }
-            } catch (e: Exception) {
-                Log.w("FirebaseAiContentEngine", "AI post-game fallback: ${e.message}")
+            } catch (t: Throwable) {
+                Log.w("FirebaseAiContentEngine", "AI post-game fallback: ${t.message}")
             }
         }
     }

@@ -327,8 +327,9 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         )
         try {
             val app = context.applicationContext as? com.redwings.widget.RedWingsApp
-            val rc = app?.container?.remoteConfigManager?.configState?.value
-                ?: com.redwings.widget.data.firebase.RemoteConfigValues()
+            val rc = runCatching {
+                app?.container?.remoteConfigManager?.configState?.value
+            }.getOrNull() ?: com.redwings.widget.data.firebase.RemoteConfigValues()
 
             val prefs = context.getSharedPreferences(com.redwings.widget.data.repository.HockeyRepository.PREFS, Context.MODE_PRIVATE)
             val nextGameTime = prefs.getLong("next_game_time_millis", 0L)

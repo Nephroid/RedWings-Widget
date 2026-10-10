@@ -1,9 +1,11 @@
 {
   "name": "Red Wings Widget",
-  "version": "26.10.10.01",
-  "versionCode": 26101001,
+  "version": "26.10.10.02",
+  "versionCode": 26101002,
   "description": "Detroit Red Wings NHL schedule widget + companion app: next-game countdown, last result, and division standings.",
   "changelog": [
+    "Fix(Startup): Harden Firebase initialization with safe try-catch fallbacks and immediate defaults, preventing launch crashes and ensuring 100% offline resilience on Android.",
+    "Fix(CI): Prepare google-services.json template on GitHub Actions so APK release builds succeed without missing credentials.",
     "Phase 1 (Operational Stability & Telemetry): Firebase Remote Config dynamic polling (4h off-day, 30m pre-game, 60s live), WidgetCrashGuard (<800KB Parcel ceiling) preventing TransactionTooLargeException, and Crashlytics non-fatal fallback telemetry.",
     "Phase 2 (Generative Intelligence): Firebase AI Logic (Gemini on Android) with pre-game matchup previews & key battle intel in NextGameHero, post-game 3-stars commentary & dynamic recap pills in LastResultCard, and 82-game pacing projections in DrwSeasonLeadersCard, backed by instant offline heuristics.",
     "Phase 3 (Real-Time Fan Community): Cloud Firestore distributed sharded counter (10 shards, 1500ms debounce) for interactive 'Light the Lamp' stadium goal horn cheering, anonymous auth, cross-device jersey preferences sync, and Room live score mirroring.",
