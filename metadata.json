@@ -1,7 +1,7 @@
 {
   "name": "Red Wings Widget",
-  "version": "26.10.10.02",
-  "versionCode": 26101002,
+  "version": "26.10.10.03",
+  "versionCode": 26101003,
   "description": "Detroit Red Wings NHL schedule widget + companion app: next-game countdown, last result, and division standings.",
   "changelog": [
     "Fix(Startup): Harden Firebase initialization with safe try-catch fallbacks and immediate defaults, preventing launch crashes and ensuring 100% offline resilience on Android.",

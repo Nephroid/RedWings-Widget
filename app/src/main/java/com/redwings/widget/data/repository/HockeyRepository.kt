@@ -346,12 +346,6 @@ class HockeyRepository(
             } catch (e: Exception) {
                 if (e is kotlinx.coroutines.CancellationException) throw e
                 Log.e("HockeyRepository", "Refresh failed: ${e.message}", e)
-                try {
-                    val crashlytics = com.google.firebase.crashlytics.FirebaseCrashlytics.getInstance()
-                    crashlytics.setCustomKey("nhl_api_endpoint", "club-schedule-season")
-                    crashlytics.setCustomKey("nhl_api_fallback_engaged", true)
-                    crashlytics.recordException(e)
-                } catch (_: Exception) {}
                 val existing = gameDao.getNextGame()
                 if (existing == null) {
                     saveSimulatedGames(context)

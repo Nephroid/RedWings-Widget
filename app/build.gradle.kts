@@ -194,7 +194,6 @@ dependencies {
   implementation(libs.retrofit)
   implementation(platform(libs.firebase.bom))
   implementation(libs.firebase.config)
-  implementation(libs.firebase.crashlytics)
   implementation(libs.firebase.analytics)
   implementation(libs.firebase.ai)
   implementation(libs.firebase.firestore)
