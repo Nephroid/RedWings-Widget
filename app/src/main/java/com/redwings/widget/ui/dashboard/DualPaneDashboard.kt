@@ -50,6 +50,7 @@ fun DualPaneDashboard(
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
     onJerseyThemeToggle: () -> Unit = {},
+    onLightTheLamp: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val pullRefreshState = rememberPullToRefreshState()
@@ -134,6 +135,11 @@ fun DualPaneDashboard(
                         showFlankingBadges = true
                     )
 
+                    com.redwings.widget.ui.components.LightTheLampBanner(
+                        pulseCount = data?.fanPulseCount ?: 1926L,
+                        onLightTheLamp = onLightTheLamp
+                    )
+
                     LastResultCard(
                         lastGame = data?.lastGame ?: LastGameUi(
                             opponent = "Boston Bruins",
@@ -149,7 +155,8 @@ fun DualPaneDashboard(
                     )
 
                     DrwSeasonLeadersCard(
-                        leaders = data?.teamLeaders ?: com.redwings.widget.data.model.TeamLeadersUi()
+                        leaders = data?.teamLeaders ?: com.redwings.widget.data.model.TeamLeadersUi(),
+                        pacing = data?.milestonePacing ?: emptyMap()
                     )
 
                     Spacer(Modifier.height(8.dp))

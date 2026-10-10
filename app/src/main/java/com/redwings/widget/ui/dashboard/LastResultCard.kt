@@ -462,6 +462,22 @@ fun StarPlayerCard(
                     )
                 }
             }
+
+            if (!star.commentary.isNullOrBlank()) {
+                Text(
+                    text = star.commentary,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontSize = 9.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = palette.secondaryText,
+                        lineHeight = 12.sp
+                    ),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 2.dp)
+                )
+            }
         }
     }
 }

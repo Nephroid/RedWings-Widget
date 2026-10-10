@@ -149,7 +149,13 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
                     val layout = if (w >= 450) R.layout.red_wings_widget_wide else R.layout.red_wings_widget_layout
                     buildWidgetViews(context, layout, game, theme, prefs, id, w, h, oppBitmap, detBitmap)
                 }
-                mgr.updateAppWidget(id, views)
+
+                if (WidgetCrashGuard.validateRemoteViews(views, id)) {
+                    mgr.updateAppWidget(id, views)
+                } else {
+                    Log.w(TAG, "Oversized RemoteViews detected for widget $id, applying emergency fallback")
+                    mgr.updateAppWidget(id, WidgetCrashGuard.buildEmergencyViews(context))
+                }
             }
         } catch (e: Exception) {
             Log.e(TAG, "update failed: ${e.message}", e)
@@ -320,10 +326,32 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
             piFlags()
         )
         try {
-            // Hockey: 30-min inexact polling is plenty (cf. baseball 15-min).
+            val app = context.applicationContext as? com.redwings.widget.RedWingsApp
+            val rc = app?.container?.remoteConfigManager?.configState?.value
+                ?: com.redwings.widget.data.firebase.RemoteConfigValues()
+
+            val prefs = context.getSharedPreferences(com.redwings.widget.data.repository.HockeyRepository.PREFS, Context.MODE_PRIVATE)
+            val nextGameTime = prefs.getLong("next_game_time_millis", 0L)
+            val now = System.currentTimeMillis()
+
+            val intervalMs = when {
+                // Game in progress or near start (15m before start to 3.5h after start)
+                nextGameTime > 0L && now in (nextGameTime - 15 * 60 * 1000L)..(nextGameTime + 3 * 3600 * 1000L + 1800 * 1000L) -> {
+                    rc.widgetLivePollMs
+                }
+                // Pre-game day window (within 6 hours of puck drop)
+                nextGameTime > 0L && now in (nextGameTime - 6 * 3600 * 1000L)..nextGameTime -> {
+                    rc.widgetGameDayPrePollMs
+                }
+                // Off-day or far out
+                else -> {
+                    rc.widgetOffDayPollMs
+                }
+            }
+
             am.setInexactRepeating(
                 android.app.AlarmManager.ELAPSED_REALTIME,
-                android.os.SystemClock.elapsedRealtime() + INTERVAL_MS, INTERVAL_MS, pi
+                android.os.SystemClock.elapsedRealtime() + intervalMs, intervalMs, pi
             )
         } catch (e: Exception) {
             Log.e(TAG, "schedule failed: ${e.message}")

@@ -7,6 +7,7 @@ plugins {
   alias(libs.plugins.kotlin.compose)
   alias(libs.plugins.google.devtools.ksp)
   alias(libs.plugins.roborazzi)
+  alias(libs.plugins.google.services)
 }
 
 val versionPropsFile = rootProject.file("version.properties")
@@ -191,6 +192,13 @@ dependencies {
   implementation(libs.moshi.kotlin)
   implementation(libs.okhttp)
   implementation(libs.retrofit)
+  implementation(platform(libs.firebase.bom))
+  implementation(libs.firebase.config)
+  implementation(libs.firebase.crashlytics)
+  implementation(libs.firebase.analytics)
+  implementation(libs.firebase.ai)
+  implementation(libs.firebase.firestore)
+  implementation(libs.firebase.auth)
   testImplementation(libs.androidx.compose.ui.test.junit4)
   testImplementation(libs.androidx.core)
   testImplementation(libs.androidx.junit)

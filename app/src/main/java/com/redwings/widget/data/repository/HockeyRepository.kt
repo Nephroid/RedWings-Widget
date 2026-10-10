@@ -294,11 +294,13 @@ class HockeyRepository(
                     val nextVenue = nextGame.venue?.default
                         ?: if (isHome) "Little Caesars Arena" else "Away"
                     val oppAbbrev = if (isHome) nextGame.awayTeam?.abbrev else nextGame.homeTeam?.abbrev
+                    val gameMillis = parseUtcToMillis(nextGame.startTimeUTC ?: nextGame.gameDate)
                     prefs.edit()
                         .putString("next_game_venue", nextVenue)
                         .putString("next_game_opponent_abbrev", oppAbbrev ?: "OPP")
                         .putString("next_game_opp", oppAbbrev ?: "OPP")
                         .putBoolean("next_game_is_home", isHome)
+                        .putLong("next_game_time_millis", gameMillis)
                         .apply()
                 }
 
@@ -344,6 +346,12 @@ class HockeyRepository(
             } catch (e: Exception) {
                 if (e is kotlinx.coroutines.CancellationException) throw e
                 Log.e("HockeyRepository", "Refresh failed: ${e.message}", e)
+                try {
+                    val crashlytics = com.google.firebase.crashlytics.FirebaseCrashlytics.getInstance()
+                    crashlytics.setCustomKey("nhl_api_endpoint", "club-schedule-season")
+                    crashlytics.setCustomKey("nhl_api_fallback_engaged", true)
+                    crashlytics.recordException(e)
+                } catch (_: Exception) {}
                 val existing = gameDao.getNextGame()
                 if (existing == null) {
                     saveSimulatedGames(context)
@@ -474,6 +482,7 @@ class HockeyRepository(
             .putString("next_game_opp", "TOR")
             .putString("next_game_opponent_abbrev", "TOR")
             .putBoolean("next_game_is_home", true)
+            .putLong("next_game_time_millis", now + TimeUnit.HOURS.toMillis(26))
             .putBoolean("is_simulated_fallback", true)
             .apply()
 

@@ -28,7 +28,8 @@ data class GameStarUi(
     val headshotUrl: String = "",
     val position: String = "",
     val sweaterNo: Int? = null,
-    val statLine: String = ""
+    val statLine: String = "",
+    val commentary: String? = null
 )
 
 data class LastGame(

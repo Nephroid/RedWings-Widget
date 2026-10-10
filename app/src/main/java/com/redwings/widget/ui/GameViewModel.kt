@@ -62,13 +62,29 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val _atlanticLine = MutableStateFlow(prefs.getString(KEY_LINE, "DET —") ?: "DET —")
     val atlanticLine: StateFlow<String> = _atlanticLine.asStateFlow()
 
+    private val app = application as RedWingsApp
+    private val aiEngine = app.container.aiContentEngine
+    private val fanPulseRepo = app.container.fanPulseRepository
+
     private val _teamLeaders =
         MutableStateFlow(repository.getCachedSeasonLeaders())
     val teamLeaders: StateFlow<TeamLeadersUi> = _teamLeaders.asStateFlow()
 
+    val fanPulseCount: StateFlow<Long> = fanPulseRepo.fanPulseCount
+
     val scheduleState: StateFlow<ScheduleUiState> = combine(
-        upcomingGames, lastGame, standingsSummary, atlanticLine, teamLeaders
-    ) { games, last, summary, line, leaders ->
+        upcomingGames, lastGame, standingsSummary, atlanticLine, teamLeaders,
+        aiEngine.intelligenceState, fanPulseRepo.fanPulseCount
+    ) { args: Array<Any?> ->
+        @Suppress("UNCHECKED_CAST")
+        val games = args[0] as List<UpcomingGame>
+        val last = args[1] as LastGameUi?
+        val summary = args[2] as String
+        val line = args[3] as String
+        val leaders = args[4] as TeamLeadersUi
+        val intelligence = args[5] as com.redwings.widget.data.firebase.GameIntelligenceState
+        val pulses = args[6] as Long
+
         val wcBack = prefs.getString("games_back_wild_card", "IN") ?: "IN"
         val poStatus = prefs.getString("playoff_status", "CLINCHED") ?: "CLINCHED"
         val inPlayoffs = poStatus.equals("IN", ignoreCase = true) ||
@@ -79,7 +95,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         val standingsList = com.redwings.widget.widget.StandingsFormatter
             .parseAtlanticRowsForUi(rawAtlantic)
 
-        val fallbackLast = last ?: repository.lastSavedGame()?.toUi() ?: LastGameUi(
+        val fallbackLast = last ?: repository.lastSavedGame()?.toUi(intelligence) ?: LastGameUi(
             opponent = "Boston Bruins",
             opponentAbbrev = "BOS",
             wingsScore = 4,
@@ -87,26 +103,29 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             isWinner = true,
             isHome = true,
             dateLabel = "Tue, Sep 30",
+            recapPills = if (intelligence.dynamicRecapPill.isNotBlank()) listOf(intelligence.dynamicRecapPill) else emptyList(),
             threeStars = com.redwings.widget.data.model.defaultThreeStars()
         )
 
         when {
             games.isNotEmpty() -> {
                 ScheduleUiState.Data(
-                    nextGame = games.first().toUi(),
-                    upcoming = games.take(7).map { it.toUi() },
+                    nextGame = games.first().toUi(intelligence),
+                    upcoming = games.take(7).map { it.toUi(intelligence) },
                     lastGame = fallbackLast,
                     standingsSummary = summary,
                     atlanticLine = line,
                     standings = standingsList,
                     playoffChaseText = chaseText,
-                    teamLeaders = leaders
+                    teamLeaders = leaders,
+                    fanPulseCount = pulses,
+                    milestonePacing = intelligence.milestonePacing
                 )
             }
             else -> {
                 val now = System.currentTimeMillis()
                 val fallbackUpcoming = listOf(
-                    NextGameUi("Toronto Maple Leafs", "TOR", "Little Caesars Arena", now + 86400000L * 2, true),
+                    NextGameUi("Toronto Maple Leafs", "TOR", "Little Caesars Arena", now + 86400000L * 2, true, storyline = intelligence.matchupStoryline, keyBattle = intelligence.keyBattle),
                     NextGameUi("Montreal Canadiens", "MTL", "Bell Centre", now + 86400000L * 4, false),
                     NextGameUi("Boston Bruins", "BOS", "Little Caesars Arena", now + 86400000L * 6, true),
                     NextGameUi("Florida Panthers", "FLA", "Little Caesars Arena", now + 86400000L * 8, true),
@@ -122,7 +141,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                     atlanticLine = line,
                     standings = standingsList,
                     playoffChaseText = chaseText,
-                    teamLeaders = leaders
+                    teamLeaders = leaders,
+                    fanPulseCount = pulses,
+                    milestonePacing = intelligence.milestonePacing
                 )
             }
         }
@@ -168,23 +189,55 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             _errorMessage.value = null
             try {
                 withContext(Dispatchers.IO) { repository.refreshGames() }
-                _lastGame.value = repository.lastSavedGame()?.toUi()
+                val intel = aiEngine.intelligenceState.value
+                _lastGame.value = repository.lastSavedGame()?.toUi(intel)
                 _standingsSummary.value =
                     prefs.getString(KEY_SUMMARY, _standingsSummary.value) ?: _standingsSummary.value
                 _atlanticLine.value =
                     prefs.getString(KEY_LINE, _atlanticLine.value) ?: _atlanticLine.value
-                _teamLeaders.value = repository.getCachedSeasonLeaders()
+                val leaders = repository.getCachedSeasonLeaders()
+                _teamLeaders.value = leaders
+                aiEngine.calculatePacingProjections(leaders)
+
+                val next = upcomingGames.value.firstOrNull()
+                if (next != null) {
+                    val detRec = prefs.getString("team_record_DET", "42-30-10") ?: "42-30-10"
+                    val oppRec = prefs.getString("team_record_${next.opponentAbbrev}", "40-30-12") ?: "40-30-12"
+                    aiEngine.refreshPreGameIntelligence(
+                        opponentName = next.opponentName,
+                        opponentAbbrev = next.opponentAbbrev,
+                        isHome = next.isHomeGame,
+                        detRecord = detRec,
+                        oppRecord = oppRec
+                    )
+                    fanPulseRepo.attachGamePulseListener(next.gameId)
+                }
+
+                val last = repository.lastSavedGame()
+                if (last != null) {
+                    aiEngine.refreshPostGameIntelligence(
+                        wingsScore = last.wingsScore,
+                        oppScore = last.oppScore,
+                        oppAbbrev = last.opponentAbbrev,
+                        stars = last.threeStars
+                    )
+                }
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
                 Log.e("GameViewModel", "Refresh failed", e)
                 _errorMessage.value = "Couldn't reach the network. Showing offline data."
+                val intel = aiEngine.intelligenceState.value
                 _lastGame.value = _lastGame.value
-                    ?: runCatching { repository.lastSavedGame()?.toUi() }.getOrNull()
+                    ?: runCatching { repository.lastSavedGame()?.toUi(intel) }.getOrNull()
                 _teamLeaders.value = repository.getCachedSeasonLeaders()
             } finally {
                 _isRefreshing.value = false
             }
         }
+    }
+
+    fun lightTheLamp(gameId: Int = upcomingGames.value.firstOrNull()?.gameId ?: 990001) {
+        fanPulseRepo.lightTheLamp(gameId)
     }
 
     fun triggerManualRefresh() = refreshData()
@@ -222,10 +275,11 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     override fun onCleared() {
         countdownJob?.cancel()
         pollingJob?.cancel()
+        fanPulseRepo.cleanup()
         super.onCleared()
     }
 
-    private fun UpcomingGame.toUi(): NextGameUi {
+    private fun UpcomingGame.toUi(intelligence: com.redwings.widget.data.firebase.GameIntelligenceState? = null): NextGameUi {
         val detRecord = prefs.getString("team_record_DET", null)
             ?: prefs.getString("wings_summary", null)?.substringBefore(" •")
             ?: ""
@@ -239,20 +293,34 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             startTimeMillis = gameTimeMillis,
             isHome = isHomeGame,
             awayRecord = awayRec,
-            homeRecord = homeRec
+            homeRecord = homeRec,
+            storyline = intelligence?.matchupStoryline.orEmpty(),
+            keyBattle = intelligence?.keyBattle.orEmpty()
         )
     }
 
-    private fun LastGame.toUi() = LastGameUi(
-        opponent = opponent,
-        opponentAbbrev = opponentAbbrev,
-        wingsScore = wingsScore,
-        oppScore = oppScore,
-        isWinner = isWinner,
-        isHome = isHome,
-        dateLabel = dateLabel,
-        threeStars = threeStars
-    )
+    private fun LastGame.toUi(intelligence: com.redwings.widget.data.firebase.GameIntelligenceState? = null): LastGameUi {
+        val pills = if (!intelligence?.dynamicRecapPill.isNullOrBlank()) {
+            listOf(intelligence!!.dynamicRecapPill)
+        } else emptyList()
+
+        val starsWithComments = threeStars.map { star ->
+            val comment = intelligence?.starCommentaries?.get(star.star)
+            if (!comment.isNullOrBlank()) star.copy(commentary = comment) else star
+        }
+
+        return LastGameUi(
+            opponent = opponent,
+            opponentAbbrev = opponentAbbrev,
+            wingsScore = wingsScore,
+            oppScore = oppScore,
+            isWinner = isWinner,
+            isHome = isHome,
+            dateLabel = dateLabel,
+            recapPills = pills,
+            threeStars = starsWithComments
+        )
+    }
 
     companion object {
         private const val KEY_SUMMARY = "standings_summary"

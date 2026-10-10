@@ -26,7 +26,9 @@ data class NextGameUi(
     val isHome: Boolean = true,
     val broadcast: String = "",
     val awayRecord: String = "",
-    val homeRecord: String = ""
+    val homeRecord: String = "",
+    val storyline: String = "",
+    val keyBattle: String = ""
 )
 
 @Immutable
@@ -69,6 +71,8 @@ sealed interface ScheduleUiState {
         val atlanticLine: String = "",
         val standings: List<StandingsRowUi> = emptyList(),
         val playoffChaseText: String = "",
-        val teamLeaders: com.redwings.widget.data.model.TeamLeadersUi = com.redwings.widget.data.model.TeamLeadersUi()
+        val teamLeaders: com.redwings.widget.data.model.TeamLeadersUi = com.redwings.widget.data.model.TeamLeadersUi(),
+        val fanPulseCount: Long = 1926L,
+        val milestonePacing: Map<Int, String> = emptyMap()
     ) : ScheduleUiState
 }

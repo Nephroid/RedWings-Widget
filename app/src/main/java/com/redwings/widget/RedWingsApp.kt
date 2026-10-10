@@ -1,12 +1,18 @@
 package com.redwings.widget
 
 import android.app.Application
+import com.redwings.widget.data.firebase.FanPulseRepository
+import com.redwings.widget.data.firebase.FirebaseAiContentEngine
+import com.redwings.widget.data.firebase.RemoteConfigManager
 import com.redwings.widget.data.local.AppDatabase
 import com.redwings.widget.data.repository.HockeyRepository
 
 data class AppContainer(
     val database: AppDatabase,
-    val hockeyRepository: HockeyRepository
+    val hockeyRepository: HockeyRepository,
+    val remoteConfigManager: RemoteConfigManager,
+    val aiContentEngine: FirebaseAiContentEngine,
+    val fanPulseRepository: FanPulseRepository
 )
 
 class RedWingsApp : Application() {
@@ -21,9 +27,17 @@ class RedWingsApp : Application() {
             gameDao = database.gameDao(),
             appContext = applicationContext
         )
+        val remoteConfigManager = RemoteConfigManager(applicationContext)
+        val aiContentEngine = FirebaseAiContentEngine(applicationContext, remoteConfigManager)
+        val fanPulseRepository = FanPulseRepository(applicationContext, database.gameDao())
+
         container = AppContainer(
             database = database,
-            hockeyRepository = repository
+            hockeyRepository = repository,
+            remoteConfigManager = remoteConfigManager,
+            aiContentEngine = aiContentEngine,
+            fanPulseRepository = fanPulseRepository
         )
     }
 }
+

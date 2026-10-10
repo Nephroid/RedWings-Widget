@@ -54,6 +54,7 @@ fun TabletopDashboard(
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
     onJerseyThemeToggle: () -> Unit = {},
+    onLightTheLamp: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val data = scheduleState as? ScheduleUiState.Data
@@ -190,6 +191,11 @@ fun TabletopDashboard(
                     modifier = Modifier.weight(0.9f),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
+                    com.redwings.widget.ui.components.LightTheLampBanner(
+                        pulseCount = data?.fanPulseCount ?: 1926L,
+                        onLightTheLamp = onLightTheLamp
+                    )
+
                     LastResultCard(
                         lastGame = data?.lastGame ?: LastGameUi(
                             opponent = "Boston Bruins",
@@ -205,7 +211,8 @@ fun TabletopDashboard(
                     )
 
                     DrwSeasonLeadersCard(
-                        leaders = data?.teamLeaders ?: com.redwings.widget.data.model.TeamLeadersUi()
+                        leaders = data?.teamLeaders ?: com.redwings.widget.data.model.TeamLeadersUi(),
+                        pacing = data?.milestonePacing ?: emptyMap()
                     )
 
                     val upcomingList = data?.upcoming?.takeIf { it.isNotEmpty() } ?: listOf(

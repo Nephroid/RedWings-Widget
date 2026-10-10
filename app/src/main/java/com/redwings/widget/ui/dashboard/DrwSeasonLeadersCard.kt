@@ -60,7 +60,8 @@ enum class LeaderCategory(val label: String) {
 @Composable
 fun DrwSeasonLeadersCard(
     leaders: TeamLeadersUi,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    pacing: Map<Int, String> = emptyMap()
 ) {
     val palette = LocalJerseyPalette.current
     var selectedCategory by remember { mutableStateOf(LeaderCategory.GOALS) }
@@ -186,7 +187,8 @@ fun DrwSeasonLeadersCard(
                 currentPlayers.take(5).forEachIndexed { index, player ->
                     DrwLeaderPlayerRow(
                         player = player,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        pacingText = pacing[player.playerId]
                     )
                     if (index < currentPlayers.take(5).lastIndex) {
                         HorizontalDivider(
@@ -209,7 +211,8 @@ fun DrwSeasonLeadersCard(
 @Composable
 fun DrwLeaderPlayerRow(
     player: TeamLeaderPlayerUi,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    pacingText: String? = null
 ) {
     val palette = LocalJerseyPalette.current
     val context = LocalContext.current
@@ -323,7 +326,18 @@ fun DrwLeaderPlayerRow(
                 }
             }
 
-            if (player.secondaryStat.isNotBlank()) {
+            if (!pacingText.isNullOrBlank()) {
+                Text(
+                    text = "✦ $pacingText",
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = palette.accentRed
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            } else if (player.secondaryStat.isNotBlank()) {
                 Text(
                     text = player.secondaryStat,
                     style = MaterialTheme.typography.bodySmall.copy(

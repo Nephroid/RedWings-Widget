@@ -43,6 +43,7 @@ fun SinglePaneDashboard(
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
     onJerseyThemeToggle: () -> Unit = {},
+    onLightTheLamp: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val pullRefreshState = rememberPullToRefreshState()
@@ -115,6 +116,16 @@ fun SinglePaneDashboard(
                 }
             }
 
+            // 1.5. Live Fan Pulse: Light the Lamp Goal Horn
+            item {
+                Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    com.redwings.widget.ui.components.LightTheLampBanner(
+                        pulseCount = data?.fanPulseCount ?: 1926L,
+                        onLightTheLamp = onLightTheLamp
+                    )
+                }
+            }
+
             // 2. Last Result Bento Card
             item {
                 Box(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -138,7 +149,8 @@ fun SinglePaneDashboard(
             item {
                 Box(modifier = Modifier.padding(horizontal = 16.dp)) {
                     DrwSeasonLeadersCard(
-                        leaders = data?.teamLeaders ?: com.redwings.widget.data.model.TeamLeadersUi()
+                        leaders = data?.teamLeaders ?: com.redwings.widget.data.model.TeamLeadersUi(),
+                        pacing = data?.milestonePacing ?: emptyMap()
                     )
                 }
             }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <!-- Widget dynamic polling cadence -->
+    <entry>
+        <key>widget_off_day_poll_ms</key>
+        <value>14400000</value> <!-- 4 hours -->
+    </entry>
+    <entry>
+        <key>widget_game_day_pre_poll_ms</key>
+        <value>1800000</value> <!-- 30 minutes -->
+    </entry>
+    <entry>
+        <key>widget_live_poll_ms</key>
+        <value>60000</value> <!-- 60 seconds -->
+    </entry>
+
+    <!-- UI Feature Card Toggles -->
+    <entry>
+        <key>feature_card_season_leaders_enabled</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>feature_card_playoff_chase_enabled</key>
+        <value>true</value>
+    </entry>
+
+    <!-- Emergency Controls -->
+    <entry>
+        <key>emergency_widget_circuit_breaker</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>max_logo_dim_px</key>
+        <value>120</value>
+    </entry>
+</defaultsMap>

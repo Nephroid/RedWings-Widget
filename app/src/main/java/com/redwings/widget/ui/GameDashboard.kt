@@ -88,6 +88,7 @@ fun SinglePaneDashboard(
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
     onJerseyThemeToggle: () -> Unit = {},
+    onLightTheLamp: () -> Unit = {},
     modifier: Modifier = Modifier
 ) = com.redwings.widget.ui.dashboard.SinglePaneDashboard(
     scheduleState = scheduleState,
@@ -97,6 +98,7 @@ fun SinglePaneDashboard(
     onRefresh = onRefresh,
     activeJersey = activeJersey,
     onJerseyThemeToggle = onJerseyThemeToggle,
+    onLightTheLamp = onLightTheLamp,
     modifier = modifier
 )
 
@@ -109,6 +111,7 @@ fun DualPaneDashboard(
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
     onJerseyThemeToggle: () -> Unit = {},
+    onLightTheLamp: () -> Unit = {},
     modifier: Modifier = Modifier
 ) = com.redwings.widget.ui.dashboard.DualPaneDashboard(
     scheduleState = scheduleState,
@@ -118,6 +121,7 @@ fun DualPaneDashboard(
     onRefresh = onRefresh,
     activeJersey = activeJersey,
     onJerseyThemeToggle = onJerseyThemeToggle,
+    onLightTheLamp = onLightTheLamp,
     modifier = modifier
 )
 
@@ -129,6 +133,7 @@ fun TabletopDashboard(
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
     onJerseyThemeToggle: () -> Unit = {},
+    onLightTheLamp: () -> Unit = {},
     modifier: Modifier = Modifier
 ) = com.redwings.widget.ui.dashboard.TabletopDashboard(
     scheduleState = scheduleState,
@@ -137,6 +142,7 @@ fun TabletopDashboard(
     onRefresh = onRefresh,
     activeJersey = activeJersey,
     onJerseyThemeToggle = onJerseyThemeToggle,
+    onLightTheLamp = onLightTheLamp,
     modifier = modifier
 )
 
@@ -166,6 +172,7 @@ fun GameDashboard(
         onRefresh = { viewModel.triggerManualRefresh() },
         activeJersey = activeJersey,
         onJerseyThemeToggle = onJerseyThemeToggle,
+        onLightTheLamp = { viewModel.lightTheLamp() },
         isTabletop = isTabletop,
         modifier = modifier
     )
@@ -180,6 +187,7 @@ fun GameDashboardContent(
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
     onJerseyThemeToggle: () -> Unit = {},
+    onLightTheLamp: () -> Unit = {},
     isTabletop: Boolean = false,
     modifier: Modifier = Modifier
 ) {
@@ -219,7 +227,8 @@ fun GameDashboardContent(
                                 isRefreshing = isRefreshing,
                                 onRefresh = onRefresh,
                                 activeJersey = activeJersey,
-                                onJerseyThemeToggle = onJerseyThemeToggle
+                                onJerseyThemeToggle = onJerseyThemeToggle,
+                                onLightTheLamp = onLightTheLamp
                             )
                         }
                         isExpanded -> {
@@ -230,7 +239,8 @@ fun GameDashboardContent(
                                 errorMessage = errorMessage,
                                 onRefresh = onRefresh,
                                 activeJersey = activeJersey,
-                                onJerseyThemeToggle = onJerseyThemeToggle
+                                onJerseyThemeToggle = onJerseyThemeToggle,
+                                onLightTheLamp = onLightTheLamp
                             )
                         }
                         else -> {
@@ -241,7 +251,8 @@ fun GameDashboardContent(
                                 errorMessage = errorMessage,
                                 onRefresh = onRefresh,
                                 activeJersey = activeJersey,
-                                onJerseyThemeToggle = onJerseyThemeToggle
+                                onJerseyThemeToggle = onJerseyThemeToggle,
+                                onLightTheLamp = onLightTheLamp
                             )
                         }
                     }

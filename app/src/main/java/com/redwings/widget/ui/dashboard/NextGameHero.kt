@@ -115,6 +115,56 @@ fun NextGameHero(
             )
         }
         Spacer(Modifier.height(14.dp))
+
+        if (!game?.storyline.isNullOrBlank() || !game?.keyBattle.isNullOrBlank()) {
+            Surface(
+                shape = RoundedCornerShape(12.dp),
+                color = palette.cardSurface.copy(alpha = 0.85f),
+                border = BorderStroke(1.dp, palette.accentRed.copy(alpha = 0.35f)),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 2.dp)
+            ) {
+                Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Text(
+                            text = "✦ MATCHUP INTEL",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Black,
+                                fontSize = 10.sp,
+                                letterSpacing = 0.8.sp,
+                                color = palette.accentRed
+                            )
+                        )
+                        if (!game?.keyBattle.isNullOrBlank()) {
+                            Text(
+                                text = "• ${game.keyBattle}",
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 10.sp,
+                                    color = palette.primaryText
+                                ),
+                                maxLines = 1,
+                                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                            )
+                        }
+                    }
+                    if (!game?.storyline.isNullOrBlank()) {
+                        Text(
+                            text = game.storyline,
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 11.sp,
+                                color = palette.secondaryText,
+                                lineHeight = 15.sp
+                            )
+                        )
+                    }
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+        }
     }
 }
 

@@ -21,6 +21,10 @@ debug.keystore
 !release.keystore
 .antigravity/
 .vscode/
-*.log
 # Room database inspector export (do not commit local DB copies)
 redwings_widget_database*
+
+# Firebase configuration (contains project credentials)
+app/google-services.json
+google-services.json
+
