@@ -176,7 +176,7 @@ class ThreeStarsTest {
         }
 
         // Header section for 3 stars
-        composeTestRule.onNodeWithText("3 PLAYERS OF THE GAME").assertIsDisplayed()
+        composeTestRule.onNodeWithText("THREE STARS OF THE GAME").assertIsDisplayed()
 
         // 1st Star
         composeTestRule.onNodeWithTag("star_player_card_1").assertIsDisplayed()
@@ -213,7 +213,7 @@ class ThreeStarsTest {
             }
         }
 
-        composeTestRule.onNodeWithText("3 PLAYERS OF THE GAME").assertDoesNotExist()
+        composeTestRule.onNodeWithText("THREE STARS OF THE GAME").assertDoesNotExist()
         composeTestRule.onNodeWithTag("star_player_card_1").assertDoesNotExist()
         composeTestRule.onNodeWithTag("three_stars_section").assertDoesNotExist()
         // Core score should still be displayed

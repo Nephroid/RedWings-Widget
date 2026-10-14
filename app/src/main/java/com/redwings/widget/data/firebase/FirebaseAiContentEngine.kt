@@ -179,6 +179,8 @@ class FirebaseAiContentEngine(
                     1. A punchy 2-3 word RECAP_TAG (e.g. 'Overtime Thriller', 'Third-Period Surge', 'Clinical Road Win').
                     2. A 1-sentence insight for each of the 3 stars.
                     
+                    CRITICAL: Avoid generic clichés like 'electrifying presence', 'stood tall in the crease', or 'valuable performance'. Be specific to each player's actual in-game hockey contribution and stat line.
+                    
                     Format:
                     TAG: <2-3 words>
                     STAR1: <1 sentence>
@@ -362,18 +364,81 @@ class FirebaseAiContentEngine(
 
     private fun generateLocalStarCommentaries(stars: List<GameStarUi>): Map<Int, String> {
         val map = mutableMapOf<Int, String>()
+        val usedPhrases = mutableSetOf<String>()
+
         stars.forEach { star ->
-            val comment = when {
-                star.position.equals("G", ignoreCase = true) || star.statLine.contains("SV") ->
-                    "Stood tall in the crease, controlling rebounds and turning aside dangerous chances."
-                star.statLine.contains("G") && !star.statLine.startsWith("0G") ->
-                    "Electrifying presence on the ice, finishing crucial chances with elite scoring touch."
-                star.statLine.contains("A") && !star.statLine.startsWith("0A") ->
-                    "Controlled the pace with high-IQ puck distribution and playmaker vision."
-                else ->
-                    "Delivered an impactful 200-foot performance to anchor the game plan."
+            val isGoalie = star.position.equals("G", ignoreCase = true) || star.statLine.contains("SV")
+            val isDefense = star.position.equals("D", ignoreCase = true)
+            val goals = Regex("(\\d+)\\s*G").find(star.statLine)?.groupValues?.get(1)?.toIntOrNull() ?: 0
+            val assists = Regex("(\\d+)\\s*A").find(star.statLine)?.groupValues?.get(1)?.toIntOrNull() ?: 0
+            val saves = Regex("(\\d+)\\s*SV").find(star.statLine)?.groupValues?.get(1)?.toIntOrNull() ?: 0
+
+            val candidateOptions: List<String> = when {
+                isGoalie -> {
+                    when {
+                        star.statLine.contains(".000") || star.statLine.contains("SO") -> listOf(
+                            "Turned aside every shot faced in a flawless, brick-wall shutout.",
+                            "Flawless night in the crease, securing a clean sheet between the pipes."
+                        )
+                        saves >= 30 -> listOf(
+                            "Weathered intense pressure with $saves clutch stops to secure the win.",
+                            "Anchored the defense under heavy siege, turning aside $saves dangerous drives."
+                        )
+                        else -> listOf(
+                            "Poised and steady in the blue paint, tracking pucks through heavy traffic.",
+                            "Commanded the crease with sharp rebound control and timely key saves."
+                        )
+                    }
+                }
+                goals >= 3 -> listOf(
+                    "Exploded for a hat trick performance, completely tilting the ice in the offensive zone.",
+                    "Dominated the game with a three-goal hat trick to pace the victory."
+                )
+                goals == 2 -> listOf(
+                    "Buried a pair of clutch goals from high-danger areas to ignite the offense.",
+                    "Clinical multi-goal performance, finishing chances with elite shooting touch."
+                )
+                goals == 1 && assists >= 1 -> listOf(
+                    "Multi-point powerhouse night, driving offensive possession all game.",
+                    "Capped a two-way effort with a clutch goal and high-IQ playmaking."
+                )
+                goals == 1 -> {
+                    when (star.star) {
+                        1 -> listOf(
+                            "Capped a dominant 200-foot performance with the game-breaking finish.",
+                            "Delivered the decisive breakthrough marker to lead the victory."
+                        )
+                        2 -> listOf(
+                            "Capitalized on an odd-man rush with a laser finish under the bar.",
+                            "Sniped a crucial marker while generating relentless forechecking pressure."
+                        )
+                        else -> listOf(
+                            "Generated high-danger pressure and cashed in on a crucial rebound.",
+                            "Broke through with a timely goal to swing momentum."
+                        )
+                    }
+                }
+                assists >= 2 -> listOf(
+                    "Orchestrated the transition game with precision tape-to-tape primary helpers.",
+                    "Masterful playmaker vision, dishing out multiple prime scoring setups."
+                )
+                assists == 1 -> listOf(
+                    "Threaded a crisp helper through traffic to unlock the scoring.",
+                    "Created the transition breakout with a sharp tape-to-tape dish."
+                )
+                isDefense -> listOf(
+                    "Stifled top-line rushes with physical gap control and clean breakout delivery.",
+                    "Logged heavy shutdown minutes, breaking up cycles and protecting the house."
+                )
+                else -> listOf(
+                    "Delivered an impactful 200-foot performance to anchor the game plan.",
+                    "Relentless motor on the forecheck, winning battles and sustaining offensive zone time."
+                )
             }
-            map[star.star] = comment
+
+            val chosen = candidateOptions.firstOrNull { it !in usedPhrases } ?: candidateOptions.first()
+            usedPhrases.add(chosen)
+            map[star.star] = chosen
         }
         return map
     }

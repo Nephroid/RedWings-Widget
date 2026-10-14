@@ -126,8 +126,20 @@ class FirebaseIntegrationTest {
         val state = engine.intelligenceState.value
         assertEquals("Offensive Explosion", state.dynamicRecapPill)
         assertEquals(3, state.starCommentaries.size)
-        assertTrue("Goalie commentary should mention crease/saves", state.starCommentaries[3]?.contains("crease") == true || state.starCommentaries[3]?.contains("chances") == true)
-        assertTrue("Goal scorer commentary should mention scoring/offensive", state.starCommentaries[1]?.contains("scoring") == true || state.starCommentaries[1]?.contains("chances") == true)
+        assertTrue("Goalie commentary should mention saves/stops/crease/siege",
+            state.starCommentaries[3]?.contains("stops") == true ||
+            state.starCommentaries[3]?.contains("saves") == true ||
+            state.starCommentaries[3]?.contains("crease") == true ||
+            state.starCommentaries[3]?.contains("siege") == true
+        )
+        assertTrue("Goal scorer commentary should mention offense/goals/chances",
+            state.starCommentaries[1]?.contains("offense") == true ||
+            state.starCommentaries[1]?.contains("goals") == true ||
+            state.starCommentaries[1]?.contains("chances") == true ||
+            state.starCommentaries[1]?.contains("scoring") == true
+        )
+        org.junit.Assert.assertFalse("Commentary should never contain electrifying cliché", state.starCommentaries.values.any { it.contains("electrifying", ignoreCase = true) })
+        assertEquals("All 3 stars should receive distinct non-duplicate commentary", 3, state.starCommentaries.values.distinct().size)
     }
 
     @Test

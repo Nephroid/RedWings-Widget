@@ -270,15 +270,16 @@ fun ThreeStarsSection(
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Text(
-                    text = "★",
+                    text = "★ ★ ★",
                     style = MaterialTheme.typography.labelSmall.copy(
                         color = Color(0xFFFFD700),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Black
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Black,
+                        letterSpacing = 1.sp
                     )
                 )
                 Text(
-                    text = "3 PLAYERS OF THE GAME",
+                    text = "THREE STARS OF THE GAME",
                     style = MaterialTheme.typography.labelSmall.copy(
                         color = palette.secondaryText,
                         fontSize = 11.sp,
@@ -288,10 +289,10 @@ fun ThreeStarsSection(
                 )
             }
             Text(
-                text = "THREE STARS",
+                text = "OFFICIAL SELECTIONS",
                 style = MaterialTheme.typography.labelSmall.copy(
                     color = palette.secondaryText.copy(alpha = 0.7f),
-                    fontSize = 10.sp,
+                    fontSize = 9.5.sp,
                     fontWeight = FontWeight.Medium,
                     letterSpacing = 0.5.sp
                 )
