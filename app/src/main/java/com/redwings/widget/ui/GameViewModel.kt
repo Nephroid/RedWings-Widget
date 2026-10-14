@@ -307,9 +307,15 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun LastGame.toUi(intelligence: com.redwings.widget.data.firebase.GameIntelligenceState? = null): LastGameUi {
-        val pills = if (!intelligence?.dynamicRecapPill.isNullOrBlank()) {
+        val basePills = if (!intelligence?.dynamicRecapPill.isNullOrBlank()) {
             listOf(intelligence!!.dynamicRecapPill)
         } else emptyList()
+
+        val pills = if ((isOvertime || isShootout) && basePills.none { it.contains("OT", ignoreCase = true) || it.contains("Overtime", ignoreCase = true) || it.contains("Shootout", ignoreCase = true) }) {
+            listOf(if (isShootout) "Shootout Finish (SO)" else "Overtime Thriller (OT)") + basePills
+        } else {
+            basePills
+        }
 
         val starsWithComments = threeStars.map { star ->
             val comment = intelligence?.starCommentaries?.get(star.star)
@@ -324,6 +330,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             isWinner = isWinner,
             isHome = isHome,
             dateLabel = dateLabel,
+            periodType = periodType,
             recapPills = pills,
             threeStars = starsWithComments
         )

@@ -67,14 +67,20 @@ fun LastResultCard(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            // Header Row: "LAST RESULT • Tue, Sep 30" + Bold W/L badge
+            // Header Row: "LAST RESULT • Tue, Sep 30" + Bold W/L/OTL badge
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                val headerTitle = buildString {
+                    append("LAST RESULT • ")
+                    append(dateText)
+                    if (lastGame.isOvertime) append(" • FINAL/OT")
+                    else if (lastGame.isShootout) append(" • FINAL/SO")
+                }
                 Text(
-                    text = "LAST RESULT • $dateText",
+                    text = headerTitle,
                     style = MaterialTheme.typography.labelSmall.copy(
                         color = palette.secondaryText,
                         fontSize = 12.sp,
@@ -83,19 +89,35 @@ fun LastResultCard(
                     )
                 )
 
+                val isOtl = !isWin && (lastGame.isOvertime || lastGame.isShootout)
+                val badgeText = when {
+                    isWin -> "W"
+                    isOtl -> "OTL"
+                    else -> "L"
+                }
+
                 Surface(
                     shape = RoundedCornerShape(10.dp),
-                    color = if (isWin) WinGreenSolid else LossRedSolid,
+                    color = when {
+                        isWin -> WinGreenSolid
+                        isOtl -> Color(0xFFD97706) // Amber for Overtime Loss (1 point earned)
+                        else -> LossRedSolid
+                    },
                     border = BorderStroke(1.dp, Color.White.copy(alpha = 0.4f)),
                     shadowElevation = 2.dp,
-                    modifier = Modifier.size(34.dp)
+                    modifier = Modifier
+                        .height(34.dp)
+                        .widthIn(min = 34.dp)
                 ) {
-                    Box(contentAlignment = Alignment.Center) {
+                    Box(
+                        modifier = Modifier.padding(horizontal = if (isOtl) 6.dp else 0.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
                         Text(
-                            text = if (isWin) "W" else "L",
+                            text = badgeText,
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Black,
-                                fontSize = 18.sp,
+                                fontSize = if (isOtl) 13.sp else 18.sp,
                                 color = Color.White
                             )
                         )
@@ -131,23 +153,47 @@ fun LastResultCard(
                     }
                 }
 
-                // Center clash: 4 – 2
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                // Center clash: 4 – 2 with optional OT / SO badge
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(3.dp)
                 ) {
-                    Text(
-                        text = "$detScore",
-                        style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Black, fontSize = 30.sp, color = if (detScore >= oppScore) palette.primaryText else palette.secondaryText)
-                    )
-                    Text(
-                        text = "–",
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold, fontSize = 22.sp, color = palette.secondaryText.copy(alpha = 0.5f))
-                    )
-                    Text(
-                        text = "$oppScore",
-                        style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Black, fontSize = 30.sp, color = if (oppScore >= detScore) palette.primaryText else palette.secondaryText)
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = "$detScore",
+                            style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Black, fontSize = 30.sp, color = if (detScore >= oppScore) palette.primaryText else palette.secondaryText)
+                        )
+                        Text(
+                            text = "–",
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold, fontSize = 22.sp, color = palette.secondaryText.copy(alpha = 0.5f))
+                        )
+                        Text(
+                            text = "$oppScore",
+                            style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Black, fontSize = 30.sp, color = if (oppScore >= detScore) palette.primaryText else palette.secondaryText)
+                        )
+                    }
+
+                    if (lastGame.isOvertime || lastGame.isShootout) {
+                        Surface(
+                            shape = RoundedCornerShape(6.dp),
+                            color = palette.cardBorder.copy(alpha = 0.35f),
+                            border = BorderStroke(0.5.dp, palette.cardBorder.copy(alpha = 0.7f))
+                        ) {
+                            Text(
+                                text = if (lastGame.isShootout) "SO" else "OT",
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontWeight = FontWeight.Black,
+                                    fontSize = 11.sp,
+                                    color = palette.accentRed,
+                                    letterSpacing = 1.sp
+                                ),
+                                modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp)
+                            )
+                        }
+                    }
                 }
 
                 // Opponent side

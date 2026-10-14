@@ -40,9 +40,13 @@ data class LastGameUi(
     val isWinner: Boolean = false,
     val isHome: Boolean = true,
     val dateLabel: String = "",
+    val periodType: String? = null,
     val recapPills: List<String> = emptyList(),
     val threeStars: List<GameStarUi> = com.redwings.widget.data.model.defaultThreeStars()
-)
+) {
+    val isOvertime: Boolean get() = periodType.equals("OT", ignoreCase = true)
+    val isShootout: Boolean get() = periodType.equals("SO", ignoreCase = true)
+}
 
 @Immutable
 data class StandingsRowUi(

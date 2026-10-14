@@ -84,6 +84,7 @@ class HockeyRepository(
         } else {
             defaultThreeStars()
         }
+        val periodType = p.getString("last_game_period_type", null)
         return LastGame(
             opponent = p.getString("last_game_opponent", "Boston Bruins") ?: "Boston Bruins",
             opponentAbbrev = p.getString("last_game_abbrev", "BOS") ?: "BOS",
@@ -92,6 +93,7 @@ class HockeyRepository(
             isWinner = p.getBoolean("last_game_is_winner", wings > opp),
             isHome = p.getBoolean("last_game_is_home", true),
             dateLabel = p.getString("last_game_date", "Tue, Sep 30") ?: "Tue, Sep 30",
+            periodType = periodType,
             threeStars = stars
         )
     }
@@ -411,6 +413,10 @@ class HockeyRepository(
             else -> defaultThreeStars()
         }
 
+        val periodType = game.periodDescriptor?.periodType
+            ?: game.gameOutcome?.lastPeriodType
+            ?: (if ((game.periodDescriptor?.number ?: 0) > 3) "OT" else "REG")
+
         val editor = prefs.edit()
             .putInt("last_game_id", game.id)
             .putString("last_game_opponent", teamDisplayName(oppAbbrev))
@@ -421,6 +427,7 @@ class HockeyRepository(
             .putBoolean("last_game_is_winner", wingsScore > oppScore)
             .putString("last_game_date", dateFmt.format(java.util.Date(parseUtcToMillis(game.startTimeUTC ?: game.gameDate))))
             .putString("last_game_status", game.gameState ?: "OFF")
+            .putString("last_game_period_type", periodType)
 
         if (fetchedStars != null) {
             editor.putBoolean("last_game_stars_from_api", true)
@@ -451,6 +458,7 @@ class HockeyRepository(
             .putBoolean("last_game_is_winner", true)
             .putString("last_game_date", "Tue, Sep 30")
             .putString("last_game_status", "FINAL")
+            .putString("last_game_period_type", "REG")
 
         try {
             editor.putString("last_game_three_stars", starsAdapter.toJson(fallbackStars))

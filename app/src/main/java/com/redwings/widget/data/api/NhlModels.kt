@@ -12,6 +12,19 @@ data class NhlScheduleResponse(
 )
 
 @JsonClass(generateAdapter = true)
+data class NhlPeriodDescriptor(
+    val number: Int? = null,
+    val periodType: String? = null,
+    val maxRegulationPeriods: Int? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class NhlGameOutcome(
+    val lastPeriodType: String? = null,
+    val otType: String? = null
+)
+
+@JsonClass(generateAdapter = true)
 data class NhlGame(
     val id: Int = 0,
     val gameDate: String? = null,
@@ -20,7 +33,9 @@ data class NhlGame(
     val gameType: Int? = null,
     val homeTeam: NhlTeam? = null,
     val awayTeam: NhlTeam? = null,
-    val venue: NhlVenue? = null
+    val venue: NhlVenue? = null,
+    val periodDescriptor: NhlPeriodDescriptor? = null,
+    val gameOutcome: NhlGameOutcome? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -102,7 +117,9 @@ data class TeamName(
 data class NhlGameLandingResponse(
     val id: Int? = null,
     val gameState: String? = null,
-    val summary: NhlGameSummary? = null
+    val summary: NhlGameSummary? = null,
+    val periodDescriptor: NhlPeriodDescriptor? = null,
+    val gameOutcome: NhlGameOutcome? = null
 )
 
 @JsonClass(generateAdapter = true)

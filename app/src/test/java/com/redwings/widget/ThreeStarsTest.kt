@@ -361,4 +361,32 @@ class ThreeStarsTest {
         assertEquals(93, firstStar.sweaterNo)
         assertEquals("RW", firstStar.position)
     }
+
+    @Test
+    fun lastResultCard_rendersOvertimeBadgeAndOtlWhenLostInOt() {
+        val lastGame = LastGameUi(
+            opponent = "New Jersey Devils",
+            opponentAbbrev = "NJD",
+            wingsScore = 4,
+            oppScore = 5,
+            isWinner = false,
+            isHome = true,
+            dateLabel = "Tue, Oct 13",
+            periodType = "OT",
+            threeStars = defaultThreeStars()
+        )
+
+        composeTestRule.setContent {
+            RedWingsTheme {
+                LastResultCard(lastGame = lastGame)
+            }
+        }
+
+        // Header shows FINAL/OT
+        composeTestRule.onNodeWithText("LAST RESULT • Tue, Oct 13 • FINAL/OT").assertIsDisplayed()
+        // Result badge shows OTL
+        composeTestRule.onNodeWithText("OTL").assertIsDisplayed()
+        // Center score clash shows OT badge
+        composeTestRule.onNodeWithText("OT").assertIsDisplayed()
+    }
 }

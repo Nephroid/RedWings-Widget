@@ -40,8 +40,12 @@ data class LastGame(
     val isWinner: Boolean = false,
     val isHome: Boolean = true,
     val dateLabel: String = "",
+    val periodType: String? = null,
     val threeStars: List<GameStarUi> = defaultThreeStars()
-)
+) {
+    val isOvertime: Boolean get() = periodType.equals("OT", ignoreCase = true)
+    val isShootout: Boolean get() = periodType.equals("SO", ignoreCase = true)
+}
 
 fun RedWingsGame.toUpcoming() = UpcomingGame(
     gameId = gameId,
