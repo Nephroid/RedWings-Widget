@@ -1,8 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Away White Road Jersey: crisp ice white base with Wings Red piping border -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <corners android:radius="18dp" />
-    <solid android:color="#FFFFFF" />
-    <stroke android:width="1.5dp" android:color="#CE1126" />
-</shape>
+<!-- Away White Road Jersey: Optical glassmorphic ice substrate with 135° specular rim and Wings Red accent -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- LAYER 0: Ambient Keyline -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="24dp" />
+            <solid android:color="#26000000" />
+        </shape>
+    </item>
+
+    <!-- LAYER 1: 135° Specular Rim Lighting -->
+    <item
+        android:bottom="0.5dp"
+        android:left="0.5dp"
+        android:right="0.5dp"
+        android:top="0.5dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="23.5dp" />
+            <gradient
+                android:angle="135"
+                android:centerColor="#33CE1126"
+                android:endColor="#80CE1126"
+                android:startColor="#FFFFFFFF"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <!-- LAYER 2: Crisp Ice White Glass Substrate -->
+    <item
+        android:bottom="1.5dp"
+        android:left="1.5dp"
+        android:right="1.5dp"
+        android:top="1.5dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="22.5dp" />
+            <gradient
+                android:angle="315"
+                android:centerColor="#F5FFFFFF"
+                android:endColor="#EBF2F7"
+                android:startColor="#FFFFFFFF"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <!-- LAYER 3: Caustic Frost Sheen -->
+    <item
+        android:bottom="1.5dp"
+        android:left="1.5dp"
+        android:right="1.5dp"
+        android:top="1.5dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="22.5dp" />
+            <gradient
+                android:centerX="0.15"
+                android:centerY="0.10"
+                android:endColor="#00FFFFFF"
+                android:gradientRadius="260dp"
+                android:startColor="#66FFFFFF"
+                android:type="radial" />
+        </shape>
+    </item>
+
+</layer-list>

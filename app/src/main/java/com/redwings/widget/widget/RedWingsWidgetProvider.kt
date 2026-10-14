@@ -84,7 +84,7 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
     ) {
         try {
             val prefs = context.getSharedPreferences(WidgetBinder.PREFS, Context.MODE_PRIVATE)
-            val theme = WidgetTheme.fromIndex(prefs.getInt(KEY_THEME, WidgetTheme.HOME.id))
+            val userThemeIndex = prefs.getInt(KEY_THEME, -1)
 
             val game = try {
                 val dao = AppDatabase.getDatabase(context).gameDao()
@@ -132,6 +132,13 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
                     WidgetBinder.loadLogoBitmap(context, "DET")
                 }
                 oppDeferred.await() to detDeferred.await()
+            }
+
+            val isHomeGame = game?.isHomeGame ?: prefs.getBoolean("next_game_is_home", true)
+            val theme = if (userThemeIndex >= 0) {
+                WidgetTheme.fromIndex(userThemeIndex)
+            } else {
+                if (isHomeGame) WidgetTheme.HOME else WidgetTheme.AWAY
             }
 
             ids.forEach { id ->
