@@ -1,9 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Frosted glass venue pill -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <corners android:radius="999dp" />
-    <solid android:color="#E6EFF5" />
-    <stroke android:width="1.2dp" android:color="#FFFFFF" />
-</shape>
+<!-- Apple-Grade Frosted Glass Stadium / Venue Capsule -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Specular rim highlight -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="999dp" />
+            <gradient
+                android:angle="135"
+                android:centerColor="#26FFFFFF"
+                android:endColor="#40FFFFFF"
+                android:startColor="#80FFFFFF"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <!-- Translucent glass fill -->
+    <item
+        android:bottom="1dp"
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="999dp" />
+            <gradient
+                android:angle="270"
+                android:endColor="#E6D6E4EE"
+                android:startColor="#F2EDF4F9"
+                android:type="linear" />
+        </shape>
+    </item>
+
+</layer-list>

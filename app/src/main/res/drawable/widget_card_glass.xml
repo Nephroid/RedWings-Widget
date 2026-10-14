@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Outer Specular Rim (Stronger at top-left, subtle at bottom-right) -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="12dp" />
+            <gradient
+                android:angle="135"
+                android:centerColor="#12FFFFFF"
+                android:endColor="#24FFFFFF"
+                android:startColor="#4DFFFFFF"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <!-- Inner Frosted Card Surface (Inset by 1dp to expose specular rim) -->
+    <item
+        android:bottom="1dp"
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="11dp" />
+            <gradient
+                android:angle="270"
+                android:endColor="#14FFFFFF"
+                android:startColor="#29FFFFFF"
+                android:type="linear" />
+        </shape>
+    </item>
+
+</layer-list>

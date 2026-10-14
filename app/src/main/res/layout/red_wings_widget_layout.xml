@@ -8,10 +8,10 @@
     android:gravity="fill"
     android:clipToPadding="false"
     android:clipChildren="false"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="9dp"
-    android:paddingBottom="9dp">
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp">
 
     <!-- COMPOSITE UPPER CARD: Ribbon Header + Matchup Frosted Card + Floating @ Badge -->
     <FrameLayout
@@ -144,7 +144,7 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="14dp"
                 android:paddingRight="14dp"
-                android:paddingTop="9dp"
+                android:paddingTop="12dp"
                 android:paddingBottom="7dp">
 
                 <!-- Away Team (Left) -->
@@ -194,6 +194,7 @@
 
                         <TextView
                             android:id="@+id/widget_away_record"
+                            android:fontFeatureSettings="tnum"
                             android:fontFamily="sans-serif-medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -230,6 +231,7 @@
 
                     <TextView
                         android:id="@+id/widget_countdown"
+                        android:fontFeatureSettings="tnum"
                         android:fontFamily="sans-serif-black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -290,6 +292,7 @@
 
                         <TextView
                             android:id="@+id/widget_home_record"
+                            android:fontFeatureSettings="tnum"
                             android:fontFamily="sans-serif-medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

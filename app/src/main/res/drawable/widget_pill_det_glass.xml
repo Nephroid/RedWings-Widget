@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Red Specular Rim -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="8dp" />
+            <gradient
+                android:angle="135"
+                android:centerColor="#33CE1126"
+                android:endColor="#4DCE1126"
+                android:startColor="#99FF6B7B"
+                android:type="linear" />
+        </shape>
+    </item>
+    <!-- Anodized Red Glass Fill -->
+    <item
+        android:bottom="1dp"
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="7dp" />
+            <gradient
+                android:angle="0"
+                android:endColor="#40CE1126"
+                android:startColor="#73CE1126"
+                android:type="linear" />
+        </shape>
+    </item>
+</layer-list>

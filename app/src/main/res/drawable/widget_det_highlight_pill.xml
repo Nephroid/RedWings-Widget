@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Detroit Red Wings Standings Highlight Pill -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <corners android:radius="10dp" />
-    <gradient
-        android:type="linear"
-        android:angle="180"
-        android:startColor="#B80C1E"
-        android:centerColor="#C8102E"
-        android:endColor="#B80C1E" />
-    <stroke android:width="1dp" android:color="#FFFFFF" />
-</shape>
+<!-- Apple-Grade Anodized Crimson Glass Highlight Pill for DET Standings Row -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Specular Rim -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="10dp" />
+            <gradient
+                android:angle="135"
+                android:centerColor="#33CE1126"
+                android:endColor="#66CE1126"
+                android:startColor="#B3FF6B7B"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <!-- Anodized Crimson Translucent Glass -->
+    <item
+        android:bottom="1dp"
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="9dp" />
+            <gradient
+                android:angle="0"
+                android:centerColor="#E6C8102E"
+                android:endColor="#E6A30C1D"
+                android:startColor="#E6D61535"
+                android:type="linear" />
+        </shape>
+    </item>
+
+</layer-list>

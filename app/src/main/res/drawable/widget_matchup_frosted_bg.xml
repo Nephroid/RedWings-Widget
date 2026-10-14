@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Frosted glass card for matchup hero section -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <corners
-        android:topLeftRadius="0dp"
-        android:topRightRadius="0dp"
-        android:bottomLeftRadius="14dp"
-        android:bottomRightRadius="14dp" />
-    <solid android:color="#F7FAFD" />
-    <stroke android:width="1.5dp" android:color="#FFFFFF" />
-</shape>
+<!-- Universal Concentric Frosted Inner Card (12dp radius) with Top Specular Rim -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Outer Specular Rim -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="12dp" />
+            <gradient
+                android:angle="135"
+                android:centerColor="#14FFFFFF"
+                android:endColor="#26FFFFFF"
+                android:startColor="#59FFFFFF"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <!-- Inner Frosted Surface (Inset 1dp) -->
+    <item
+        android:bottom="1dp"
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="11dp" />
+            <gradient
+                android:angle="270"
+                android:endColor="#14FFFFFF"
+                android:startColor="#29FFFFFF"
+                android:type="linear" />
+        </shape>
+    </item>
+
+</layer-list>
