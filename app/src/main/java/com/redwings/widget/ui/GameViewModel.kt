@@ -249,13 +249,15 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun startCountdownTicker(nextGame: UpcomingGame?) {
         countdownJob?.cancel()
-        if (nextGame == null) {
+        val targetGameTime = nextGame?.gameTimeMillis ?: prefs.getLong("next_game_time_millis", 0L)
+        if (targetGameTime <= 0L) {
             _countdown.value = CountdownState(text = "No Games Scheduled")
             return
         }
+        val targetMillis = targetGameTime
         countdownJob = viewModelScope.launch {
             while (isActive) {
-                val diff = nextGame.gameTimeMillis - System.currentTimeMillis()
+                val diff = targetMillis - System.currentTimeMillis()
                 _countdown.value = when {
                     diff <= 0 && diff > -TimeUnit.HOURS.toMillis(3) ->
                         CountdownState(isLive = true, text = "LIVE NOW")
