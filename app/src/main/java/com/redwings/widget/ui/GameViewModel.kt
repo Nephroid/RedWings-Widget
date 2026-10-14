@@ -238,6 +238,11 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     fun lightTheLamp(gameId: Int = upcomingGames.value.firstOrNull()?.gameId ?: 990001) {
         fanPulseRepo.lightTheLamp(gameId)
+        val app = getApplication<android.app.Application>()
+        com.redwings.widget.audio.GoalCelebrationAudioEngine.getInstance(app).playCelebration(
+            scorerName = "Dylan Larkin",
+            sweaterNumber = 71
+        )
     }
 
     fun triggerManualRefresh() = refreshData()
