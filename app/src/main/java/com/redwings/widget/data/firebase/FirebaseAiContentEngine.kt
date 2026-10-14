@@ -82,17 +82,20 @@ class FirebaseAiContentEngine(
         detRecord: String,
         oppRecord: String
     ) {
+        val cachedOpponent = prefs.getString("ai_matchup_opponent_abbrev", "") ?: ""
+        val isNewOpponent = !cachedOpponent.equals(opponentAbbrev, ignoreCase = true)
+
         // Step 1: Immediate local heuristic preview
         val heuristicStoryline = generateLocalMatchupStoryline(opponentName, opponentAbbrev, isHome, detRecord, oppRecord)
         val heuristicBattle = generateLocalKeyBattle(opponentAbbrev)
 
-        if (_intelligenceState.value.matchupStoryline.isBlank()) {
+        if (isNewOpponent || _intelligenceState.value.matchupStoryline.isBlank()) {
             val updated = _intelligenceState.value.copy(
                 matchupStoryline = heuristicStoryline,
                 keyBattle = heuristicBattle
             )
             _intelligenceState.value = updated
-            savePreGamePrefs(heuristicStoryline, heuristicBattle)
+            savePreGamePrefs(opponentAbbrev, heuristicStoryline, heuristicBattle)
         }
 
         // Step 2: Background Gemini AI generation
@@ -100,16 +103,18 @@ class FirebaseAiContentEngine(
             try {
                 val modelName = "gemini-2.5-flash"
                 val model = Firebase.ai.generativeModel(modelName)
+                val phase = getSeasonPhase()
                 val prompt = """
                     You are a sharp, analytical Detroit Red Wings hockey beat writer.
                     Write a punchy 1-sentence pre-game storyline and identify 1 key player battle for:
                     Opponent: $opponentName ($opponentAbbrev)
                     Location: ${if (isHome) "Home at Little Caesars Arena" else "Away at $opponentName"}
                     Detroit record: $detRecord, Opponent record: $oppRecord.
+                    Season Phase: $phase
                     
                     Format your response EXACTLY as:
-                    STORYLINE: <1 sentence storyline>
-                    BATTLE: <Key Battle: Player vs Player>
+                    STORYLINE: <1 sentence storyline reflecting the season phase and stakes>
+                    BATTLE: <Player vs Player>
                 """.trimIndent()
 
                 val response = model.generateContent(prompt)
@@ -123,7 +128,7 @@ class FirebaseAiContentEngine(
                                 aiStoryline = line.substringAfter(":").trim()
                             }
                             line.startsWith("BATTLE:", ignoreCase = true) -> {
-                                aiBattle = line.substringAfter(":").trim()
+                                aiBattle = line.substringAfter(":").removePrefix("Key Battle:").removePrefix("•").trim()
                             }
                         }
                     }
@@ -134,7 +139,7 @@ class FirebaseAiContentEngine(
                             keyBattle = aiBattle
                         )
                     }
-                    savePreGamePrefs(aiStoryline, aiBattle)
+                    savePreGamePrefs(opponentAbbrev, aiStoryline, aiBattle)
                     Log.d("FirebaseAiContentEngine", "Generated AI pre-game preview: $aiStoryline")
                 }
             } catch (t: Throwable) {
@@ -258,24 +263,90 @@ class FirebaseAiContentEngine(
         return match?.groupValues?.get(1)?.toIntOrNull() ?: 50
     }
 
+    enum class SeasonPhase {
+        EARLY_SEASON,
+        WINTER_GRIND,
+        PLAYOFF_CHASE,
+        OFF_SEASON
+    }
+
+    private fun getSeasonPhase(): SeasonPhase {
+        val calendar = java.util.Calendar.getInstance()
+        return when (calendar.get(java.util.Calendar.MONTH)) {
+            java.util.Calendar.OCTOBER, java.util.Calendar.NOVEMBER -> SeasonPhase.EARLY_SEASON
+            java.util.Calendar.DECEMBER, java.util.Calendar.JANUARY -> SeasonPhase.WINTER_GRIND
+            java.util.Calendar.FEBRUARY, java.util.Calendar.MARCH, java.util.Calendar.APRIL -> SeasonPhase.PLAYOFF_CHASE
+            else -> SeasonPhase.OFF_SEASON
+        }
+    }
+
     private fun generateLocalMatchupStoryline(name: String, abbr: String, isHome: Boolean, detRecord: String, oppRecord: String): String {
         val venue = if (isHome) "at Little Caesars Arena" else "on the road"
-        return when (abbr) {
-            "BOS", "TOR", "TBL", "FLA", "MTL", "OTT", "BUF" ->
-                "Critical Atlantic Division battle $venue as Detroit ($detRecord) looks to secure crucial playoff positioning against $name ($oppRecord)."
+        val detRecClean = detRecord.trim().takeIf { it.isNotEmpty() && it != "--" }
+        val oppRecClean = oppRecord.trim().takeIf { it.isNotEmpty() && it != "--" }
+        val detText = if (detRecClean != null) "Detroit ($detRecClean)" else "Detroit"
+        val oppText = if (oppRecClean != null) "$name ($oppRecClean)" else name
+
+        val isAtlantic = abbr.uppercase() in listOf("BOS", "TOR", "TBL", "FLA", "MTL", "OTT", "BUF")
+        val isOriginalSix = abbr.uppercase() in listOf("BOS", "CHI", "MTL", "NYR", "TOR")
+        val phase = getSeasonPhase()
+
+        return when {
+            isAtlantic && phase == SeasonPhase.PLAYOFF_CHASE ->
+                "High-stakes Atlantic Division clash $venue as $detText battles $oppText with massive four-point wild card implications."
+            isAtlantic && phase == SeasonPhase.WINTER_GRIND ->
+                "Intense Atlantic Division showdown $venue as $detText looks to out-grit rival $oppText through the grueling mid-season stretch."
+            isAtlantic ->
+                "Crucial Atlantic Division test $venue as $detText sets the early division pace against $oppText."
+            isOriginalSix ->
+                "Historic Original Six rivalry takes center stage $venue as $detText clashes with $oppText."
+            phase == SeasonPhase.PLAYOFF_CHASE ->
+                "Every regulation point is critical $venue as $detText pushes for playoff position against cross-conference challenger $oppText."
+            phase == SeasonPhase.WINTER_GRIND ->
+                "The Red Wings take the ice $venue, seeking a gritty statement win and two key points against $oppText."
             else ->
-                "The Red Wings take the ice $venue, eyeing a statement win and two big points against $name."
+                "$detText faces off $venue against $oppText, looking to establish aggressive 5-on-5 tempo from the opening puck drop."
         }
     }
 
     private fun generateLocalKeyBattle(oppAbbr: String): String {
-        return when (oppAbbr) {
-            "TOR" -> "Key Battle: Larkin vs. Matthews"
-            "BOS" -> "Key Battle: Seider vs. Pastrnak"
-            "TBL" -> "Key Battle: Raymond vs. Kucherov"
-            "EDM" -> "Key Battle: Seider vs. McDavid"
-            "COL" -> "Key Battle: Larkin vs. MacKinnon"
-            else -> "Key Battle: Top line execution & special teams supremacy"
+        return when (oppAbbr.uppercase()) {
+            // Atlantic Division
+            "TOR" -> "Larkin vs. Matthews"
+            "BOS" -> "Seider vs. Pastrnak"
+            "TBL" -> "Raymond vs. Kucherov"
+            "FLA" -> "Seider vs. Barkov"
+            "OTT" -> "DeBrincat vs. Tkachuk"
+            "MTL" -> "Larkin vs. Suzuki"
+            "BUF" -> "Larkin vs. Thompson"
+            // Metropolitan Division
+            "NYR" -> "Seider vs. Panarin"
+            "CAR" -> "Larkin vs. Aho"
+            "NJD" -> "Raymond vs. J. Hughes"
+            "NYI" -> "Larkin vs. Barzal"
+            "PIT" -> "Kane vs. Crosby"
+            "WSH" -> "Seider vs. Ovechkin"
+            "PHI" -> "Raymond vs. Konecny"
+            "CBJ" -> "Larkin vs. Fantilli"
+            // Central Division
+            "COL" -> "Larkin vs. MacKinnon"
+            "DAL" -> "Larkin vs. Robertson"
+            "WPG" -> "Seider vs. Connor"
+            "MIN" -> "Seider vs. Kaprizov"
+            "NSH" -> "Larkin vs. Forsberg"
+            "STL" -> "Raymond vs. Thomas"
+            "CHI" -> "Kane vs. Bedard"
+            "UTA" -> "Larkin vs. Keller"
+            // Pacific Division
+            "EDM" -> "Seider vs. McDavid"
+            "VAN" -> "Seider vs. Q. Hughes"
+            "VGK" -> "Larkin vs. Eichel"
+            "LAK" -> "Larkin vs. Kopitar"
+            "CGY" -> "Raymond vs. Kadri"
+            "SEA" -> "Larkin vs. Beniers"
+            "ANA" -> "Raymond vs. Carlsson"
+            "SJS" -> "Seider vs. Celebrini"
+            else -> "Top Line Execution vs. Opponent Defense"
         }
     }
 
@@ -307,8 +378,9 @@ class FirebaseAiContentEngine(
         return map
     }
 
-    private fun savePreGamePrefs(storyline: String, battle: String) {
+    private fun savePreGamePrefs(oppAbbrev: String, storyline: String, battle: String) {
         prefs.edit()
+            .putString("ai_matchup_opponent_abbrev", oppAbbrev)
             .putString("ai_matchup_storyline", storyline)
             .putString("ai_key_battle", battle)
             .apply()

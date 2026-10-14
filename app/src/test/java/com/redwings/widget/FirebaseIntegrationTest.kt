@@ -67,6 +67,44 @@ class FirebaseIntegrationTest {
         assertTrue("Should have generated storyline", state.matchupStoryline.isNotBlank())
         assertTrue("Storyline should mention Atlantic or Detroit", state.matchupStoryline.contains("Detroit") || state.matchupStoryline.contains("Atlantic"))
         assertTrue("Key battle should target TOR star", state.keyBattle.contains("Matthews") || state.keyBattle.contains("Larkin"))
+        org.junit.Assert.assertFalse("Key battle should not repeat Key Battle prefix", state.keyBattle.startsWith("Key Battle:"))
+        org.junit.Assert.assertFalse("Storyline should not have empty parentheses", state.matchupStoryline.contains("()"))
+    }
+
+    @Test
+    fun testMatchupIntelInvalidatesOnOpponentChange() {
+        val engine = FirebaseAiContentEngine(context)
+
+        // Game 1: vs Toronto
+        engine.refreshPreGameIntelligence(
+            opponentName = "Toronto Maple Leafs",
+            opponentAbbrev = "TOR",
+            isHome = true,
+            detRecord = "10-5-2",
+            oppRecord = "12-4-1"
+        )
+        assertEquals("Larkin vs. Matthews", engine.intelligenceState.value.keyBattle)
+
+        // Game 2: Transition to Chicago Blackhawks
+        engine.refreshPreGameIntelligence(
+            opponentName = "Chicago Blackhawks",
+            opponentAbbrev = "CHI",
+            isHome = false,
+            detRecord = "11-5-2",
+            oppRecord = "7-11-0"
+        )
+        assertEquals("Kane vs. Bedard", engine.intelligenceState.value.keyBattle)
+        assertTrue("Storyline should reference Original Six", engine.intelligenceState.value.matchupStoryline.contains("Original Six"))
+
+        // Game 3: Transition to Edmonton Oilers
+        engine.refreshPreGameIntelligence(
+            opponentName = "Edmonton Oilers",
+            opponentAbbrev = "EDM",
+            isHome = true,
+            detRecord = "12-5-2",
+            oppRecord = "14-6-1"
+        )
+        assertEquals("Seider vs. McDavid", engine.intelligenceState.value.keyBattle)
     }
 
     @Test

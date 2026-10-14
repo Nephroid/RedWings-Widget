@@ -105,7 +105,7 @@ fun NextGameHero(
                 shadowElevation = 3.dp
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text("@", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Black, fontSize = 13.sp, color = Color.White))
+                    Text("VS", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Black, fontSize = 10.sp, color = Color.White))
                 }
             }
             
