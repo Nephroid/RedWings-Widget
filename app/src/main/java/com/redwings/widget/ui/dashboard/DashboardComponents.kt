@@ -1,4 +1,5 @@
 package com.redwings.widget.ui.dashboard
+import androidx.compose.ui.graphics.luminance
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -308,29 +309,38 @@ fun AnchoredArenaCapsule(
     modifier: Modifier = Modifier
 ) {
     val palette = LocalJerseyPalette.current
+    val isDarkJersey = palette.background.luminance() < 0.2f
     val pillShape = CircleShape
+    val pillBg = if (isDarkJersey) Color(0xFF1E222A).copy(alpha = 0.95f) else Color.White.copy(alpha = 0.95f)
+    val textCol = if (isDarkJersey) Color.White else Color(0xFF1A1210)
+    val borderBrush = if (isDarkJersey) {
+        Brush.verticalGradient(listOf(Color.White.copy(alpha = 0.45f), Color.White.copy(alpha = 0.10f)))
+    } else {
+        Brush.verticalGradient(listOf(Color.White.copy(alpha = 0.95f), Color(0xFFCBD5E1)))
+    }
+
     Surface(
         modifier = modifier
             .shadow(
-                elevation = 2.dp,
+                elevation = 4.dp,
                 shape = pillShape,
-                ambientColor = Color.Black.copy(alpha = 0.05f)
+                ambientColor = Color.Black.copy(alpha = 0.25f)
             )
             .border(
-                BorderStroke(1.dp, Brush.verticalGradient(listOf(Color.White.copy(alpha = 0.85f), Color.White.copy(alpha = 0.20f)))),
+                BorderStroke(1.dp, borderBrush),
                 pillShape
             ),
         shape = pillShape,
-        color = Color.White.copy(alpha = 0.90f)
+        color = pillBg
     ) {
         Text(
             text = arenaName,
             style = MaterialTheme.typography.labelSmall.copy(
                 fontSize = 11.sp,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Bold,
                 letterSpacing = 0.5.sp
             ),
-            color = palette.primaryText,
+            color = textCol,
             modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp)
         )
     }
