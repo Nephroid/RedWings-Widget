@@ -301,13 +301,17 @@ fun ThreeStarsSection(
 
         // 3 player star cards
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             stars.take(3).forEach { star ->
                 StarPlayerCard(
                     star = star,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
                 )
             }
         }
@@ -341,7 +345,8 @@ fun StarPlayerCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 4.dp, vertical = 8.dp),
+                .fillMaxHeight()
+                .padding(start = 6.dp, end = 6.dp, top = 8.dp, bottom = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
@@ -465,18 +470,21 @@ fun StarPlayerCard(
             }
 
             if (!star.commentary.isNullOrBlank()) {
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = star.commentary,
                     style = MaterialTheme.typography.bodySmall.copy(
-                        fontSize = 9.sp,
+                        fontSize = 9.5.sp,
                         fontWeight = FontWeight.Medium,
                         color = palette.secondaryText,
-                        lineHeight = 12.sp
+                        lineHeight = 13.sp
                     ),
-                    maxLines = 2,
+                    maxLines = 4,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 2.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 2.dp, vertical = 1.dp)
                 )
             }
         }

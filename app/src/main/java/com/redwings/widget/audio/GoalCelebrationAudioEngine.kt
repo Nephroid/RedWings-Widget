@@ -42,8 +42,8 @@ class GoalCelebrationAudioEngine private constructor(private val context: Contex
     }
 
     fun playCelebration(
-        scorerName: String = "Dylan Larkin",
-        sweaterNumber: Int = 71,
+        scorerName: String = DEFAULT_SCORER_NAME,
+        sweaterNumber: Int = DEFAULT_SWEATER_NUMBER,
         isOvertime: Boolean = false
     ) {
         scope.launch {
@@ -52,15 +52,28 @@ class GoalCelebrationAudioEngine private constructor(private val context: Contex
             // Step 1: Play authentic Goal Horn
             playGoalHorn()
 
-            // Step 2: Speak Arena Goal Announcement
+            // Step 2: Speak Arena Goal Announcement with authentic hockey phonetics
+            val spokenScorerName = applyHockeyPhonetics(scorerName)
             val announcement = if (isOvertime) {
-                "Detroit Red Wings Overtime Winner! Scored by number $sweaterNumber, $scorerName!"
+                "Detroit Red Wings Overtime Winner! Scored by number $sweaterNumber, $spokenScorerName!"
             } else {
-                "Detroit Red Wings goal! Scored by number $sweaterNumber, $scorerName!"
+                "Detroit Red Wings goal! Scored by number $sweaterNumber, $spokenScorerName!"
             }
 
             speakAnnouncement(announcement)
         }
+    }
+
+    /**
+     * Maps canonical NHL player names to TTS-friendly phonetic spellings
+     * so UI/Domain models remain clean while audio announcements sound authentic.
+     */
+    internal fun applyHockeyPhonetics(name: String): String {
+        var spoken = name
+        for ((regex, phonetic) in PHONETIC_OVERRIDES) {
+            spoken = regex.replace(spoken, phonetic)
+        }
+        return spoken
     }
 
     private suspend fun playGoalHorn(): Long = suspendCancellableCoroutine { continuation ->
@@ -160,6 +173,13 @@ class GoalCelebrationAudioEngine private constructor(private val context: Contex
 
     companion object {
         private const val TAG = "GoalCelebrationAudio"
+        const val DEFAULT_SCORER_NAME = "Alex DeBrincat"
+        const val DEFAULT_SWEATER_NUMBER = 93
+
+        private val PHONETIC_OVERRIDES: List<Pair<Regex, String>> = listOf(
+            Regex("\\bDeBrincat\\b", RegexOption.IGNORE_CASE) to "Duh-brink-it",
+            Regex("\\bSeider\\b", RegexOption.IGNORE_CASE) to "Sigh-der"
+        )
 
         @Volatile
         private var instance: GoalCelebrationAudioEngine? = null

@@ -240,8 +240,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         fanPulseRepo.lightTheLamp(gameId)
         val app = getApplication<android.app.Application>()
         com.redwings.widget.audio.GoalCelebrationAudioEngine.getInstance(app).playCelebration(
-            scorerName = "Dylan Larkin",
-            sweaterNumber = 71
+            scorerName = "Alex DeBrincat",
+            sweaterNumber = 93
         )
     }
 

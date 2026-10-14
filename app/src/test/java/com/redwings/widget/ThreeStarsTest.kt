@@ -180,7 +180,7 @@ class ThreeStarsTest {
 
         // 1st Star
         composeTestRule.onNodeWithTag("star_player_card_1").assertIsDisplayed()
-        composeTestRule.onNodeWithText("D. Larkin").assertIsDisplayed()
+        composeTestRule.onNodeWithText("A. DeBrincat").assertIsDisplayed()
         composeTestRule.onNodeWithText("1ST").assertIsDisplayed()
 
         // 2nd Star
@@ -334,5 +334,31 @@ class ThreeStarsTest {
         assertNotNull(gameWithCustomStars)
         assertEquals(1, gameWithCustomStars?.threeStars?.size)
         assertEquals("Test Star", gameWithCustomStars?.threeStars?.first()?.name)
+    }
+
+    @Test
+    fun goalCelebration_phoneticsTranslateDeBrincatCorrectly() {
+        val context = androidx.test.core.app.ApplicationProvider.getApplicationContext<android.content.Context>()
+        val engine = com.redwings.widget.audio.GoalCelebrationAudioEngine.getInstance(context)
+
+        val singleName = engine.applyHockeyPhonetics("Alex DeBrincat")
+        assertEquals("Alex Duh-brink-it", singleName)
+
+        val fullAnnouncement = engine.applyHockeyPhonetics("Detroit Red Wings goal! Scored by number 93, Alex DeBrincat!")
+        assertEquals("Detroit Red Wings goal! Scored by number 93, Alex Duh-brink-it!", fullAnnouncement)
+
+        val seiderAnnouncement = engine.applyHockeyPhonetics("Moritz Seider")
+        assertEquals("Moritz Sigh-der", seiderAnnouncement)
+    }
+
+    @Test
+    fun defaultThreeStars_leadsWithDeBrincat() {
+        val stars = defaultThreeStars()
+        assertEquals(3, stars.size)
+        val firstStar = stars.first()
+        assertEquals(1, firstStar.star)
+        assertEquals("A. DeBrincat", firstStar.name)
+        assertEquals(93, firstStar.sweaterNo)
+        assertEquals("RW", firstStar.position)
     }
 }

@@ -104,12 +104,12 @@ fun NhlThreeStar.toUi(): GameStarUi {
 fun defaultThreeStars(): List<GameStarUi> = listOf(
     GameStarUi(
         star = 1,
-        playerId = 8477940,
-        name = "D. Larkin",
+        playerId = 8479337,
+        name = "A. DeBrincat",
         teamAbbrev = "DET",
-        headshotUrl = "https://assets.nhle.com/mugs/nhl/latest/8477940.png",
-        position = "C",
-        sweaterNo = 71,
+        headshotUrl = "https://assets.nhle.com/mugs/nhl/latest/8479337.png",
+        position = "RW",
+        sweaterNo = 93,
         statLine = "2G • 1A • 3 PTS"
     ),
     GameStarUi(
