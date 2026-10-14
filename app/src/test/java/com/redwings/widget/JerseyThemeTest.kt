@@ -16,6 +16,7 @@ import com.redwings.widget.ui.theme.LocalJerseyPalette
 import com.redwings.widget.ui.theme.RedWingsTheme
 import com.redwings.widget.ui.theme.ReverseRetroPalette
 import com.redwings.widget.ui.theme.StadiumSeriesPalette
+import com.redwings.widget.ui.theme.resolveAppJersey
 import com.redwings.widget.ui.theme.toPalette
 import com.redwings.widget.widget.WidgetBinder
 import org.junit.Assert.assertEquals
@@ -101,4 +102,65 @@ class JerseyThemeTest {
         assertEquals(targetTheme.id, appPrefs.getInt(MainActivity.KEY_THEME, -1))
         assertEquals(targetTheme.id, widgetPrefs.getInt(MainActivity.KEY_THEME, -1))
     }
+
+    @Test
+    fun testThemeModeFromIdAndLegacyFallback() {
+        assertEquals(com.redwings.widget.widget.ThemeMode.AUTO, com.redwings.widget.widget.ThemeMode.fromId(-1))
+        assertEquals(com.redwings.widget.widget.ThemeMode.HERITAGE, com.redwings.widget.widget.ThemeMode.fromId(0))
+        assertEquals(com.redwings.widget.widget.ThemeMode.REVERSE_RETRO, com.redwings.widget.widget.ThemeMode.fromId(3))
+        assertEquals(com.redwings.widget.widget.ThemeMode.STADIUM_SERIES, com.redwings.widget.widget.ThemeMode.fromId(4))
+
+        // Legacy values (1=Home, 2=Away) cleanly fall back to AUTO
+        assertEquals(com.redwings.widget.widget.ThemeMode.AUTO, com.redwings.widget.widget.ThemeMode.fromId(1))
+        assertEquals(com.redwings.widget.widget.ThemeMode.AUTO, com.redwings.widget.widget.ThemeMode.fromId(2))
+        assertEquals(com.redwings.widget.widget.ThemeMode.AUTO, com.redwings.widget.widget.ThemeMode.fromId(999))
+    }
+
+    @Test
+    fun testThemeModeCyclingCycle() {
+        val auto = com.redwings.widget.widget.ThemeMode.AUTO
+        val heritage = auto.next()
+        val retro = heritage.next()
+        val special = retro.next()
+        val backToAuto = special.next()
+
+        assertEquals(com.redwings.widget.widget.ThemeMode.HERITAGE, heritage)
+        assertEquals(com.redwings.widget.widget.ThemeMode.REVERSE_RETRO, retro)
+        assertEquals(com.redwings.widget.widget.ThemeMode.STADIUM_SERIES, special)
+        assertEquals(com.redwings.widget.widget.ThemeMode.AUTO, backToAuto)
+    }
+
+    @Test
+    fun testThemeModeAutomagicResolution() {
+        val auto = com.redwings.widget.widget.ThemeMode.AUTO
+        assertEquals(AppJersey.HOME, auto.resolveAppJersey(isHomeGame = true))
+        assertEquals(AppJersey.AWAY, auto.resolveAppJersey(isHomeGame = false))
+
+        assertEquals(com.redwings.widget.widget.WidgetTheme.HOME, auto.resolveWidgetTheme(isHomeGame = true))
+        assertEquals(com.redwings.widget.widget.WidgetTheme.AWAY, auto.resolveWidgetTheme(isHomeGame = false))
+
+        val heritage = com.redwings.widget.widget.ThemeMode.HERITAGE
+        assertEquals(AppJersey.HERITAGE, heritage.resolveAppJersey(isHomeGame = true))
+        assertEquals(AppJersey.HERITAGE, heritage.resolveAppJersey(isHomeGame = false))
+        assertEquals(com.redwings.widget.widget.WidgetTheme.HERITAGE, heritage.resolveWidgetTheme(isHomeGame = true))
+        assertEquals(com.redwings.widget.widget.WidgetTheme.HERITAGE, heritage.resolveWidgetTheme(isHomeGame = false))
+    }
+
+    @Test
+    fun testAppHeaderBannerDisplaysCustomAutoChipLabel() {
+        composeTestRule.setContent {
+            RedWingsTheme(jersey = AppJersey.HOME) {
+                AppHeaderBanner(
+                    isRefreshing = false,
+                    onRefresh = {},
+                    activeJersey = AppJersey.HOME,
+                    themeChipLabel = "⚡ AUTO (HOME)",
+                    onJerseyThemeToggle = {}
+                )
+            }
+        }
+
+        composeTestRule.onNodeWithText("⚡ AUTO (HOME)").assertExists()
+    }
 }
+

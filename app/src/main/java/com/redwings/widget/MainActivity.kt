@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -12,9 +13,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModelProvider
 import com.redwings.widget.ui.GameDashboard
 import com.redwings.widget.ui.GameViewModel
+import com.redwings.widget.ui.ScheduleUiState
 import com.redwings.widget.ui.theme.AppJersey
 import com.redwings.widget.ui.theme.RedWingsTheme
+import com.redwings.widget.ui.theme.resolveAppJersey
 import com.redwings.widget.widget.RedWingsWidgetProvider
+import com.redwings.widget.widget.ThemeMode
 import com.redwings.widget.widget.WidgetBinder
 
 class MainActivity : ComponentActivity() {
@@ -28,33 +32,43 @@ class MainActivity : ComponentActivity() {
         val legacyPrefs = getSharedPreferences(WidgetBinder.PREFS, Context.MODE_PRIVATE)
 
         setContent {
-            var activeJersey by remember {
+            val scheduleState by viewModel.scheduleState.collectAsState()
+            val isHomeGame = (scheduleState as? ScheduleUiState.Data)?.nextGame?.isHome
+                ?: legacyPrefs.getBoolean("next_game_is_home", true)
+
+            var activeThemeMode by remember {
                 val initialIndex = if (prefs.contains(KEY_THEME)) {
-                    prefs.getInt(KEY_THEME, AppJersey.HOME.id)
+                    prefs.getInt(KEY_THEME, -1)
                 } else {
-                    legacyPrefs.getInt(KEY_THEME, AppJersey.HOME.id)
+                    legacyPrefs.getInt(KEY_THEME, -1)
                 }
-                mutableStateOf(AppJersey.fromIndex(initialIndex))
+                mutableStateOf(ThemeMode.fromId(initialIndex))
             }
 
-            fun toggleJersey() {
-                val nextJersey = AppJersey.fromIndex(activeJersey.id + 1)
-                activeJersey = nextJersey
-                // Persist to SharedPreferences ("com.redwings.widget.PREFS", key "widget_theme_index")
-                prefs.edit().putInt(KEY_THEME, nextJersey.id).apply()
-                // Synchronize with widget preferences and trigger widget update
-                legacyPrefs.edit().putInt(KEY_THEME, nextJersey.id).apply()
+            fun toggleThemeMode() {
+                val nextMode = activeThemeMode.next()
+                activeThemeMode = nextMode
+                prefs.edit().putInt(KEY_THEME, nextMode.id).apply()
+                legacyPrefs.edit().putInt(KEY_THEME, nextMode.id).apply()
                 RedWingsWidgetProvider.triggerUpdate(this@MainActivity)
                 try {
-                    (application as? RedWingsApp)?.container?.fanPulseRepository?.syncThemeToCloud(nextJersey.id)
+                    (application as? RedWingsApp)?.container?.fanPulseRepository?.syncThemeToCloud(nextMode.id)
                 } catch (_: Throwable) { }
             }
 
-            com.redwings.widget.ui.theme.RedWingsTheme(jersey = activeJersey) {
-                com.redwings.widget.ui.GameDashboard(
+            val activeJersey = activeThemeMode.resolveAppJersey(isHomeGame)
+            val themeChipLabel = if (activeThemeMode == ThemeMode.AUTO) {
+                "⚡ AUTO (${if (isHomeGame) "HOME" else "AWAY"})"
+            } else {
+                activeThemeMode.chipLabel
+            }
+
+            RedWingsTheme(jersey = activeJersey) {
+                GameDashboard(
                     viewModel = viewModel,
                     activeJersey = activeJersey,
-                    onJerseyThemeToggle = ::toggleJersey
+                    themeChipLabel = themeChipLabel,
+                    onJerseyThemeToggle = ::toggleThemeMode
                 )
             }
         }

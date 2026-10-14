@@ -164,3 +164,45 @@ enum class WidgetTheme(
         }
     }
 }
+
+/**
+ * 4 user-facing theme selection modes:
+ * - AUTO (-1): Automagically resolves to HOME (Home Red) when Detroit is home, AWAY (Away White) when on the road.
+ * - HERITAGE (0): 1926 Cougars vintage cream & red sweater.
+ * - REVERSE_RETRO (3): 2022 Adidas black sweater.
+ * - STADIUM_SERIES (4): 2016 Coors Field special alternate sweater.
+ */
+enum class ThemeMode(
+    val id: Int,
+    val displayName: String,
+    val chipLabel: String
+) {
+    AUTO(-1, "Auto (Home/Away)", "⚡ AUTO"),
+    HERITAGE(0, "Heritage 1926", "🏛️ HERITAGE"),
+    REVERSE_RETRO(3, "Reverse Retro", "⚫ RETRO"),
+    STADIUM_SERIES(4, "Stadium Series", "⭐ SPECIAL");
+
+    fun resolveWidgetTheme(isHomeGame: Boolean): WidgetTheme = when (this) {
+        AUTO -> if (isHomeGame) WidgetTheme.HOME else WidgetTheme.AWAY
+        HERITAGE -> WidgetTheme.HERITAGE
+        REVERSE_RETRO -> WidgetTheme.REVERSE_RETRO
+        STADIUM_SERIES -> WidgetTheme.STADIUM_SERIES
+    }
+
+    fun next(): ThemeMode = when (this) {
+        AUTO -> HERITAGE
+        HERITAGE -> REVERSE_RETRO
+        REVERSE_RETRO -> STADIUM_SERIES
+        STADIUM_SERIES -> AUTO
+    }
+
+    companion object {
+        fun fromId(id: Int): ThemeMode = when (id) {
+            0 -> HERITAGE
+            3 -> REVERSE_RETRO
+            4 -> STADIUM_SERIES
+            else -> AUTO // Default: handles -1, missing key, and legacy 1 (HOME) / 2 (AWAY)
+        }
+    }
+}
+

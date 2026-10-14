@@ -136,3 +136,10 @@ fun AppJersey.toPalette(): JerseyPalette = when (this) {
 }
 
 val LocalJerseyPalette = staticCompositionLocalOf { HomePalette }
+
+fun com.redwings.widget.widget.ThemeMode.resolveAppJersey(isHomeGame: Boolean): AppJersey = when (this) {
+    com.redwings.widget.widget.ThemeMode.AUTO -> if (isHomeGame) AppJersey.HOME else AppJersey.AWAY
+    com.redwings.widget.widget.ThemeMode.HERITAGE -> AppJersey.HERITAGE
+    com.redwings.widget.widget.ThemeMode.REVERSE_RETRO -> AppJersey.REVERSE_RETRO
+    com.redwings.widget.widget.ThemeMode.STADIUM_SERIES -> AppJersey.STADIUM_SERIES
+}

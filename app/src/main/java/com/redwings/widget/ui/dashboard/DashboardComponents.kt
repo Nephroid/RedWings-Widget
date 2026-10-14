@@ -82,6 +82,7 @@ fun AppHeaderBanner(
     modifier: Modifier = Modifier,
     subtitle: String? = null,
     activeJersey: AppJersey = AppJersey.HERITAGE,
+    themeChipLabel: String = activeJersey.chipLabel,
     onJerseyThemeToggle: () -> Unit = {}
 ) {
     val palette = LocalJerseyPalette.current
@@ -111,7 +112,7 @@ fun AppHeaderBanner(
                     modifier = Modifier.testTag("jersey_theme_chip")
                 ) {
                     Text(
-                        text = activeJersey.chipLabel,
+                        text = themeChipLabel,
                         color = Color.White,
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Bold, fontSize = 11.sp, letterSpacing = 0.5.sp

@@ -87,6 +87,7 @@ fun SinglePaneDashboard(
     errorMessage: String?,
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
+    themeChipLabel: String = activeJersey.chipLabel,
     onJerseyThemeToggle: () -> Unit = {},
     onLightTheLamp: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -97,6 +98,7 @@ fun SinglePaneDashboard(
     errorMessage = errorMessage,
     onRefresh = onRefresh,
     activeJersey = activeJersey,
+    themeChipLabel = themeChipLabel,
     onJerseyThemeToggle = onJerseyThemeToggle,
     onLightTheLamp = onLightTheLamp,
     modifier = modifier
@@ -110,6 +112,7 @@ fun DualPaneDashboard(
     errorMessage: String?,
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
+    themeChipLabel: String = activeJersey.chipLabel,
     onJerseyThemeToggle: () -> Unit = {},
     onLightTheLamp: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -120,6 +123,7 @@ fun DualPaneDashboard(
     errorMessage = errorMessage,
     onRefresh = onRefresh,
     activeJersey = activeJersey,
+    themeChipLabel = themeChipLabel,
     onJerseyThemeToggle = onJerseyThemeToggle,
     onLightTheLamp = onLightTheLamp,
     modifier = modifier
@@ -132,6 +136,7 @@ fun TabletopDashboard(
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
+    themeChipLabel: String = activeJersey.chipLabel,
     onJerseyThemeToggle: () -> Unit = {},
     onLightTheLamp: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -141,6 +146,7 @@ fun TabletopDashboard(
     isRefreshing = isRefreshing,
     onRefresh = onRefresh,
     activeJersey = activeJersey,
+    themeChipLabel = themeChipLabel,
     onJerseyThemeToggle = onJerseyThemeToggle,
     onLightTheLamp = onLightTheLamp,
     modifier = modifier
@@ -157,6 +163,7 @@ fun GameDashboard(
     viewModel: GameViewModel,
     modifier: Modifier = Modifier,
     activeJersey: AppJersey = AppJersey.HOME,
+    themeChipLabel: String = activeJersey.chipLabel,
     onJerseyThemeToggle: () -> Unit = {},
     isTabletop: Boolean = false
 ) {
@@ -171,6 +178,7 @@ fun GameDashboard(
         errorMessage = errorMessage,
         onRefresh = { viewModel.triggerManualRefresh() },
         activeJersey = activeJersey,
+        themeChipLabel = themeChipLabel,
         onJerseyThemeToggle = onJerseyThemeToggle,
         onLightTheLamp = { viewModel.lightTheLamp() },
         isTabletop = isTabletop,
@@ -186,6 +194,7 @@ fun GameDashboardContent(
     errorMessage: String?,
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
+    themeChipLabel: String = activeJersey.chipLabel,
     onJerseyThemeToggle: () -> Unit = {},
     onLightTheLamp: () -> Unit = {},
     isTabletop: Boolean = false,
@@ -227,6 +236,7 @@ fun GameDashboardContent(
                                 isRefreshing = isRefreshing,
                                 onRefresh = onRefresh,
                                 activeJersey = activeJersey,
+                                themeChipLabel = themeChipLabel,
                                 onJerseyThemeToggle = onJerseyThemeToggle,
                                 onLightTheLamp = onLightTheLamp
                             )
@@ -239,6 +249,7 @@ fun GameDashboardContent(
                                 errorMessage = errorMessage,
                                 onRefresh = onRefresh,
                                 activeJersey = activeJersey,
+                                themeChipLabel = themeChipLabel,
                                 onJerseyThemeToggle = onJerseyThemeToggle,
                                 onLightTheLamp = onLightTheLamp
                             )
@@ -251,6 +262,7 @@ fun GameDashboardContent(
                                 errorMessage = errorMessage,
                                 onRefresh = onRefresh,
                                 activeJersey = activeJersey,
+                                themeChipLabel = themeChipLabel,
                                 onJerseyThemeToggle = onJerseyThemeToggle,
                                 onLightTheLamp = onLightTheLamp
                             )

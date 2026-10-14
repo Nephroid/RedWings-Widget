@@ -53,6 +53,7 @@ fun TabletopDashboard(
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
+    themeChipLabel: String = activeJersey.chipLabel,
     onJerseyThemeToggle: () -> Unit = {},
     onLightTheLamp: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -110,7 +111,7 @@ fun TabletopDashboard(
                             modifier = Modifier.testTag("jersey_theme_chip")
                         ) {
                             Text(
-                                text = activeJersey.chipLabel,
+                                text = themeChipLabel,
                                 color = palette.chipText,
                                 style = MaterialTheme.typography.labelSmall.copy(
                                     fontWeight = FontWeight.Bold,

@@ -42,6 +42,7 @@ fun SinglePaneDashboard(
     errorMessage: String?,
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
+    themeChipLabel: String = activeJersey.chipLabel,
     onJerseyThemeToggle: () -> Unit = {},
     onLightTheLamp: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -81,6 +82,7 @@ fun SinglePaneDashboard(
                     onRefresh = onRefresh,
                     subtitle = data?.standingsSummary?.ifBlank { "4th in Atlantic • 94 pts" },
                     activeJersey = activeJersey,
+                    themeChipLabel = themeChipLabel,
                     onJerseyThemeToggle = onJerseyThemeToggle
                 )
             }

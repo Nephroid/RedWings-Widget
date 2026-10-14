@@ -60,8 +60,11 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         when (intent.action) {
             ACTION_TOGGLE_THEME -> {
                 val prefs = context.getSharedPreferences(WidgetBinder.PREFS, Context.MODE_PRIVATE)
-                val next = (prefs.getInt(KEY_THEME, WidgetTheme.HOME.id) + 1) % WidgetTheme.values().size
-                prefs.edit().putInt(KEY_THEME, next).apply()
+                val currentMode = ThemeMode.fromId(prefs.getInt(KEY_THEME, -1))
+                val nextMode = currentMode.next()
+                prefs.edit().putInt(KEY_THEME, nextMode.id).apply()
+                val appPrefs = context.getSharedPreferences("com.redwings.widget.PREFS", Context.MODE_PRIVATE)
+                appPrefs.edit().putInt(KEY_THEME, nextMode.id).apply()
                 triggerUpdate(context)
             }
             AppWidgetManager.ACTION_APPWIDGET_UPDATE, Intent.ACTION_BOOT_COMPLETED,
@@ -135,11 +138,8 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
             }
 
             val isHomeGame = game?.isHomeGame ?: prefs.getBoolean("next_game_is_home", true)
-            val theme = if (userThemeIndex >= 0) {
-                WidgetTheme.fromIndex(userThemeIndex)
-            } else {
-                if (isHomeGame) WidgetTheme.HOME else WidgetTheme.AWAY
-            }
+            val themeMode = ThemeMode.fromId(userThemeIndex)
+            val theme = themeMode.resolveWidgetTheme(isHomeGame)
 
             ids.forEach { id ->
                 val options = opts ?: mgr.getAppWidgetOptions(id)
@@ -148,13 +148,13 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
 
                 val views = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     val sizeMap = mapOf(
-                        android.util.SizeF(280f, 110f) to buildWidgetViews(context, R.layout.red_wings_widget_layout, game, theme, prefs, id, 320, 140, oppBitmap, detBitmap),
-                        android.util.SizeF(460f, 130f) to buildWidgetViews(context, R.layout.red_wings_widget_wide, game, theme, prefs, id, 540, 170, oppBitmap, detBitmap)
+                        android.util.SizeF(280f, 110f) to buildWidgetViews(context, R.layout.red_wings_widget_layout, game, theme, themeMode, isHomeGame, prefs, id, 320, 140, oppBitmap, detBitmap),
+                        android.util.SizeF(460f, 130f) to buildWidgetViews(context, R.layout.red_wings_widget_wide, game, theme, themeMode, isHomeGame, prefs, id, 540, 170, oppBitmap, detBitmap)
                     )
                     RemoteViews(sizeMap)
                 } else {
                     val layout = if (w >= 450) R.layout.red_wings_widget_wide else R.layout.red_wings_widget_layout
-                    buildWidgetViews(context, layout, game, theme, prefs, id, w, h, oppBitmap, detBitmap)
+                    buildWidgetViews(context, layout, game, theme, themeMode, isHomeGame, prefs, id, w, h, oppBitmap, detBitmap)
                 }
 
                 if (WidgetCrashGuard.validateRemoteViews(views, id)) {
@@ -174,6 +174,8 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         layoutResId: Int,
         game: WidgetBinder.WidgetGame?,
         theme: WidgetTheme,
+        themeMode: ThemeMode,
+        isHomeGame: Boolean,
         prefs: android.content.SharedPreferences,
         widgetId: Int,
         minW: Int,
@@ -182,8 +184,16 @@ class RedWingsWidgetProvider : AppWidgetProvider() {
         detBitmap: Bitmap? = null
     ): RemoteViews {
         val views = RemoteViews(context.packageName, layoutResId)
-        views.setOnClickPendingIntent(R.id.widget_theme_toggle, togglePI(context, widgetId))
-        views.setTextViewText(R.id.widget_theme_toggle, theme.buttonLabel)
+        val togglePI = togglePI(context, widgetId)
+        views.setOnClickPendingIntent(R.id.widget_theme_toggle, togglePI)
+        views.setOnClickPendingIntent(R.id.widget_header_layout, togglePI)
+
+        val toggleLabel = if (themeMode == ThemeMode.AUTO) {
+            "⚡ AUTO (${if (isHomeGame) "HOME" else "AWAY"})"
+        } else {
+            themeMode.chipLabel
+        }
+        views.setTextViewText(R.id.widget_theme_toggle, toggleLabel)
         applyWidgetTheme(context, views, theme)
 
         if (game != null) WidgetBinder.bindGameData(context, views, game, theme, oppBitmap, detBitmap)

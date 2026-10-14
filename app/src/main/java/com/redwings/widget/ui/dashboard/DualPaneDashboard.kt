@@ -49,6 +49,7 @@ fun DualPaneDashboard(
     errorMessage: String?,
     onRefresh: () -> Unit,
     activeJersey: AppJersey = AppJersey.HOME,
+    themeChipLabel: String = activeJersey.chipLabel,
     onJerseyThemeToggle: () -> Unit = {},
     onLightTheLamp: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -86,6 +87,7 @@ fun DualPaneDashboard(
                 onRefresh = onRefresh,
                 subtitle = "NHL COMMAND CENTER • ${data?.standingsSummary ?: "4th in Atlantic"}",
                 activeJersey = activeJersey,
+                themeChipLabel = themeChipLabel,
                 onJerseyThemeToggle = onJerseyThemeToggle
             )
 
