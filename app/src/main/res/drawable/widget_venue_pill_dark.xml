@@ -1,8 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Dark Matte Acrylic Venue Pill for Retro & Stadium Series -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <corners android:radius="999dp" />
-    <solid android:color="#27272A" />
-    <stroke android:width="1dp" android:color="#3F3F46" />
-</shape>
+<!-- Dark Glassmorphic Venue Capsule with 135° Specular Edge for Retro & Stadium Series -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Specular rim highlight -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="999dp" />
+            <gradient
+                android:angle="135"
+                android:centerColor="#26FFFFFF"
+                android:endColor="#40FFFFFF"
+                android:startColor="#80FFFFFF"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <!-- Translucent Dark Slate/Black Glass -->
+    <item
+        android:bottom="1dp"
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="999dp" />
+            <gradient
+                android:angle="270"
+                android:endColor="#F218181B"
+                android:startColor="#F227272A"
+                android:type="linear" />
+        </shape>
+    </item>
+
+</layer-list>

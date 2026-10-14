@@ -171,9 +171,14 @@
 
                         <TextView
                             android:id="@+id/widget_away_tag"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-black"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@drawable/widget_tag_away"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:paddingTop="1.5dp"
+                            android:paddingBottom="1.5dp"
                             android:text="AWAY"
                             android:textColor="#64748B"
                             android:textSize="8.5sp"
@@ -267,9 +272,14 @@
 
                         <TextView
                             android:id="@+id/widget_home_tag"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-black"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@drawable/widget_tag_home"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:paddingTop="1.5dp"
+                            android:paddingBottom="1.5dp"
                             android:text="HOME"
                             android:textColor="#64748B"
                             android:textSize="8.5sp"

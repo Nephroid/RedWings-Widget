@@ -47,8 +47,8 @@
     <color name="widget_retro_countdown">#FF3B30</color>
     <color name="widget_retro_opponent">#FFFFFF</color>
     <color name="widget_retro_divider">#FF3B30</color>
-    <color name="widget_retro_sub">#A1A1AA</color>
-    <color name="widget_retro_standing">#E4E4E7</color>
+    <color name="widget_retro_sub">#E4E4E7</color>
+    <color name="widget_retro_standing">#FFFFFF</color>
     <color name="widget_retro_team">#FFFFFF</color>
     <color name="widget_retro_team_det">#FFFFFF</color>
     <color name="widget_retro_wcgb">#FF6B60</color>
@@ -59,8 +59,8 @@
     <color name="widget_stadium_countdown">#FF2D20</color>
     <color name="widget_stadium_opponent">#FFFFFF</color>
     <color name="widget_stadium_divider">#FF2D20</color>
-    <color name="widget_stadium_sub">#CBD5E1</color>
-    <color name="widget_stadium_standing">#E2E8F0</color>
+    <color name="widget_stadium_sub">#F1F5F9</color>
+    <color name="widget_stadium_standing">#FFFFFF</color>
     <color name="widget_stadium_team">#FFFFFF</color>
     <color name="widget_stadium_team_det">#FFFFFF</color>
     <color name="widget_stadium_wcgb">#FF8080</color>
